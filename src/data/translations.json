@@ -1,0 +1,355 @@
+{
+  "en": {
+    "nav": {
+      "home": "Home",
+      "countries": "Countries",
+      "about": "About",
+      "getStarted": "Get Started",
+      "myApplications": "My Applications",
+      "signIn": "Sign In",
+      "signOut": "Sign Out",
+      "exportAgentUrl": "Export Agent URL",
+      "agentUrlCopied": "Agent URL copied to clipboard!"
+    },
+    "hero": {
+      "badge": "✨ Automated Electronic Visa Service",
+      "title": "Get Your Electronic Visa",
+      "titleHighlight": "Automatically",
+      "description": "Streamline your visa application process with our automated platform. Fast, secure, and hassle-free electronic visa creation for Israeli tourists.",
+      "startApplication": "Start Application",
+      "learnMore": "Learn More"
+    },
+    "countries": {
+      "title": "Available Destinations",
+      "subtitle": "Select your destination to begin your visa application",
+      "available": "Available Now",
+      "upcoming": "Coming Soon",
+      "select": "Select Country",
+      "morocco": "Morocco",
+      "tanzania": "Tanzania / Zanzibar",
+      "sriLanka": "Sri Lanka"
+    },
+    "features": {
+      "title": "Why Choose Visa-Kal?",
+      "subtitle": "Everything you need for a smooth visa experience",
+      "fast": {
+        "title": "Fast Processing",
+        "desc": "Automated visa creation in minutes, not days"
+      },
+      "secure": {
+        "title": "Secure & Safe",
+        "desc": "Your data is protected with enterprise-grade security"
+      },
+      "automated": {
+        "title": "Fully Automated",
+        "desc": "No paperwork, no hassle - everything is automated"
+      },
+      "support": {
+        "title": "Expert Support",
+        "desc": "Get help from our team whenever you need it"
+      },
+      "track": {
+        "title": "Track Progress",
+        "desc": "Monitor your application status in real-time"
+      },
+      "easy": {
+        "title": "Easy Process",
+        "desc": "Simple steps to get your electronic visa"
+      }
+    },
+    "cta": {
+      "title": "Ready to Begin Your Journey?",
+      "description": "Join thousands of Israeli tourists who have successfully obtained their electronic visas",
+      "button": "Get Started Today"
+    },
+    "footer": {
+      "tagline": "Automating electronic visa creation for Israeli tourists.",
+      "quickLinks": "Quick Links",
+      "support": "Support",
+      "helpCenter": "Help Center",
+      "contactUs": "Contact Us",
+      "privacyPolicy": "Privacy Policy",
+      "copyright": "© 2025 Visa-Kal. All rights reserved."
+    },
+    "form": {
+      "loading": "Loading form...",
+      "notFound": "Form not found",
+      "failedToLoad": "Failed to load form. Please try again.",
+      "back": "Back",
+      "title": "Visa Application for",
+      "description": "Please fill out all required fields to complete your visa application.",
+      "submitting": "Submitting...",
+      "submitSuccess": "Form submitted successfully!",
+      "submitError": "Please fix the errors below.",
+      "validationError": "Error validating form. Please try again.",
+      "addBeneficiary": "Add Beneficiary",
+      "removeBeneficiary": "Remove",
+      "beneficiary": "Beneficiary",
+      "copyFromPrevious": "Copy from previous",
+      "signInRequired": "Sign In Required",
+      "signInMessage": "Please sign in to access the application form.",
+      "signIn": "Sign In",
+      "backToHome": "Back to Home",
+      "uploadingFiles": "Uploading files...",
+      "autoCopy": "Auto-copy",
+      "autoCopyTooltip": "Auto-copy this field to new beneficiaries",
+      "copy": "↩ Copy",
+      "copyTooltip": "Copy from previous beneficiary"
+    },
+    "monitor": {
+      "title": "Monitor Your Requests",
+      "subtitle": "Track the status of all your visa applications and beneficiaries",
+      "noRequests": "No requests found. Start a new application to see it here.",
+      "requestFor": "Request for",
+      "beneficiaries": "Beneficiaries",
+      "beneficiary": "Beneficiary",
+      "beneficiariesCount": "Beneficiaries:",
+      "status": "Status",
+      "submitted": "Submitted:",
+      "submittedAt": "Submitted at",
+      "notSubmitted": "Not submitted",
+      "more": "more",
+      "loading": "Loading requests...",
+      "error": "Failed to load requests",
+      "signInToView": "Please sign in to view your requests.",
+      "retry": "Retry",
+      "clientRequest": "Client Request",
+      "clientEmail": "Client Email"
+    },
+    "applications": {
+      "title": "My Applications",
+      "signInToView": "Please sign in to view your applications.",
+      "noApplications": "No applications yet.",
+      "startNew": "Start New Application",
+      "submitted": "Submitted:",
+      "submittedAt": "Submitted at",
+      "notSubmitted": "Not submitted",
+      "beneficiaries": "Beneficiaries",
+      "beneficiariesCount": "Beneficiaries:",
+      "beneficiary": "Beneficiary",
+      "more": "more",
+      "requestFor": "Request for",
+      "clientRequest": "Client Request",
+      "clientEmail": "Client Email"
+    },
+    "payment": {
+      "title": "Payment",
+      "signInToComplete": "Please sign in to complete payment.",
+      "backToHome": "Back to Home",
+      "processing": "Processing payment...",
+      "loading": "Loading...",
+      "back": "Back",
+      "summary": "Application Summary",
+      "country": "Country:",
+      "beneficiaries": "Beneficiaries:",
+      "totalAmount": "Total Amount:",
+      "method": "Payment Method",
+      "creditCard": "Credit Card",
+      "cardNumber": "Card Number",
+      "cardholderName": "Cardholder Name",
+      "complete": "Complete Payment",
+      "processingButton": "Processing...",
+      "success": "Payment processed successfully! Your application has been submitted.",
+      "error": "Payment processing failed. Please try again."
+    },
+    "common": {
+      "loading": "Loading...",
+      "hebrew": "עברית",
+      "english": "English",
+      "application": "Application",
+      "approved": "Approved",
+      "travelReady": "Travel Ready"
+    },
+    "fileUpload": {
+      "invalidImageFormat": "Invalid image format",
+      "fileSizeExceeds": "File size exceeds",
+      "uploadFailed": "Upload failed",
+      "deleteFailed": "Failed to delete file",
+      "uploading": "Uploading...",
+      "choosePhoto": "Choose Photo",
+      "remove": "Remove",
+      "removePhoto": "Remove photo",
+      "invalidFileFormat": "Invalid file format",
+      "chooseFile": "Choose File",
+      "removeFile": "Remove file",
+      "maxSize": "Max size"
+    }
+  },
+  "he": {
+    "nav": {
+      "home": "בית",
+      "countries": "מדינות",
+      "about": "אודות",
+      "getStarted": "התחל עכשיו",
+      "myApplications": "הבקשות שלי",
+      "signIn": "התחבר",
+      "signOut": "התנתק",
+      "exportAgentUrl": "ייצא כתובת סוכן",
+      "agentUrlCopied": "כתובת הסוכן הועתקה ללוח!"
+    },
+    "hero": {
+      "badge": "✨ שירות ויזה אלקטרונית אוטומטי",
+      "title": "קבל את הויזה האלקטרונית שלך",
+      "titleHighlight": "באופן אוטומטי",
+      "description": "פשט את תהליך הגשת הבקשה לויזה עם הפלטפורמה האוטומטית שלנו. יצירת ויזה אלקטרונית מהירה, מאובטחת וללא טרחה לתיירים ישראלים.",
+      "startApplication": "התחל בקשה",
+      "learnMore": "למידע נוסף"
+    },
+    "countries": {
+      "title": "יעדים זמינים",
+      "subtitle": "בחר את היעד שלך כדי להתחיל את בקשת הויזה",
+      "available": "זמין כעת",
+      "upcoming": "בקרוב",
+      "select": "בחר מדינה",
+      "morocco": "מרוקו",
+      "tanzania": "טנזניה / זנזיבר",
+      "sriLanka": "סרי לנקה"
+    },
+    "features": {
+      "title": "למה לבחור ב-Visa-Kal?",
+      "subtitle": "כל מה שאתה צריך לחוויית ויזה חלקה",
+      "fast": {
+        "title": "עיבוד מהיר",
+        "desc": "יצירת ויזה אוטומטית תוך דקות, לא ימים"
+      },
+      "secure": {
+        "title": "מאובטח ובטוח",
+        "desc": "הנתונים שלך מוגנים באבטחה ברמה ארגונית"
+      },
+      "automated": {
+        "title": "מאומת לחלוטין",
+        "desc": "ללא ניירת, ללא טרחה - הכל אוטומטי"
+      },
+      "support": {
+        "title": "תמיכה מקצועית",
+        "desc": "קבל עזרה מהצוות שלנו מתי שתצטרך"
+      },
+      "track": {
+        "title": "מעקב אחר התקדמות",
+        "desc": "עקוב אחר סטטוס הבקשה שלך בזמן אמת"
+      },
+      "easy": {
+        "title": "תהליך קל",
+        "desc": "שלבים פשוטים לקבלת הויזה האלקטרונית שלך"
+      }
+    },
+    "cta": {
+      "title": "מוכן להתחיל את המסע שלך?",
+      "description": "הצטרף לאלפי תיירים ישראלים שהצליחו לקבל את הויזות האלקטרוניות שלהם",
+      "button": "התחל היום"
+    },
+    "footer": {
+      "tagline": "אוטומציה של יצירת ויזות אלקטרוניות לתיירים ישראלים.",
+      "quickLinks": "קישורים מהירים",
+      "support": "תמיכה",
+      "helpCenter": "מרכז עזרה",
+      "contactUs": "צור קשר",
+      "privacyPolicy": "מדיניות פרטיות",
+      "copyright": "© 2025 Visa-Kal. כל הזכויות שמורות."
+    },
+    "form": {
+      "loading": "טוען טופס...",
+      "notFound": "טופס לא נמצא",
+      "failedToLoad": "נכשל בטעינת הטופס. נסה שוב.",
+      "back": "חזור",
+      "title": "בקשת ויזה ל-",
+      "description": "אנא מלא את כל השדות הנדרשים כדי להשלים את בקשת הויזה שלך.",
+      "submitting": "שולח...",
+      "submitSuccess": "הטופס נשלח בהצלחה!",
+      "submitError": "אנא תקן את השגיאות למטה.",
+      "validationError": "שגיאה באימות הטופס. נסה שוב.",
+      "addBeneficiary": "הוסף נהנה",
+      "removeBeneficiary": "הסר",
+      "beneficiary": "נהנה",
+      "copyFromPrevious": "העתק מהקודם",
+      "signInRequired": "נדרש להתחברות",
+      "signInMessage": "אנא התחבר כדי לגשת לטופס הבקשה.",
+      "signIn": "התחבר",
+      "backToHome": "חזור לדף הבית",
+      "uploadingFiles": "מעלה קבצים...",
+      "autoCopy": "העתק אוטומטי",
+      "autoCopyTooltip": "העתק אוטומטית שדה זה לנהנים חדשים",
+      "copy": "↩ העתק",
+      "copyTooltip": "העתק מהנהנה הקודם"
+    },
+    "monitor": {
+      "title": "עקוב אחר הבקשות שלך",
+      "subtitle": "עקוב אחר סטטוס כל בקשת הויזה והנהנים שלך",
+      "noRequests": "לא נמצאו בקשות. התחל בקשה חדשה כדי לראות אותה כאן.",
+      "requestFor": "בקשה ל-",
+      "beneficiaries": "נהנים",
+      "beneficiary": "נהנה",
+      "beneficiariesCount": "נהנים:",
+      "status": "סטטוס",
+      "submitted": "נשלח:",
+      "submittedAt": "נשלח ב-",
+      "notSubmitted": "לא נשלח",
+      "more": "נוספים",
+      "loading": "טוען בקשות...",
+      "error": "נכשל בטעינת הבקשות",
+      "signInToView": "אנא התחבר כדי לצפות בבקשות שלך.",
+      "retry": "נסה שוב",
+      "clientRequest": "בקשת לקוח",
+      "clientEmail": "אימייל לקוח"
+    },
+    "applications": {
+      "title": "הבקשות שלי",
+      "signInToView": "אנא התחבר כדי לצפות בבקשות שלך.",
+      "noApplications": "אין בקשות עדיין.",
+      "startNew": "התחל בקשה חדשה",
+      "submitted": "נשלח:",
+      "submittedAt": "נשלח ב-",
+      "notSubmitted": "לא נשלח",
+      "beneficiaries": "נהנים",
+      "beneficiariesCount": "נהנים:",
+      "beneficiary": "נהנה",
+      "more": "נוספים",
+      "requestFor": "בקשה ל-",
+      "clientRequest": "בקשת לקוח",
+      "clientEmail": "אימייל לקוח"
+    },
+    "payment": {
+      "title": "תשלום",
+      "signInToComplete": "אנא התחבר כדי להשלים תשלום.",
+      "backToHome": "חזור לדף הבית",
+      "processing": "מעבד תשלום...",
+      "loading": "טוען...",
+      "back": "חזור",
+      "summary": "סיכום הבקשה",
+      "country": "מדינה:",
+      "beneficiaries": "נהנים:",
+      "totalAmount": "סכום כולל:",
+      "method": "אמצעי תשלום",
+      "creditCard": "כרטיס אשראי",
+      "cardNumber": "מספר כרטיס",
+      "cardholderName": "שם בעל הכרטיס",
+      "complete": "השלם תשלום",
+      "processingButton": "מעבד...",
+      "success": "התשלום בוצע בהצלחה! הבקשה שלך נשלחה.",
+      "error": "עיבוד התשלום נכשל. אנא נסה שוב."
+    },
+    "common": {
+      "loading": "טוען...",
+      "hebrew": "עברית",
+      "english": "English",
+      "application": "בקשה",
+      "approved": "אושר",
+      "travelReady": "מוכן לנסיעה"
+    },
+    "fileUpload": {
+      "invalidImageFormat": "פורמט תמונה לא תקין",
+      "fileSizeExceeds": "גודל הקובץ חורג מ-",
+      "uploadFailed": "העלאה נכשלה",
+      "deleteFailed": "מחיקת הקובץ נכשלה",
+      "uploading": "מעלה...",
+      "choosePhoto": "בחר תמונה",
+      "remove": "הסר",
+      "removePhoto": "הסר תמונה",
+      "invalidFileFormat": "פורמט קובץ לא תקין",
+      "chooseFile": "בחר קובץ",
+      "removeFile": "הסר קובץ",
+      "maxSize": "גודל מקסימלי"
+    }
+  }
+}
+
