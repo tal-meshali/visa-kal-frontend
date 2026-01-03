@@ -1,0 +1,19 @@
+version: 1.0
+runtime: docker
+
+build:
+  commands:
+    build:
+      - echo "Building Docker image for frontend"
+      - docker build -t visa-vibe-frontend .
+
+run:
+  runtime-version: latest
+  command: nginx -g "daemon off;"
+  network:
+    port: 80
+    env: PORT
+  env:
+    - name: PORT
+      value: "80"
+
