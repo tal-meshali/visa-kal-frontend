@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./App.css";
 import { CountriesSection } from "./components/CountriesSection";
 import { CTASection } from "./components/CTASection";
@@ -8,7 +8,7 @@ import { Footer } from "./components/Footer";
 import { Hero } from "./components/Hero";
 import { Navbar } from "./components/Navbar";
 import { RequestsMonitor } from "./components/RequestsMonitor";
-import { useLanguage } from "./contexts/LanguageContext";
+import { useLanguage } from "./contexts/useLanguage";
 import { countries } from "./data/countries";
 
 type Theme = "light" | "dark";

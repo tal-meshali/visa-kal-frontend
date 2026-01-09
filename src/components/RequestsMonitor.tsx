@@ -1,6 +1,6 @@
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../contexts/useLanguage";
 import {
   getUserRequestsWithBeneficiaries,
   type Application,
@@ -42,7 +42,6 @@ export const RequestsMonitor = () => {
     return label[language];
   };
 
-
   const getBeneficiaryName = (formData: Beneficiary["form_data"]): string => {
     // Try to find name fields in common formats
     if (formData.passport_data) {
@@ -57,9 +56,7 @@ export const RequestsMonitor = () => {
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">{t.monitor.title}</h2>
-            <p className="section-subtitle">
-              {t.monitor.signInToView}
-            </p>
+            <p className="section-subtitle">{t.monitor.signInToView}</p>
           </div>
         </div>
       </SignedOut>

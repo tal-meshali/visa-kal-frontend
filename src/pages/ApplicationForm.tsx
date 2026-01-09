@@ -7,7 +7,7 @@ import { BackButton } from "../components/BackButton";
 import { BeneficiaryForm } from "../components/BeneficiaryForm";
 import { Button } from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../contexts/useLanguage";
 import { useFormSchema } from "../hooks/useFormSchema";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { initializeFormData, type FormSchema } from "../services/formService";

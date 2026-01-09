@@ -1,5 +1,5 @@
 import { getStatusColor } from "../config/statusConfig";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../contexts/useLanguage";
 import type { Application, Beneficiary } from "../services/requestService";
 import { formatDate } from "../utils/dateUtils";
 import "./ApplicationCard.css";
@@ -18,7 +18,7 @@ export const ApplicationCard = ({
   getStatusLabel,
 }: ApplicationCardProps) => {
   const { language, t } = useLanguage();
-  
+
   // Use monitor translations for detailed variant, applications for compact
   const translations = variant === "detailed" ? t.monitor : t.applications;
 

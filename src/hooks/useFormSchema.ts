@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../contexts/useLanguage";
 import { fetchFormSchema, type FormSchema } from "../services/formService";
 
 export const useFormSchema = (countryId: string | undefined) => {
@@ -24,6 +24,7 @@ export const useFormSchema = (countryId: string | undefined) => {
   return {
     schema,
     loading: isLoading,
-    error: error instanceof Error ? error.message : error ? String(error) : null,
+    error:
+      error instanceof Error ? error.message : error ? String(error) : null,
   };
 };

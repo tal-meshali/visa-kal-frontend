@@ -8,7 +8,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../contexts/useLanguage";
 import { getCurrentUser } from "../services/authService";
 import "./Navbar.css";
 
@@ -87,9 +87,7 @@ export const Navbar = ({
               </button>
             )}
             {showAgentUrlModal && (
-              <div className="agent-url-modal">
-                {t.nav.agentUrlCopied}
-              </div>
+              <div className="agent-url-modal">{t.nav.agentUrlCopied}</div>
             )}
           </SignedIn>
           <button

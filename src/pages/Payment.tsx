@@ -5,14 +5,18 @@ import { Alert } from "../components/Alert";
 import { BackButton } from "../components/BackButton";
 import { Button } from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../contexts/useLanguage";
 import { createApplication } from "../services/applicationService";
 import "./Payment.css";
 
-import type { FormDataRecord, TranslatedText } from "../types/formTypes";
+import type {
+  FormDataInput,
+  FormDataRecord,
+  TranslatedText,
+} from "../types/formTypes";
 
 interface LocationState {
-  formData?: FormDataRecord;
+  formData?: FormDataInput & { beneficiaries: FormDataRecord[] };
   countryName?: TranslatedText;
 }
 
@@ -63,13 +67,19 @@ const Payment = () => {
       setProgress(40);
       // Get agent_id from localStorage if it exists
       const agentId = localStorage.getItem("agent_id");
+      // Convert FormDataInput to FormDataRecord for API
+      // If it's a single record, use it directly; if it has beneficiaries, use the first one
+      const formDataRecord =
+        formData && "beneficiaries" in formData
+          ? formData.beneficiaries[0] || {}
+          : formData || {};
       await createApplication({
         country_id: countryId,
         country_name: countryName,
-        form_data: formData,
+        form_data: formDataRecord,
         agent_id: agentId || undefined,
       });
-      
+
       // Delete agent_id from localStorage after successful submission
       if (agentId) {
         localStorage.removeItem("agent_id");
@@ -155,7 +165,7 @@ const Payment = () => {
               <div className="summary-item">
                 <span className="summary-label">{t.payment.beneficiaries}</span>
                 <span className="summary-value">
-                  {formData && formData.beneficiaries
+                  {formData && "beneficiaries" in formData
                     ? formData.beneficiaries.length
                     : 1}
                 </span>
@@ -166,12 +176,12 @@ const Payment = () => {
                 <span className="summary-value summary-amount">
                   {language === "en"
                     ? `$${
-                        (formData && formData.beneficiaries
+                        (formData && "beneficiaries" in formData
                           ? formData.beneficiaries.length
                           : 1) * 50
                       }.00`
                     : `₪${
-                        (formData && formData.beneficiaries
+                        (formData && "beneficiaries" in formData
                           ? formData.beneficiaries.length
                           : 1) * 180
                       }.00`}

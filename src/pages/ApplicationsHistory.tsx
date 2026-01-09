@@ -1,11 +1,11 @@
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { ApplicationCard } from "../components/ApplicationCard";
 import { BackButton } from "../components/BackButton";
 import { Button } from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
-import { ApplicationCard } from "../components/ApplicationCard";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../contexts/useLanguage";
 import { getUserApplications } from "../services/applicationService";
 import type { Application } from "../services/requestService";
 import "./ApplicationsHistory.css";

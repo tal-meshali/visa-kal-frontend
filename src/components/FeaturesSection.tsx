@@ -1,7 +1,4 @@
-import {
-  useLanguage,
-  type LanguageContextType,
-} from "../contexts/LanguageContext";
+import { useLanguage, type LanguageContextType } from "../contexts/useLanguage";
 import "./FeaturesSection.css";
 
 type SectionText = { title: string; desc: string };

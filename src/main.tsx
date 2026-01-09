@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App.tsx";
 import { ClerkTokenSync } from "./components/ClerkTokenSync.tsx";
-import { LanguageProvider } from "./contexts/LanguageContext";
+import { LanguageProvider } from "./contexts/LanguageProvider";
 import "./index.css";
 import ApplicationForm from "./pages/ApplicationForm.tsx";
 import ApplicationsHistory from "./pages/ApplicationsHistory.tsx";

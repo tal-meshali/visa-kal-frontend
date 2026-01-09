@@ -1,19 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import translationsData from "../data/translations.json";
-
-type Language = "en" | "he";
-
-export interface LanguageContextType {
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: typeof translationsData.en;
-}
-
-export type Translations = LanguageContextType["t"];
-
-const LanguageContext = createContext<LanguageContextType | undefined>(
-  undefined
-);
+import type { Language } from "../types/formTypes";
+import { LanguageContext } from "./useLanguage";
 
 interface LanguageProviderProps {
   children: React.ReactNode;
@@ -40,12 +28,4 @@ export const LanguageProvider = ({
       {children}
     </LanguageContext.Provider>
   );
-};
-
-export const useLanguage = (): LanguageContextType => {
-  const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
-  }
-  return context;
 };
