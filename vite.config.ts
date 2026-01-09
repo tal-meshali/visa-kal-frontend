@@ -2,7 +2,7 @@
 /// <reference types="vite/client" />
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
-import type { PluginOption } from 'vite'
+import type { PluginOption } from 'vitest'
 
 // https://vite.dev/config/
 export default defineConfig({
