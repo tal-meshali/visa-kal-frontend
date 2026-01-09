@@ -1,9 +1,32 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import axios from 'axios'
 import { apiService, apiGet, apiPost, apiPut, apiDelete, apiPostFormData } from '../apiService'
 import { getTokenFromStorage } from '../../utils/tokenManager'
 
 vi.mock('../../utils/tokenManager')
-vi.mock('axios')
+vi.mock('axios', () => {
+  const mockAxiosInstance = {
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    patch: vi.fn(),
+    delete: vi.fn(),
+    interceptors: {
+      request: {
+        use: vi.fn(),
+      },
+      response: {
+        use: vi.fn(),
+      },
+    },
+  }
+
+  return {
+    default: {
+      create: vi.fn(() => mockAxiosInstance),
+    },
+  }
+})
 
 describe('apiService', () => {
   beforeEach(() => {
