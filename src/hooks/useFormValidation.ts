@@ -16,7 +16,7 @@ export const useFormValidation = () => {
   const [validateState, executeValidate] = useAsyncFn(
     async (
       countryId: string | undefined,
-      formData: BaseFormData,
+      formData: BaseFormData | { beneficiaries: BaseFormData[] },
       language: "en" | "he"
     ): Promise<boolean> => {
       if (!countryId) {
