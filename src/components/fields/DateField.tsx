@@ -22,7 +22,6 @@ const DateField: React.FC<DateFieldProps> = ({
   onChange,
   error,
   required = false,
-  placeholder,
   minDate,
   maxDate,
   language,

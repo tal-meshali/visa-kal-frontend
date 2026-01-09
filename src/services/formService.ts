@@ -68,7 +68,7 @@ export interface ValidationResult {
  */
 export const validateFormData = async (
   countryId: string | undefined,
-  formData: BaseFormData,
+  formData: BaseFormData | { beneficiaries: BaseFormData[] },
   language: "en" | "he"
 ): Promise<ValidationResult> => {
   if (!countryId) {

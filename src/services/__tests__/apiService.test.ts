@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import axios from 'axios'
 import { apiService, apiGet, apiPost, apiPut, apiDelete, apiPostFormData } from '../apiService'
 import { getTokenFromStorage } from '../../utils/tokenManager'
 

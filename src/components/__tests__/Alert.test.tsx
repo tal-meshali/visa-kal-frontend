@@ -69,7 +69,7 @@ describe('Alert', () => {
         onClose={handleClose}
       />
     )
-    const overlay = screen.getByText('Test').closest('.alert-overlay')
+    const overlay = screen.getByText('Test').closest('.alert-overlay') as HTMLElement | null
     overlay?.click()
     expect(handleClose).toHaveBeenCalledTimes(1)
   })
@@ -84,7 +84,7 @@ describe('Alert', () => {
         onClose={handleClose}
       />
     )
-    const alertContent = screen.getByText('Test').closest('.alert')
+    const alertContent = screen.getByText('Test').closest('.alert') as HTMLElement | null
     alertContent?.click()
     expect(handleClose).not.toHaveBeenCalled()
   })

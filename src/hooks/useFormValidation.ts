@@ -45,7 +45,7 @@ export const useFormValidation = () => {
 
   const validate = async (
     countryId: string | undefined,
-    formData: BaseFormData,
+    formData: BaseFormData | { beneficiaries: BaseFormData[] },
     language: "en" | "he"
   ): Promise<boolean> => {
     try {

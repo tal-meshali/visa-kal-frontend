@@ -48,7 +48,6 @@ const createApiInstance = (): AxiosInstance => {
     (response) => response,
     async (error: AxiosError) => {
       if (error.response) {
-        const status = error.response.status;
         const data = error.response.data as any;
 
         // Handle 401 Unauthorized - token might be invalid
