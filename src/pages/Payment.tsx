@@ -9,9 +9,11 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { createApplication } from "../services/applicationService";
 import "./Payment.css";
 
+import type { FormDataRecord, TranslatedText } from "../types/formTypes";
+
 interface LocationState {
-  formData?: Record<string, any>;
-  countryName?: { en: string; he: string };
+  formData?: FormDataRecord;
+  countryName?: TranslatedText;
 }
 
 const Payment = () => {
@@ -93,7 +95,7 @@ const Payment = () => {
       setTimeout(() => {
         navigate("/applications");
       }, 2000);
-    } catch (error) {
+    } catch {
       setAlert({
         type: "error",
         message: t.payment.error,

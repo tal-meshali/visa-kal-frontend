@@ -1,27 +1,21 @@
 import _, { mapValues } from "lodash";
 import { apiGet, apiPost } from "./apiService";
-import type { BaseFormData } from "./requestService";
+import type {
+  FormField,
+  FormSchema,
+  ValidationError,
+  ValidationResult,
+  FormDataInput,
+  Language,
+  FormDataRecord,
+} from "../types/formTypes";
 
-export interface FormField {
-  name: string;
-  label: { en: string; he: string };
-  field_type: "string" | "number" | "date" | "select" | "document" | "photo";
-  required?: boolean;
-  placeholder?: { en: string; he: string };
-  auto_copy?: boolean;
-  default_value?: string;
-}
-
-export interface FormSchema {
-  country_id: string;
-  country_name: { en: string; he: string };
-  fields: FormField[];
-  submit_button_text: { en: string; he: string };
-}
+// Re-export types for backward compatibility
+export type { FormField, FormSchema, ValidationError, ValidationResult };
 
 // Dictionary config for language preference - replaces if/else chains
-const getLanguageParam = (language: "en" | "he"): string => {
-  const languageParams: Record<"en" | "he", string> = {
+const getLanguageParam = (language: Language): string => {
+  const languageParams: Record<Language, string> = {
     en: "en",
     he: "he",
   };
@@ -34,7 +28,7 @@ const getLanguageParam = (language: "en" | "he"): string => {
  */
 export const fetchFormSchema = async (
   countryId: string | undefined,
-  language: "en" | "he" = "en"
+  language: Language = "en"
 ): Promise<FormSchema> => {
   if (!countryId) {
     throw new Error("Country ID is required");
@@ -47,31 +41,22 @@ export const fetchFormSchema = async (
 };
 
 const sanitizeFormData = (
-  data: BaseFormData | { beneficiaries: BaseFormData[] }
-): BaseFormData | { beneficiaries: BaseFormData[] } => {
+  data: FormDataInput
+): FormDataInput => {
   if ('beneficiaries' in data && Array.isArray(data.beneficiaries)) {
     return {
-      beneficiaries: data.beneficiaries.map((beneficiary: BaseFormData) =>
+      beneficiaries: data.beneficiaries.map((beneficiary: FormDataRecord) =>
         mapValues(beneficiary, (value) =>
           value instanceof File ? value.name : value
         )
       ),
     };
   }
-  return mapValues(data as BaseFormData, (value) =>
+  return mapValues(data as FormDataRecord, (value) =>
     value instanceof File ? value.name : value
   );
 };
 
-export type ValidationError = {
-  field: string;
-  message: { en: string; he: string };
-};
-
-export interface ValidationResult {
-  valid: boolean;
-  errors: Array<ValidationError>;
-}
 
 /**
  * Validates form data
@@ -79,8 +64,8 @@ export interface ValidationResult {
  */
 export const validateFormData = async (
   countryId: string | undefined,
-  formData: BaseFormData | { beneficiaries: BaseFormData[] },
-  language: "en" | "he"
+  formData: FormDataInput,
+  language: Language
 ): Promise<ValidationResult> => {
   if (!countryId) {
     throw new Error("Country ID is required");
@@ -97,7 +82,7 @@ export const validateFormData = async (
  * Initializes form data with default values from fields
  * Uses default_value from field if available, otherwise uses empty string
  */
-export const initializeFormData = (fields: FormField[]): BaseFormData => {
+export const initializeFormData = (fields: FormField[]): FormDataRecord => {
   return _.reduce(
     fields,
     (acc, field) => {
@@ -113,6 +98,6 @@ export const initializeFormData = (fields: FormField[]): BaseFormData => {
       }
       return acc;
     },
-    {} as BaseFormData
+    {} as FormDataRecord
   );
 };

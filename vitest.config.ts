@@ -18,4 +18,4 @@ export default mergeConfig(viteConfig, defineConfig({
       ],
     },
   },
-})
+}))

@@ -1,30 +1,6 @@
 import { useLanguage } from '../contexts/LanguageContext'
 import { renderFormField } from '../utils/fieldRenderer'
-
-interface FormField {
-  name: string
-  label: { en: string; he: string }
-  field_type: 'string' | 'number' | 'date' | 'select' | 'document' | 'photo'
-  required?: boolean
-  placeholder?: { en: string; he: string }
-  [key: string]: any
-}
-
-interface BeneficiaryFormProps {
-  beneficiaryIndex: number
-  fields: FormField[]
-  formData: Record<string, any>
-  errors: Record<string, string>
-  language: 'en' | 'he'
-  onFieldChange: (fieldName: string, value: any) => void
-  onCopyFromPrevious: (fieldName: string, previousValue: any) => void
-  previousBeneficiaryData?: Record<string, any>
-  totalBeneficiaries: number
-  autoCopyFields: Set<string>
-  onAutoCopyToggle: (fieldName: string, checked: boolean) => void
-  onUploadStateChange?: (uploadId: string, isUploading: boolean) => void
-  activeUploads?: Set<string>
-}
+import type { FormField, BeneficiaryFormProps } from '../types/formTypes'
 
 export const BeneficiaryForm = ({
   beneficiaryIndex,
@@ -55,7 +31,7 @@ export const BeneficiaryForm = ({
       name: field.name,
       label: field.label,
       value: formData[field.name] || '',
-      onChange: (value: any) => onFieldChange(field.name, value),
+      onChange: (value) => onFieldChange(field.name, value),
       error,
       required: field.required || false,
       placeholder: field.placeholder,

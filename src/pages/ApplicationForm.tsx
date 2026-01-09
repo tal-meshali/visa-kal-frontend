@@ -11,7 +11,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useFormSchema } from "../hooks/useFormSchema";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { initializeFormData, type FormSchema } from "../services/formService";
-import type { BaseFormData } from "../services/requestService";
+import type { FormDataRecord, FormFieldValue } from "../types/formTypes";
 import "./ApplicationForm.css";
 
 const ApplicationForm = () => {
@@ -75,7 +75,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
       updateAt: updateAtBeneficiaries,
       removeAt: removeBeneficiary,
     },
-  ] = useList<BaseFormData>([initializeFormData(schema.fields)]);
+  ] = useList<FormDataRecord>([initializeFormData(schema.fields)]);
 
   // Use ref to track latest beneficiaries state to prevent race conditions
   const beneficiariesRef = useRef(beneficiaries);
@@ -110,18 +110,19 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
   // Show sign-in prompt if not authenticated (don't redirect immediately)
   useEffect(() => {
     if (!authLoading && !user) {
-      setAlert({
-        type: "info",
-        message: t.form.signInMessage,
-        isOpen: true,
-      });
+      (() =>
+        setAlert({
+          type: "info",
+          message: t.form.signInMessage,
+          isOpen: true,
+        }))();
     }
   }, [user, authLoading, language, t.form.signInMessage]);
 
   const handleFieldChange = (
     beneficiaryIndex: number,
     fieldName: string,
-    value: any
+    value: FormFieldValue
   ): void => {
     updateAtBeneficiaries(beneficiaryIndex, {
       ...beneficiariesRef.current[beneficiaryIndex],
@@ -139,7 +140,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
   const handleCopyFromPrevious = (
     beneficiaryIndex: number,
     fieldName: string,
-    previousValue: any
+    previousValue: FormFieldValue
   ): void => {
     if (beneficiaryIndex > 0) {
       handleFieldChange(beneficiaryIndex, fieldName, previousValue);

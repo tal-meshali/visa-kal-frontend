@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from './apiService'
+import { apiGet } from './apiService'
 
 export interface User {
   id: string
@@ -13,9 +13,6 @@ export interface User {
  * Authenticates with Google user data
  * This endpoint doesn't require auth token
  */
-export const authenticateWithGoogle = async (googleUser: any): Promise<User> => {
-  return apiPost<User>('/api/auth/google', googleUser)
-}
 
 /**
  * Gets the current authenticated user

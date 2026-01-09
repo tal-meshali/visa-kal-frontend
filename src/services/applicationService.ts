@@ -1,10 +1,11 @@
 import { apiGet, apiPost } from "./apiService";
-import type { Application, BaseFormData } from "./requestService";
+import type { Application } from "./requestService";
+import type { FormDataRecord, TranslatedText } from "../types/formTypes";
 
 export interface CreateApplicationRequest {
   country_id: string;
-  country_name: { en: string; he: string };
-  form_data: BaseFormData;
+  country_name: TranslatedText;
+  form_data: FormDataRecord;
   agent_id?: string;
 }
 /**

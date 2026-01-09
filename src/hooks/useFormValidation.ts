@@ -5,7 +5,7 @@ import {
   validateFormData,
   type ValidationError,
 } from "../services/formService";
-import type { BaseFormData } from "../services/requestService";
+import type { FormDataInput, Language } from "../types/formTypes";
 
 export const useFormValidation = () => {
   // Store full error objects with both languages
@@ -16,8 +16,8 @@ export const useFormValidation = () => {
   const [validateState, executeValidate] = useAsyncFn(
     async (
       countryId: string | undefined,
-      formData: BaseFormData | { beneficiaries: BaseFormData[] },
-      language: "en" | "he"
+      formData: FormDataInput,
+      language: Language
     ): Promise<boolean> => {
       if (!countryId) {
         return false;
@@ -45,8 +45,8 @@ export const useFormValidation = () => {
 
   const validate = async (
     countryId: string | undefined,
-    formData: BaseFormData | { beneficiaries: BaseFormData[] },
-    language: "en" | "he"
+    formData: FormDataInput,
+    language: Language
   ): Promise<boolean> => {
     try {
       return await executeValidate(countryId, formData, language);
@@ -63,7 +63,7 @@ export const useFormValidation = () => {
   };
 
   // Get translated errors for current language
-  const getErrors = (language: "en" | "he"): Record<string, string> => {
+  const getErrors = (language: Language): Record<string, string> => {
     return _.mapValues(errorObjects, (message) => message[language]);
   };
 

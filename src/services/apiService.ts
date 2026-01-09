@@ -48,7 +48,7 @@ const createApiInstance = (): AxiosInstance => {
     (response) => response,
     async (error: AxiosError) => {
       if (error.response) {
-        const data = error.response.data as any;
+        const data = error.response.data as { detail?: string; message?: string };
 
         // Handle 401 Unauthorized - token might be invalid
         // if (status === 401) {
@@ -80,7 +80,7 @@ export const apiService = createApiInstance();
 /**
  * GET request helper
  */
-export const apiGet = async <T = any>(
+export const apiGet = async <T = unknown>(
   url: string,
   config?: AxiosRequestConfig
 ): Promise<T> => {
@@ -91,9 +91,9 @@ export const apiGet = async <T = any>(
 /**
  * POST request helper
  */
-export const apiPost = async <T = any>(
+export const apiPost = async <T = unknown>(
   url: string,
-  data?: any,
+  data?: unknown,
   config?: AxiosRequestConfig
 ): Promise<T> => {
   const response = await apiService.post<T>(url, data, config);
@@ -103,9 +103,9 @@ export const apiPost = async <T = any>(
 /**
  * PUT request helper
  */
-export const apiPut = async <T = any>(
+export const apiPut = async <T = unknown>(
   url: string,
-  data?: any,
+  data?: unknown,
   config?: AxiosRequestConfig
 ): Promise<T> => {
   const response = await apiService.put<T>(url, data, config);
@@ -115,9 +115,9 @@ export const apiPut = async <T = any>(
 /**
  * PATCH request helper
  */
-export const apiPatch = async <T = any>(
+export const apiPatch = async <T = unknown>(
   url: string,
-  data?: any,
+  data?: unknown,
   config?: AxiosRequestConfig
 ): Promise<T> => {
   const response = await apiService.patch<T>(url, data, config);
@@ -127,7 +127,7 @@ export const apiPatch = async <T = any>(
 /**
  * DELETE request helper
  */
-export const apiDelete = async <T = any>(
+export const apiDelete = async <T = unknown>(
   url: string,
   config?: AxiosRequestConfig
 ): Promise<T> => {
@@ -139,7 +139,7 @@ export const apiDelete = async <T = any>(
  * POST FormData helper for file uploads
  * Automatically sets Content-Type to multipart/form-data
  */
-export const apiPostFormData = async <T = any>(
+export const apiPostFormData = async <T = unknown>(
   url: string,
   formData: FormData,
   config?: AxiosRequestConfig

@@ -14,7 +14,7 @@ describe('apiService', () => {
   describe('apiGet', () => {
     it('makes GET request with correct URL', async () => {
       const mockData = { id: 1, name: 'Test' }
-      vi.mocked(apiService.get).mockResolvedValue({ data: mockData } as any)
+      vi.mocked(apiService.get).mockResolvedValue({ data: mockData })
 
       const result = await apiGet('/api/test')
 
@@ -25,7 +25,7 @@ describe('apiService', () => {
     it('includes authorization header when token exists', async () => {
       vi.mocked(getTokenFromStorage).mockReturnValue('test_token')
       const mockData = { id: 1 }
-      vi.mocked(apiService.get).mockResolvedValue({ data: mockData } as any)
+      vi.mocked(apiService.get).mockResolvedValue({ data: mockData })
 
       await apiGet('/api/test')
 
@@ -37,7 +37,7 @@ describe('apiService', () => {
     it('makes POST request with data', async () => {
       const mockData = { success: true }
       const postData = { name: 'Test' }
-      vi.mocked(apiService.post).mockResolvedValue({ data: mockData } as any)
+      vi.mocked(apiService.post).mockResolvedValue({ data: mockData })
 
       const result = await apiPost('/api/test', postData)
 
@@ -50,7 +50,7 @@ describe('apiService', () => {
     it('makes PUT request with data', async () => {
       const mockData = { id: 1, updated: true }
       const putData = { name: 'Updated' }
-      vi.mocked(apiService.put).mockResolvedValue({ data: mockData } as any)
+      vi.mocked(apiService.put).mockResolvedValue({ data: mockData })
 
       const result = await apiPut('/api/test', putData)
 
@@ -62,7 +62,7 @@ describe('apiService', () => {
   describe('apiDelete', () => {
     it('makes DELETE request', async () => {
       const mockData = { deleted: true }
-      vi.mocked(apiService.delete).mockResolvedValue({ data: mockData } as any)
+      vi.mocked(apiService.delete).mockResolvedValue({ data: mockData })
 
       const result = await apiDelete('/api/test')
 
@@ -76,7 +76,7 @@ describe('apiService', () => {
       const mockData = { success: true }
       const formData = new FormData()
       formData.append('file', new Blob(['content']), 'test.pdf')
-      vi.mocked(apiService.post).mockResolvedValue({ data: mockData } as any)
+      vi.mocked(apiService.post).mockResolvedValue({ data: mockData })
 
       const result = await apiPostFormData('/api/upload', formData)
 

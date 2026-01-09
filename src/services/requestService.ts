@@ -1,10 +1,9 @@
+import type { FormDataRecord, TranslatedText } from "../types/formTypes";
 import { apiGet } from "./apiService";
-
-export type BaseFormData = Record<string, string | number | boolean | File>;
 
 export interface Beneficiary {
   id: string;
-  form_data: BaseFormData & { passport_data?: BaseFormData };
+  form_data: FormDataRecord & { passport_data?: FormDataRecord };
   status: string;
   created_at: string;
   updated_at: string;
@@ -16,7 +15,7 @@ export interface Application {
   id: string;
   user_id: string;
   country_id: string;
-  country_name: { en: string; he: string };
+  country_name: TranslatedText;
   status: string;
   submitted_at: string | null;
   created_at: string;
