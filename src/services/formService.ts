@@ -49,16 +49,16 @@ export const fetchFormSchema = async (
 const sanitizeFormData = (
   data: BaseFormData | { beneficiaries: BaseFormData[] }
 ): BaseFormData | { beneficiaries: BaseFormData[] } => {
-  if ('beneficiaries' in data) {
+  if ('beneficiaries' in data && Array.isArray(data.beneficiaries)) {
     return {
-      beneficiaries: data.beneficiaries.map((beneficiary) =>
+      beneficiaries: data.beneficiaries.map((beneficiary: BaseFormData) =>
         mapValues(beneficiary, (value) =>
           value instanceof File ? value.name : value
         )
       ),
     };
   }
-  return mapValues(data, (value) =>
+  return mapValues(data as BaseFormData, (value) =>
     value instanceof File ? value.name : value
   );
 };

@@ -1,12 +1,12 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
+// @ts-ignore - vitest/config extends vite config with test property
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
-import type { PluginOption } from 'vitest'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()] as PluginOption[],
+  plugins: [react()],
   test: {
     globals: true,
     environment: 'jsdom',
