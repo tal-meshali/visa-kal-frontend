@@ -25,7 +25,7 @@ spec:
         - name: VITE_CLERK_PUBLISHABLE_KEY
           value: "pk_test_cGxlYXNhbnQtcG9ycG9pc2UtOTcuY2xlcmsuYWNjb3VudHMuZGV2JA"
         - name: VITE_API_BASE_URL
-          value: "https://visa-vibe-backend-249130274218.europe-west4.run.app"
+          value: "https://server.visa-kal.co.il/"
         resources:
           limits:
             cpu: "1"

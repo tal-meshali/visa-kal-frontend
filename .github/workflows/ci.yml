@@ -126,7 +126,7 @@ jobs:
           --platform managed \
           --region ${{ env.REGION }} \
           --allow-unauthenticated \
-          --set-env-vars VITE_CLERK_PUBLISHABLE_KEY="${{ env.VITE_CLERK_PUBLISHABLE_KEY }}",VITE_API_BASE_URL="${{ env.VITE_API_BASE_URL }}" \
+          --set-env-vars PORT="80",VITE_CLERK_PUBLISHABLE_KEY="${{ env.VITE_CLERK_PUBLISHABLE_KEY }}",VITE_API_BASE_URL="${{ env.VITE_API_BASE_URL }}" \
           --memory 512Mi \
           --cpu 1 \
           --timeout 300 \
