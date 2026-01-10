@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { SignedIn, SignedOut } from "./AuthComponents";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "../contexts/useLanguage";
 import {

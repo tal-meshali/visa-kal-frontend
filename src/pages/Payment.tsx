@@ -1,4 +1,8 @@
-import { SignedIn, SignedOut, useUser } from "@clerk/clerk-react";
+import {
+  SignedIn,
+  SignedOut,
+  useUser,
+} from "../components/AuthComponents";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Alert } from "../components/Alert";

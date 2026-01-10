@@ -50,15 +50,14 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
   const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
   const isUploadingRef = useRef(false);
 
-  // Check if there's an active upload for this field when component mounts or props change
+  // Sync uploading state from activeUploads prop (only when starting upload)
+  // Don't clear uploading state from activeUploads - let the completion flow handle it
   useEffect(() => {
-    if (activeUploads && activeUploads.has(uploadId)) {
+    if (activeUploads && activeUploads.has(uploadId) && !isUploadingRef.current) {
+      // Only set uploading to true if activeUploads has this uploadId and we're not already uploading
+      // This handles the case where the component re-mounts during an upload
       setUploading(true);
       isUploadingRef.current = true;
-    } else {
-      // Clear uploading state if there's no active upload for this specific field/beneficiary
-      setUploading(false);
-      isUploadingRef.current = false;
     }
   }, [activeUploads, uploadId]);
 

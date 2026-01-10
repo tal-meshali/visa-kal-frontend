@@ -9,8 +9,8 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 /**
- * Gets the Clerk token from localStorage
- * Token is automatically synced by useClerkTokenSync hook
+ * Gets the Firebase token from localStorage
+ * Token is automatically synced by useFirebaseTokenSync hook
  */
 const getStoredToken = (): string | null => {
   return getTokenFromStorage();
@@ -18,7 +18,7 @@ const getStoredToken = (): string | null => {
 
 /**
  * Creates an axios instance with automatic token injection from localStorage
- * The token is synced from Clerk via useClerkTokenSync hook
+ * The token is synced from Firebase via useFirebaseTokenSync hook
  */
 const createApiInstance = (): AxiosInstance => {
   const instance = axios.create({
@@ -48,12 +48,15 @@ const createApiInstance = (): AxiosInstance => {
     (response) => response,
     async (error: AxiosError) => {
       if (error.response) {
-        const data = error.response.data as { detail?: string; message?: string };
+        const data = error.response.data as {
+          detail?: string;
+          message?: string;
+        };
 
         // Handle 401 Unauthorized - token might be invalid
-        // if (status === 401) {
-        //   localStorage.removeItem(CLERK_TOKEN_KEY);
-        // }
+        if (error.response.status === 401) {
+          localStorage.removeItem("firebase_token");
+        }
 
         const errorMessage =
           data?.detail || data?.message || error.message || "An error occurred";

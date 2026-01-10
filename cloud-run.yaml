@@ -22,8 +22,28 @@ spec:
         env:
         - name: PORT
           value: "80"
-        - name: VITE_CLERK_PUBLISHABLE_KEY
-          value: "pk_test_cGxlYXNhbnQtcG9ycG9pc2UtOTcuY2xlcmsuYWNjb3VudHMuZGV2JA"
+        - name: VITE_FIREBASE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: firebase-api-key
+              key: latest
+        - name: VITE_FIREBASE_AUTH_DOMAIN
+          value: "strong-planet-483808-d1.firebaseapp.com"
+        - name: VITE_FIREBASE_PROJECT_ID
+          value: "strong-planet-483808-d1"
+        - name: VITE_FIREBASE_STORAGE_BUCKET
+          value: "strong-planet-483808-d1.firebasestorage.app"
+        - name: VITE_FIREBASE_MESSAGING_SENDER_ID
+          value: "249130274218"
+        - name: VITE_FIREBASE_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: firebase-app-id
+              key: latest
+        - name: VITE_FIREBASE_MEASUREMENT_ID
+          value: "G-8DS1KLSVTV"
+        - name: VITE_USE_FIREBASE_EMULATOR
+          value: "false"
         - name: VITE_API_BASE_URL
           value: "https://server.visa-kal.co.il/"
         resources:

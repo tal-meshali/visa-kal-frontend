@@ -1,8 +1,13 @@
-import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/clerk-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useList } from "react-use";
 import { Alert } from "../components/Alert";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  useUser,
+} from "../components/AuthComponents";
 import { BackButton } from "../components/BackButton";
 import { BeneficiaryForm } from "../components/BeneficiaryForm";
 import { Button } from "../components/Button";
@@ -31,7 +36,7 @@ const ApplicationForm = () => {
           <div className="sign-in-prompt">
             <h2 className="sign-in-title">{t.form.signInRequired}</h2>
             <p className="sign-in-message">{t.form.signInMessage}</p>
-            <SignInButton mode="modal">
+            <SignInButton>
               <Button variant="primary" size="large">
                 {t.form.signIn}
               </Button>

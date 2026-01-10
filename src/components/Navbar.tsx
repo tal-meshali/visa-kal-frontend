@@ -1,15 +1,15 @@
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useLanguage } from "../contexts/useLanguage";
+import { getCurrentUser } from "../services/authService";
 import {
   SignedIn,
   SignedOut,
   SignInButton,
   UserButton,
   useUser,
-} from "@clerk/clerk-react";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useLanguage } from "../contexts/useLanguage";
-import { getCurrentUser } from "../services/authService";
+} from "./AuthComponents";
 import "./Navbar.css";
 
 interface NavbarProps {
@@ -108,7 +108,7 @@ export const Navbar = ({
             <UserButton />
           </SignedIn>
           <SignedOut>
-            <SignInButton mode="modal">
+            <SignInButton>
               <button className="nav-button">{t.nav.signIn}</button>
             </SignInButton>
           </SignedOut>

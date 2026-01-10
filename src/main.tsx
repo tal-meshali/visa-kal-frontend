@@ -1,15 +1,16 @@
-import { ClerkProvider } from "@clerk/clerk-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App.tsx";
-import { ClerkTokenSync } from "./components/ClerkTokenSync.tsx";
+import { FirebaseTokenSync } from "./components/FirebaseTokenSync.tsx";
+import { AuthProvider } from "./contexts/AuthContext";
 import { LanguageProvider } from "./contexts/LanguageProvider";
 import "./index.css";
 import ApplicationForm from "./pages/ApplicationForm.tsx";
 import ApplicationsHistory from "./pages/ApplicationsHistory.tsx";
 import Payment from "./pages/Payment.tsx";
+import { EmailVerification } from "./components/EmailVerification.tsx";
 
 // Create a client for react-query
 const queryClient = new QueryClient({
@@ -22,10 +23,21 @@ const queryClient = new QueryClient({
   },
 });
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+// Validate Firebase config
+const requiredEnvVars = [
+  "VITE_FIREBASE_API_KEY",
+  "VITE_FIREBASE_AUTH_DOMAIN",
+  "VITE_FIREBASE_PROJECT_ID",
+];
 
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Clerk Publishable Key");
+const missingVars = requiredEnvVars.filter(
+  (varName) => !import.meta.env[varName]
+);
+
+if (missingVars.length > 0) {
+  throw new Error(
+    `Missing required Firebase environment variables: ${missingVars.join(", ")}`
+  );
 }
 
 // Get language from URL params or browser preference
@@ -47,9 +59,9 @@ const getInitialLanguage = (): "en" | "he" => {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <AuthProvider>
       <QueryClientProvider client={queryClient}>
-        <ClerkTokenSync />
+        <FirebaseTokenSync />
         <LanguageProvider defaultLanguage={getInitialLanguage()}>
           <BrowserRouter>
             <Routes>
@@ -57,10 +69,11 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/apply/:countryId" element={<ApplicationForm />} />
               <Route path="/payment/:countryId" element={<Payment />} />
               <Route path="/applications" element={<ApplicationsHistory />} />
+              <Route path="/verify-email" element={<EmailVerification />} />
             </Routes>
           </BrowserRouter>
         </LanguageProvider>
       </QueryClientProvider>
-    </ClerkProvider>
+    </AuthProvider>
   </StrictMode>
 );

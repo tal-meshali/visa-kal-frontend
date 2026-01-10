@@ -75,7 +75,7 @@ The `utils.tsx` file provides a custom `render` function that includes all neces
 ## Mocking
 
 Global mocks are configured in `setup.ts`:
-- Clerk authentication
+- Firebase Authentication
 - React Router
 - Environment variables
 

@@ -49,15 +49,14 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
   const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
   const isUploadingRef = useRef(false);
 
-  // Check if there's an active upload for this field when component mounts or props change
+  // Sync uploading state from activeUploads prop (only when starting upload)
+  // Don't clear uploading state from activeUploads - let the completion flow handle it
   useEffect(() => {
-    if (activeUploads && activeUploads.has(uploadId)) {
+    if (activeUploads && activeUploads.has(uploadId) && !isUploadingRef.current) {
+      // Only set uploading to true if activeUploads has this uploadId and we're not already uploading
+      // This handles the case where the component re-mounts during an upload
       setUploading(true);
       isUploadingRef.current = true;
-    } else {
-      // Clear uploading state if there's no active upload for this specific field/beneficiary
-      setUploading(false);
-      isUploadingRef.current = false;
     }
   }, [activeUploads, uploadId]);
 
@@ -113,14 +112,17 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
 
     try {
       const result = await uploadFileToS3(file, name, beneficiaryId);
+      // Update value - the useEffect will sync uploadedFilename from value
+      // Don't clear uploading state here - let the useEffect handle it when value is set
       onChange(result.url);
-      setUploadedFilename(result.filename);
+      // Update parent upload state after onChange
+      onUploadStateChange?.(uploadId, false);
+      // The uploading state will be cleared by the useEffect when value prop updates
     } catch (err) {
       setUploadError(
         err instanceof Error ? err.message : t.fileUpload.uploadFailed
       );
       onChange(null);
-    } finally {
       setUploading(false);
       isUploadingRef.current = false;
       onUploadStateChange?.(uploadId, false);

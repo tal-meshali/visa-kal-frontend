@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { SignedIn, SignedOut } from "../components/AuthComponents";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { ApplicationCard } from "../components/ApplicationCard";

@@ -7,25 +7,33 @@ import { vi } from 'vitest'
 
 // Mock environment variables
 vi.stubEnv('VITE_API_BASE_URL', 'http://localhost:8080')
-vi.stubEnv('VITE_CLERK_PUBLISHABLE_KEY', 'pk_test_mock_key')
+vi.stubEnv('VITE_FIREBASE_API_KEY', 'mock_firebase_api_key')
+vi.stubEnv('VITE_FIREBASE_AUTH_DOMAIN', 'mock-project.firebaseapp.com')
+vi.stubEnv('VITE_FIREBASE_PROJECT_ID', 'mock-project')
+vi.stubEnv('VITE_FIREBASE_STORAGE_BUCKET', 'mock-project.appspot.com')
+vi.stubEnv('VITE_FIREBASE_MESSAGING_SENDER_ID', '123456789')
+vi.stubEnv('VITE_FIREBASE_APP_ID', '1:123456789:web:abcdef')
 
-// Mock Clerk
-vi.mock('@clerk/clerk-react', () => ({
-  useUser: () => ({
-    user: {
-      id: 'test_user_id',
-      emailAddresses: [{ emailAddress: 'test@example.com' }],
-      firstName: 'Test',
-      lastName: 'User',
-    },
-    isLoaded: true,
-  }),
+// Mock Firebase Auth
+vi.mock('../config/firebase', () => ({
+  auth: {},
+  default: {},
+}))
+
+vi.mock('../contexts/AuthContext', () => ({
   useAuth: () => ({
-    getToken: async () => 'mock_token_12345',
-    isLoaded: true,
-    isSignedIn: true,
+    user: {
+      uid: 'test_user_id',
+      email: 'test@example.com',
+      displayName: 'Test User',
+      photoURL: null,
+    },
+    loading: false,
+    signIn: vi.fn(),
+    signOut: vi.fn(),
+    getIdToken: async () => 'mock_token_12345',
   }),
-  ClerkProvider: ({ children }: { children: React.ReactNode }) => children,
+  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
 }))
 
 // Mock react-router-dom
