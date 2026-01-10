@@ -15,8 +15,8 @@ env:
   PROJECT_ID: strong-planet-483808-d1
   SERVICE_NAME: visa-vibe-frontend
   REGION: europe-west4
-  VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL || 'https://visa-vibe-backend-strong-planet-483808-d1.a.run.app' }}
-  VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY || 'pk_test_cGxlYXNhbnQtcG9ycG9pc2UtOTcuY2xlcmsuYWNjb3VudHMuZGV2JA' }}
+  VITE_API_BASE_URL: ${{ env.VITE_API_BASE_URL }}
+  VITE_CLERK_PUBLISHABLE_KEY: ${{ env.VITE_CLERK_PUBLISHABLE_KEY }}
 
 jobs:
   build:
