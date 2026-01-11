@@ -158,7 +158,7 @@ jobs:
           --platform managed \
           --region ${{ env.REGION }} \
           --allow-unauthenticated \
-          --service-account visa-vibe-frontend@${{ env.PROJECT_ID }}.iam.gserviceaccount.com \
+          --service-account visa-kal-frontend@${{ env.PROJECT_ID }}.iam.gserviceaccount.com \
           --set-env-vars VITE_FIREBASE_AUTH_DOMAIN=${{ env.FIREBASE_AUTH_DOMAIN }},VITE_FIREBASE_PROJECT_ID=${{ env.FIREBASE_PROJECT_ID }},VITE_FIREBASE_STORAGE_BUCKET=${{ env.FIREBASE_STORAGE_BUCKET }},VITE_FIREBASE_MESSAGING_SENDER_ID=${{ env.FIREBASE_MESSAGING_SENDER_ID }},VITE_FIREBASE_MEASUREMENT_ID=${{ env.FIREBASE_MEASUREMENT_ID }},VITE_USE_FIREBASE_EMULATOR=false,VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }} \
           --set-secrets VITE_FIREBASE_API_KEY=firebase-api-key:latest,VITE_FIREBASE_APP_ID=firebase-app-id:latest \
           --memory 512Mi \
