@@ -14,7 +14,7 @@ spec:
     spec:
       containerConcurrency: 80
       timeoutSeconds: 300
-      serviceAccountName: visa-vibe-frontend@strong-planet-483808-d1.iam.gserviceaccount.com
+      serviceAccountName: visa-kal-frontend@strong-planet-483808-d1.iam.gserviceaccount.com
       containers:
       - image: gcr.io/strong-planet-483808-d1/visa-vibe-frontend:latest
         ports:
