@@ -57,6 +57,16 @@ const getInitialLanguage = (): "en" | "he" => {
   return "en";
 };
 
+// Initialize theme - ensures data-theme is always set, even on routes where App.tsx is not rendered
+const initializeTheme = (): void => {
+  const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+  const theme = savedTheme || "light";
+  document.documentElement.setAttribute("data-theme", theme);
+};
+
+// Initialize theme before rendering
+initializeTheme();
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider>
