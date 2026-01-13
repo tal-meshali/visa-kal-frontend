@@ -2,8 +2,8 @@ import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { useLanguage } from "../../contexts/useLanguage";
 import {
-  deleteFileFromS3,
-  uploadFileToS3,
+  deleteFileFromBucket,
+  uploadFileToBucket,
 } from "../../services/fileUploadService";
 import PassportDataModal from "../PassportDataModal";
 import "./FieldBase.css";
@@ -98,7 +98,7 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
     onUploadStateChange?.(uploadId, true);
 
     try {
-      const result = await uploadFileToS3(file, name, beneficiaryId);
+      const result = await uploadFileToBucket(file, name, beneficiaryId);
       try {
         const url = await getDownloadURL(
           ref(
@@ -133,7 +133,7 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
     }
 
     try {
-      await deleteFileFromS3(value);
+      await deleteFileFromBucket(value);
       onChange(null);
       setUploadedFilename(null);
       setPreview(null);
@@ -145,7 +145,7 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
     }
   };
 
-  // Extract filename from S3 URL if value is a URL
+  // Extract filename from bucket URL if value is a URL
   const displayFilename =
     uploadedFilename ||
     (value ? value.split("/").pop()?.split("_").slice(1).join("_") : null);

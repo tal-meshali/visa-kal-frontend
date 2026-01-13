@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useLanguage } from "../../contexts/useLanguage";
 import {
-  deleteFileFromS3,
-  uploadFileToS3,
+  deleteFileFromBucket,
+  uploadFileToBucket,
 } from "../../services/fileUploadService";
 import "./FieldBase.css";
 
@@ -72,7 +72,7 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
     onUploadStateChange?.(uploadId, true);
 
     try {
-      const result = await uploadFileToS3(file, name, beneficiaryId);
+      const result = await uploadFileToBucket(file, name, beneficiaryId);
       onChange(result.url);
       setUploadError(null);
       setUploading(false);
@@ -93,7 +93,7 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
     }
 
     try {
-      await deleteFileFromS3(value);
+      await deleteFileFromBucket(value);
       onChange(null);
       setUploadError(null);
     } catch (err) {
@@ -103,7 +103,7 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
     }
   };
 
-  // Extract filename from S3 URL if value is a URL
+  // Extract filename from bucket URL if value is a URL
   const displayFilename = value
     ? value.split("/").pop()?.split("_").slice(1).join("_") || null
     : null;
