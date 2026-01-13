@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import React, { useEffect, useState } from "react";
 import { useLanguage } from "../../contexts/useLanguage";
 import {
   deleteFileFromS3,
   uploadFileToS3,
 } from "../../services/fileUploadService";
+import PassportDataModal from "../PassportDataModal";
 import "./FieldBase.css";
 
 interface PhotoFieldProps {
@@ -22,7 +24,11 @@ interface PhotoFieldProps {
   beneficiaryId?: string;
   onUploadStateChange?: (uploadId: string, isUploading: boolean) => void;
   activeUploads?: Set<string>;
+  requestId?: string;
 }
+
+const storage = getStorage();
+storage.maxOperationRetryTime = 2000;
 
 const PhotoField: React.FC<PhotoFieldProps> = ({
   name,
@@ -39,7 +45,7 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
   fieldId,
   beneficiaryId = "0",
   onUploadStateChange,
-  activeUploads,
+  requestId,
 }) => {
   const { t } = useLanguage();
   const inputId = fieldId || name;
@@ -48,52 +54,15 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
-  const isUploadingRef = useRef(false);
-
-  // Sync uploading state from activeUploads prop (only when starting upload)
-  // Don't clear uploading state from activeUploads - let the completion flow handle it
-  useEffect(() => {
-    if (activeUploads && activeUploads.has(uploadId) && !isUploadingRef.current) {
-      // Only set uploading to true if activeUploads has this uploadId and we're not already uploading
-      // This handles the case where the component re-mounts during an upload
-      setUploading(true);
-      isUploadingRef.current = true;
-    }
-  }, [activeUploads, uploadId]);
+  const [showPassportModal, setShowPassportModal] = useState(false);
 
   useEffect(() => {
-    // If value is set and we were uploading, the upload completed
-    if (value && isUploadingRef.current) {
-      setUploading(false);
-      isUploadingRef.current = false;
-    }
-
     if (value) {
-      // If value is a URL (S3 URL), use it directly
-      if (value.startsWith("http://") || value.startsWith("https://")) {
-        setPreview(value);
-        // Extract filename from URL
-        const filename =
-          value.split("/").pop()?.split("_").slice(1).join("_") || null;
-        setUploadedFilename(filename);
-      } else {
-        // Legacy: if it's a File object (shouldn't happen but handle it)
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPreview(reader.result as string);
-        };
-        // This shouldn't happen with new implementation
-        setPreview(null);
-        setUploadedFilename(null);
-      }
-      // Clear error when value changes (new file uploaded successfully)
-      setUploadError(null);
-    } else if (!isUploadingRef.current) {
-      // Only clear preview and filename if not currently uploading
-      setPreview(null);
-      setUploadedFilename(null);
+      const filename =
+        value.split("/").pop()?.split("_").slice(1).join("_") || null;
+      setUploadedFilename(filename);
     }
-  }, [value, fieldId, beneficiaryId]);
+  }, [value]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -125,14 +94,27 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
     reader.readAsDataURL(file);
 
     setUploading(true);
-    isUploadingRef.current = true;
     setUploadError(null);
     onUploadStateChange?.(uploadId, true);
 
     try {
       const result = await uploadFileToS3(file, name, beneficiaryId);
+      try {
+        const url = await getDownloadURL(
+          ref(
+            storage,
+            result.url.replace("https://storage.googleapis.com/", "")
+          )
+        );
+        setPreview(url);
+      } catch (e) {
+        console.log(e);
+      }
       onChange(result.url);
       setUploadedFilename(result.filename);
+      if (name === "passport_copy") {
+        setShowPassportModal(true);
+      }
     } catch (err) {
       setUploadError(
         err instanceof Error ? err.message : t.fileUpload.uploadFailed
@@ -141,7 +123,6 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
       setPreview(null);
     } finally {
       setUploading(false);
-      isUploadingRef.current = false;
       onUploadStateChange?.(uploadId, false);
     }
   };
@@ -232,6 +213,14 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
       )}
       {error && <span className="error-message">{error}</span>}
       {uploadError && <span className="error-message">{uploadError}</span>}
+      {showPassportModal && (
+        <PassportDataModal
+          isOpen={showPassportModal}
+          onClose={() => setShowPassportModal(false)}
+          beneficiaryId={beneficiaryId}
+          requestId={requestId}
+        />
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLanguage } from "../../contexts/useLanguage";
 import {
   deleteFileFromS3,
@@ -21,7 +21,6 @@ interface DocumentFieldProps {
   fieldId?: string;
   beneficiaryId?: string;
   onUploadStateChange?: (uploadId: string, isUploading: boolean) => void;
-  activeUploads?: Set<string>;
 }
 
 const DocumentField: React.FC<DocumentFieldProps> = ({
@@ -39,7 +38,6 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
   fieldId,
   beneficiaryId = "0",
   onUploadStateChange,
-  activeUploads,
 }) => {
   const { t } = useLanguage();
   const inputId = fieldId || name;
@@ -47,41 +45,15 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
-  const isUploadingRef = useRef(false);
 
-  // Sync uploading state from activeUploads prop (only when starting upload)
-  // Don't clear uploading state from activeUploads - let the completion flow handle it
   useEffect(() => {
-    if (activeUploads && activeUploads.has(uploadId) && !isUploadingRef.current) {
-      // Only set uploading to true if activeUploads has this uploadId and we're not already uploading
-      // This handles the case where the component re-mounts during an upload
-      setUploading(true);
-      isUploadingRef.current = true;
-    }
-  }, [activeUploads, uploadId]);
-
-  // Sync uploadedFilename with value prop when value changes
-  // Clear uploading state when value is set (upload completed) or when switching beneficiaries
-  useEffect(() => {
-    // If value is set and we were uploading, the upload completed
-    if (value && isUploadingRef.current) {
-      setUploading(false);
-      isUploadingRef.current = false;
-    }
-
-    // Sync filename with value
     if (value) {
-      // Extract filename from URL if value is a URL
       const filename =
         value.split("/").pop()?.split("_").slice(1).join("_") || null;
       setUploadedFilename(filename);
-      // Clear error when value changes (new file uploaded successfully)
       setUploadError(null);
-    } else if (!isUploadingRef.current) {
-      // Only clear filename if not currently uploading and value is empty
-      setUploadedFilename(null);
     }
-  }, [value, fieldId, beneficiaryId]);
+  }, [value]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -106,7 +78,6 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
     }
 
     setUploading(true);
-    isUploadingRef.current = true;
     setUploadError(null);
     onUploadStateChange?.(uploadId, true);
 
@@ -124,7 +95,6 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
       );
       onChange(null);
       setUploading(false);
-      isUploadingRef.current = false;
       onUploadStateChange?.(uploadId, false);
     }
   };

@@ -19,7 +19,6 @@ export const BeneficiaryForm = ({
   autoCopyFields,
   onAutoCopyToggle,
   onUploadStateChange,
-  activeUploads,
 }: BeneficiaryFormProps) => {
   const { t } = useLanguage();
   const canCopyFromPrevious =
@@ -92,7 +91,6 @@ export const BeneficiaryForm = ({
               : field.name,
           beneficiaryId: beneficiaryIndex.toString(),
           onUploadStateChange,
-          activeUploads,
         })}
       </div>
     );

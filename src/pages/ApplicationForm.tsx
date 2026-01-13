@@ -362,7 +362,6 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
                   autoCopyFields={autoCopyFields}
                   onAutoCopyToggle={handleAutoCopyToggle}
                   onUploadStateChange={handleUploadStateChange}
-                  activeUploads={activeUploads}
                 />
               </div>
             )}

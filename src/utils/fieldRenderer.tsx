@@ -63,10 +63,12 @@ export const renderFormField = (
   field: TypedFormField | FormField,
   commonProps: CommonFieldProps
 ): React.JSX.Element | null => {
+  const key = `${commonProps.beneficiaryId}__${field.name}`;
   if (isStringField(field)) {
     return (
       <StringFieldComponent
         {...commonProps}
+        key={key}
         value={commonProps.value as string}
         onChange={(value) => commonProps.onChange(value)}
         minLength={field.min_length}
@@ -79,6 +81,7 @@ export const renderFormField = (
     return (
       <NumberFieldComponent
         {...commonProps}
+        key={key}
         value={commonProps.value as number | string}
         onChange={(value) => commonProps.onChange(value)}
         min={field.min_value}
@@ -92,6 +95,7 @@ export const renderFormField = (
     return (
       <DateFieldComponent
         {...commonProps}
+        key={key}
         value={commonProps.value as string}
         onChange={(value) => commonProps.onChange(value)}
         minDate={field.min_date}
@@ -104,6 +108,7 @@ export const renderFormField = (
     return (
       <SelectFieldComponent
         {...commonProps}
+        key={key}
         value={commonProps.value as string}
         onChange={(value) => commonProps.onChange(value)}
         options={field.options || []}
@@ -116,6 +121,7 @@ export const renderFormField = (
     return (
       <DocumentFieldComponent
         {...commonProps}
+        key={key}
         value={commonProps.value as string | null}
         onChange={(value) => commonProps.onChange(value ?? "")}
         fieldId={commonProps.fieldId || commonProps.name}
@@ -132,6 +138,7 @@ export const renderFormField = (
     return (
       <PhotoFieldComponent
         {...commonProps}
+        key={key}
         value={commonProps.value as string | null}
         onChange={(value) => commonProps.onChange(value ?? "")}
         fieldId={commonProps.fieldId || commonProps.name}
@@ -139,7 +146,7 @@ export const renderFormField = (
         acceptedFormats={field.accepted_formats}
         maxSizeMB={field.max_size_mb}
         onUploadStateChange={commonProps.onUploadStateChange}
-        activeUploads={commonProps.activeUploads}
+        requestId={commonProps.requestId}
       />
     );
   }
