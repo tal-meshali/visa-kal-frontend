@@ -1,8 +1,8 @@
 import { useLanguage } from "../contexts/useLanguage";
 import type {
   BeneficiaryFormProps,
-  FormField,
   FormFieldValue,
+  TypedFormField,
 } from "../types/formTypes";
 import { renderFormField } from "../utils/fieldRenderer";
 
@@ -25,7 +25,7 @@ export const BeneficiaryForm = ({
     previousBeneficiaryData !== undefined && beneficiaryIndex > 0;
   const isFirstBeneficiary = beneficiaryIndex === 0;
 
-  const renderField = (field: FormField) => {
+  const renderField = (field: TypedFormField) => {
     const fieldErrorKey =
       totalBeneficiaries > 1
         ? `beneficiaries[${beneficiaryIndex}].${field.name}`

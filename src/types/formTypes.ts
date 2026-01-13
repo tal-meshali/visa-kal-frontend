@@ -130,40 +130,12 @@ export type TypedFormField =
   | PhotoField;
 
 /**
- * Legacy FormField type for backward compatibility
- * @deprecated Use TypedFormField instead
- */
-export interface FormField {
-  name: string;
-  label: TranslatedText;
-  field_type: FieldType;
-  required?: boolean;
-  placeholder?: TranslatedText;
-  auto_copy?: boolean;
-  default_value?: string;
-  // Field-specific properties (using index signature for flexibility)
-  [key: string]:
-    | string
-    | number
-    | boolean
-    | string[]
-    | TranslatedText
-    | undefined;
-}
-
-/**
- * Legacy ExtendedFormField type for backward compatibility
- * @deprecated Use TypedFormField instead
- */
-export type ExtendedFormField = FormField;
-
-/**
  * Form schema structure
  */
 export interface FormSchema {
   country_id: string;
   country_name: TranslatedText;
-  fields: FormField[];
+  fields: TypedFormField[];
   submit_button_text: TranslatedText;
 }
 
@@ -181,15 +153,8 @@ export interface ValidationError {
 export interface ValidationResult {
   valid: boolean;
   errors: ValidationError[];
-  data?: FormDataRecord | { beneficiaries: FormDataRecord[] };
+  data?: { beneficiaries: FormDataRecord[] };
 }
-
-/**
- * Form data for single or multiple beneficiaries
- */
-export type FormDataInput =
-  | FormDataRecord
-  | { beneficiaries: FormDataRecord[] };
 
 /**
  * Common props for all form field components
@@ -205,6 +170,7 @@ export interface CommonFieldProps {
   language: Language;
   fieldId?: string;
   beneficiaryId?: string;
+  requestId?: string;
   getToken?: () => Promise<string | null>;
   onUploadStateChange?: (uploadId: string, isUploading: boolean) => void;
   activeUploads?: Set<string>;
@@ -215,7 +181,7 @@ export interface CommonFieldProps {
  */
 export interface BeneficiaryFormProps {
   beneficiaryIndex: number;
-  fields: FormField[];
+  fields: TypedFormField[];
   formData: FormDataRecord;
   errors: Record<string, string>;
   language: Language;
@@ -229,5 +195,4 @@ export interface BeneficiaryFormProps {
   autoCopyFields: Set<string>;
   onAutoCopyToggle: (fieldName: string, checked: boolean) => void;
   onUploadStateChange?: (uploadId: string, isUploading: boolean) => void;
-  activeUploads?: Set<string>;
 }

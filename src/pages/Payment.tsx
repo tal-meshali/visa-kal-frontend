@@ -1,26 +1,22 @@
-import {
-  SignedIn,
-  SignedOut,
-  useUser,
-} from "../components/AuthComponents";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Alert } from "../components/Alert";
-import { BackButton } from "../components/BackButton";
+import { SignedIn, SignedOut, useUser } from "../components/AuthComponents";
 import { Button } from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
 import { useLanguage } from "../contexts/useLanguage";
-import { createApplication } from "../services/applicationService";
+import {
+  createApplication,
+  getApplication,
+  updateApplicationStatus,
+} from "../services/applicationService";
 import "./Payment.css";
 
-import type {
-  FormDataInput,
-  FormDataRecord,
-  TranslatedText,
-} from "../types/formTypes";
+import type { FormDataRecord, TranslatedText } from "../types/formTypes";
 
 interface LocationState {
-  formData?: FormDataInput & { beneficiaries: FormDataRecord[] };
+  requestId?: string;
+  formData?: FormDataRecord[];
   countryName?: TranslatedText;
 }
 
@@ -44,18 +40,73 @@ const Payment = () => {
   });
 
   const state = location.state as LocationState | null;
+  const requestId = state?.requestId;
   const formData = state?.formData;
   const countryName = state?.countryName;
+  const [loadingRequest, setLoadingRequest] = useState(false);
+  const [loadedFormData, setLoadedFormData] = useState<FormDataRecord[] | null>(
+    null
+  );
+  const [loadedCountryName, setLoadedCountryName] =
+    useState<TranslatedText | null>(null);
+
+  // Load form data from request if requestId exists
+  useEffect(() => {
+    const loadRequestData = async () => {
+      if (requestId && user && !formData) {
+        setLoadingRequest(true);
+        try {
+          const application = await getApplication(requestId);
+          // Extract form data from beneficiaries
+          const beneficiariesFormData = application.beneficiaries.map(
+            (beneficiary) => beneficiary.form_data
+          );
+          setLoadedFormData(beneficiariesFormData);
+          setLoadedCountryName(application.country_name);
+        } catch (error) {
+          setAlert({
+            type: "error",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Failed to load application data",
+            isOpen: true,
+          });
+          // Redirect back if loading fails
+          navigate(`/apply/${countryId}`);
+        } finally {
+          setLoadingRequest(false);
+        }
+      }
+    };
+
+    loadRequestData();
+  }, [requestId, user, formData, countryId, navigate]);
+
+  // Use loaded data if available, otherwise use state data
+  const finalFormData = loadedFormData || formData;
+  const finalCountryName = loadedCountryName || countryName;
 
   // Redirect if no form data or not authenticated
   useEffect(() => {
-    if (!authLoading && (!user || !formData || !countryId)) {
+    if (
+      !authLoading &&
+      !loadingRequest &&
+      (!user || !finalFormData || !countryId)
+    ) {
       navigate("/");
     }
-  }, [user, authLoading, formData, countryId, navigate]);
+  }, [
+    user,
+    authLoading,
+    loadingRequest,
+    finalFormData,
+    countryId,
+    navigate,
+  ]);
 
   const handlePayment = async (): Promise<void> => {
-    if (!user || !formData || !countryId || !countryName) {
+    if (!user || !finalFormData || !countryId || !finalCountryName) {
       return;
     }
 
@@ -67,26 +118,25 @@ const Payment = () => {
       setProgress(20);
       await new Promise((resolve) => setTimeout(resolve, 300));
 
-      // Step 2: Creating application in backend (40%)
+      // Step 2: Update request status or create application (40%)
       setProgress(40);
-      // Get agent_id from localStorage if it exists
-      const agentId = localStorage.getItem("agent_id");
-      // Convert FormDataInput to FormDataRecord for API
-      // If it's a single record, use it directly; if it has beneficiaries, use the first one
-      const formDataRecord =
-        formData && "beneficiaries" in formData
-          ? formData.beneficiaries[0] || {}
-          : formData || {};
-      await createApplication({
-        country_id: countryId,
-        country_name: countryName,
-        form_data: formDataRecord,
-        agent_id: agentId || undefined,
-      });
+      if (requestId) {
+        // Update existing request status to payment_received
+        await updateApplicationStatus(requestId, "payment_received");
+      } else {
+        // Fallback: Create new application (for backward compatibility)
+        const agentId = localStorage.getItem("agent_id");
+        await createApplication({
+          country_id: countryId,
+          country_name: finalCountryName,
+          beneficiaries: finalFormData,
+          agent_id: agentId || undefined,
+        });
 
-      // Delete agent_id from localStorage after successful submission
-      if (agentId) {
-        localStorage.removeItem("agent_id");
+        // Delete agent_id from localStorage after successful submission
+        if (agentId) {
+          localStorage.removeItem("agent_id");
+        }
       }
 
       // Step 3: Processing payment (70%)
@@ -124,11 +174,11 @@ const Payment = () => {
     setAlert((prev) => ({ ...prev, isOpen: false }));
   };
 
-  if (authLoading) {
+  if (authLoading || loadingRequest) {
     return <LoadingScreen message={t.common.loading} />;
   }
 
-  if (!formData || !countryId || !countryName) {
+  if (!finalFormData || !countryId || !finalCountryName) {
     return null;
   }
 
@@ -139,7 +189,9 @@ const Payment = () => {
           <div className="error-message-history">
             {t.payment.signInToComplete}
           </div>
-          <BackButton />
+          <Button variant="back" onClick={() => navigate("/")}>
+            ← {t.form.back}
+          </Button>
         </div>
       </SignedOut>
       <SignedIn>
@@ -156,7 +208,16 @@ const Payment = () => {
         <div className="payment-container">
           <div className="payment-content">
             <div className="payment-header">
-              <BackButton path={`/apply/${countryId}`} />
+              <Button
+                variant="back"
+                onClick={() =>
+                  navigate(`/apply/${countryId}`, {
+                    state: requestId ? { requestId } : undefined,
+                  })
+                }
+              >
+                ← {t.form.back}
+              </Button>
               <h1 className="payment-title">{t.payment.title}</h1>
             </div>
 
@@ -164,31 +225,19 @@ const Payment = () => {
               <h2 className="summary-title">{t.payment.summary}</h2>
               <div className="summary-item">
                 <span className="summary-label">{t.payment.country}</span>
-                <span className="summary-value">{countryName[language]}</span>
+                <span className="summary-value">{finalCountryName[language]}</span>
               </div>
               <div className="summary-item">
                 <span className="summary-label">{t.payment.beneficiaries}</span>
-                <span className="summary-value">
-                  {formData && "beneficiaries" in formData
-                    ? formData.beneficiaries.length
-                    : 1}
-                </span>
+                <span className="summary-value">{finalFormData.length}</span>
               </div>
               <div className="summary-divider"></div>
               <div className="summary-item">
                 <span className="summary-label">{t.payment.totalAmount}</span>
                 <span className="summary-value summary-amount">
                   {language === "en"
-                    ? `$${
-                        (formData && "beneficiaries" in formData
-                          ? formData.beneficiaries.length
-                          : 1) * 50
-                      }.00`
-                    : `₪${
-                        (formData && "beneficiaries" in formData
-                          ? formData.beneficiaries.length
-                          : 1) * 180
-                      }.00`}
+                    ? `$${finalFormData.length * 50}.00`
+                    : `₪${finalFormData.length * 180}.00`}
                 </span>
               </div>
             </div>

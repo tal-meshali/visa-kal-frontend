@@ -148,7 +148,6 @@ export const apiPostFormData = async <T = unknown>(
   config?: AxiosRequestConfig
 ): Promise<T> => {
   const token = getStoredToken();
-  console.log({ token });
   const response = await apiService.post<T>(url, formData, {
     ...config,
     headers: {

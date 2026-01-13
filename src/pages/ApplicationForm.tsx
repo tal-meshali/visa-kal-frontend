@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useList } from "react-use";
 import { Alert } from "../components/Alert";
 import {
@@ -15,8 +15,16 @@ import LoadingScreen from "../components/LoadingScreen";
 import { useLanguage } from "../contexts/useLanguage";
 import { useFormSchema } from "../hooks/useFormSchema";
 import { useFormValidation } from "../hooks/useFormValidation";
-import { initializeFormData, type FormSchema } from "../services/formService";
-import type { FormDataRecord, FormFieldValue } from "../types/formTypes";
+import {
+  createApplication,
+  getApplication,
+} from "../services/applicationService";
+import { initializeFormData } from "../services/formService";
+import type {
+  FormDataRecord,
+  FormFieldValue,
+  FormSchema,
+} from "../types/formTypes";
 import "./ApplicationForm.css";
 
 const ApplicationForm = () => {
@@ -66,11 +74,17 @@ const ApplicationForm = () => {
 const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
   const { countryId } = useParams<{ countryId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { language, setLanguage, t } = useLanguage();
   const { user, isLoaded: isUserLoaded } = useUser();
   const authLoading = !isUserLoaded;
   const { getErrors, submitting, validate, clearFieldError } =
     useFormValidation();
+
+  // Check if requestId is provided in location state
+  const locationState = location.state as { requestId?: string } | null;
+  const requestId = locationState?.requestId;
+  const [loadingRequest, setLoadingRequest] = useState(!!requestId);
 
   // Manage multiple beneficiaries
   const [
@@ -79,8 +93,36 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
       push: pushBeneficiary,
       updateAt: updateAtBeneficiaries,
       removeAt: removeBeneficiary,
+      set: setBeneficiaries,
     },
   ] = useList<FormDataRecord>([initializeFormData(schema.fields)]);
+
+  // Load form data from request if requestId is provided
+  useEffect(() => {
+    const loadRequestData = async () => {
+      if (requestId && user && isUserLoaded) {
+        try {
+          const application = await getApplication(requestId);
+          // Extract form data from beneficiaries
+          const beneficiariesFormData = application.beneficiaries.map(
+            (beneficiary) => beneficiary.form_data
+          );
+          if (beneficiariesFormData.length > 0) {
+            setBeneficiaries(beneficiariesFormData);
+          }
+        } catch (error) {
+          console.error("Failed to load request data:", error);
+          // Continue with empty form if loading fails
+        } finally {
+          setLoadingRequest(false);
+        }
+      } else if (!requestId) {
+        setLoadingRequest(false);
+      }
+    };
+
+    loadRequestData();
+  }, [requestId, user, isUserLoaded, setBeneficiaries]);
 
   // Use ref to track latest beneficiaries state to prevent race conditions
   const beneficiariesRef = useRef(beneficiaries);
@@ -123,6 +165,11 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
         }))();
     }
   }, [user, authLoading, language, t.form.signInMessage]);
+
+  // Show loading while loading request data
+  if (loadingRequest) {
+    return <LoadingScreen message={t.form.loading} />;
+  }
 
   const handleFieldChange = (
     beneficiaryIndex: number,
@@ -198,9 +245,8 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
 
-    // Prepare form data for validation (single or multiple beneficiaries)
-    const validationData =
-      beneficiaries.length > 1 ? { beneficiaries } : beneficiaries[0];
+    // Prepare form data for validation (always as list of beneficiaries)
+    const validationData = beneficiaries;
 
     const isValid = await validate(countryId, validationData, language);
 
@@ -213,14 +259,45 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
       return;
     }
 
-    // Redirect to payment page if form is valid
+    // Create request with pending_payment status (only if not already created)
     if (schema && countryId) {
-      navigate(`/payment/${countryId}`, {
-        state: {
-          formData: validationData,
-          countryName: schema.country_name,
-        },
-      });
+      try {
+        if (requestId) {
+          // Request already exists, just navigate to payment
+          navigate(`/payment/${countryId}`, {
+            state: {
+              requestId,
+              formData: validationData,
+              countryName: schema.country_name,
+            },
+          });
+        } else {
+          // Create new request
+          const agentId = localStorage.getItem("agent_id");
+
+          const request = await createApplication({
+            country_id: countryId,
+            country_name: schema.country_name,
+            beneficiaries: validationData,
+            agent_id: agentId || undefined,
+          });
+
+          // Navigate to payment page with request ID
+          navigate(`/payment/${countryId}`, {
+            state: {
+              requestId: request.id,
+              formData: validationData,
+              countryName: schema.country_name,
+            },
+          });
+        }
+      } catch (error) {
+        setAlert({
+          type: "error",
+          message: error instanceof Error ? error.message : t.form.submitError,
+          isOpen: true,
+        });
+      }
     }
   };
 

@@ -173,6 +173,28 @@
       "chooseFile": "Choose File",
       "removeFile": "Remove file",
       "maxSize": "Max size"
+    },
+    "passport": {
+      "title": "Verify Passport Information",
+      "description": "Please review and verify the passport information extracted from your document. You can edit any fields if needed.",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "passport_number": "Passport Number",
+      "date_of_birth": "Date of Birth",
+      "date_of_issue": "Date of Issue",
+      "date_of_expiry": "Date of Expiry",
+      "sex": "Sex",
+      "place_of_birth": "Place of Birth",
+      "nationality": "Nationality",
+      "save": "Save",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "saveSuccess": "Passport data saved successfully",
+      "saveError": "Failed to save passport data",
+      "loadError": "Failed to load passport data",
+      "loading": "Loading passport data...",
+      "male": "Male",
+      "female": "Female"
     }
   },
   "he": {
@@ -349,6 +371,28 @@
       "chooseFile": "בחר קובץ",
       "removeFile": "הסר קובץ",
       "maxSize": "גודל מקסימלי"
+    },
+    "passport": {
+      "title": "אימות פרטי דרכון",
+      "description": "אנא בדוק ואימות את פרטי הדרכון שחולצו מהמסמך שלך. תוכל לערוך כל שדה במידת הצורך.",
+      "first_name": "שם פרטי",
+      "last_name": "שם משפחה",
+      "passport_number": "מספר דרכון",
+      "date_of_birth": "תאריך לידה",
+      "date_of_issue": "תאריך הנפקה",
+      "date_of_expiry": "תאריך תפוגה",
+      "sex": "מין",
+      "place_of_birth": "מקום לידה",
+      "nationality": "אזרחות",
+      "save": "שמור",
+      "cancel": "ביטול",
+      "saving": "שומר...",
+      "saveSuccess": "פרטי הדרכון נשמרו בהצלחה",
+      "saveError": "שמירת פרטי הדרכון נכשלה",
+      "loadError": "טעינת פרטי הדרכון נכשלה",
+      "loading": "טוען פרטי דרכון...",
+      "male": "זכר",
+      "female": "נקבה"
     }
   }
 }

@@ -5,62 +5,61 @@ import NumberFieldComponent from "../components/fields/NumberField";
 import PhotoFieldComponent from "../components/fields/PhotoField";
 import SelectFieldComponent from "../components/fields/SelectField";
 import StringFieldComponent from "../components/fields/StringField";
-import type {
-  TypedFormField,
-  StringField,
-  NumberField,
-  DateField,
-  SelectField,
-  DocumentField,
-  PhotoField,
-  CommonFieldProps,
-  FormField,
+import {
+  type CommonFieldProps,
+  type DateField,
+  type DocumentField,
+  type NumberField,
+  type PhotoField,
+  type SelectField,
+  type StringField,
+  type TypedFormField,
 } from "../types/formTypes";
 
 /**
  * Type guard to check if field is a StringField
  */
-function isStringField(field: TypedFormField | FormField): field is StringField {
+function isStringField(field: TypedFormField): field is StringField {
   return field.field_type === "string";
 }
 
 /**
  * Type guard to check if field is a NumberField
  */
-function isNumberField(field: TypedFormField | FormField): field is NumberField {
+function isNumberField(field: TypedFormField): field is NumberField {
   return field.field_type === "number";
 }
 
 /**
  * Type guard to check if field is a DateField
  */
-function isDateField(field: TypedFormField | FormField): field is DateField {
+function isDateField(field: TypedFormField): field is DateField {
   return field.field_type === "date";
 }
 
 /**
  * Type guard to check if field is a SelectField
  */
-function isSelectField(field: TypedFormField | FormField): field is SelectField {
+function isSelectField(field: TypedFormField): field is SelectField {
   return field.field_type === "select";
 }
 
 /**
  * Type guard to check if field is a DocumentField
  */
-function isDocumentField(field: TypedFormField | FormField): field is DocumentField {
+function isDocumentField(field: TypedFormField): field is DocumentField {
   return field.field_type === "document";
 }
 
 /**
  * Type guard to check if field is a PhotoField
  */
-function isPhotoField(field: TypedFormField | FormField): field is PhotoField {
+function isPhotoField(field: TypedFormField): field is PhotoField {
   return field.field_type === "photo";
 }
 
 export const renderFormField = (
-  field: TypedFormField | FormField,
+  field: TypedFormField,
   commonProps: CommonFieldProps
 ): React.JSX.Element | null => {
   const key = `${commonProps.beneficiaryId}__${field.name}`;

@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "../contexts/useLanguage";
-import { fetchFormSchema, type FormSchema } from "../services/formService";
+import { fetchFormSchema } from "../services/formService";
+import type { FormSchema } from "../types/formTypes";
 
 export const useFormSchema = (countryId: string | undefined) => {
   const { language } = useLanguage();

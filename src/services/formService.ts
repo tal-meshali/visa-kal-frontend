@@ -1,17 +1,12 @@
-import _, { mapValues } from "lodash";
-import { apiGet, apiPost } from "./apiService";
+import _ from "lodash";
 import type {
-  FormField,
-  FormSchema,
-  ValidationError,
-  ValidationResult,
-  FormDataInput,
-  Language,
   FormDataRecord,
+  FormSchema,
+  Language,
+  TypedFormField,
+  ValidationResult,
 } from "../types/formTypes";
-
-// Re-export types for backward compatibility
-export type { FormField, FormSchema, ValidationError, ValidationResult };
+import { apiGet, apiPost } from "./apiService";
 
 // Dictionary config for language preference - replaces if/else chains
 const getLanguageParam = (language: Language): string => {
@@ -40,41 +35,22 @@ export const fetchFormSchema = async (
   );
 };
 
-const sanitizeFormData = (
-  data: FormDataInput
-): FormDataInput => {
-  if ('beneficiaries' in data && Array.isArray(data.beneficiaries)) {
-    return {
-      beneficiaries: data.beneficiaries.map((beneficiary: FormDataRecord) =>
-        mapValues(beneficiary, (value) =>
-          value instanceof File ? value.name : value
-        )
-      ),
-    };
-  }
-  return mapValues(data as FormDataRecord, (value) =>
-    value instanceof File ? value.name : value
-  );
-};
-
-
 /**
- * Validates form data
+ * Validates beneficiaries list
  * Token is automatically provided by apiService from localStorage
  */
 export const validateFormData = async (
   countryId: string | undefined,
-  formData: FormDataInput,
+  beneficiaries: FormDataRecord[],
   language: Language
 ): Promise<ValidationResult> => {
   if (!countryId) {
     throw new Error("Country ID is required");
   }
 
-  const validationData = sanitizeFormData(formData);
   return apiPost<ValidationResult>(
     `/api/validate/${countryId}?language=${language}`,
-    validationData
+    beneficiaries
   );
 };
 
@@ -82,7 +58,9 @@ export const validateFormData = async (
  * Initializes form data with default values from fields
  * Uses default_value from field if available, otherwise uses empty string
  */
-export const initializeFormData = (fields: FormField[]): FormDataRecord => {
+export const initializeFormData = (
+  fields: TypedFormField[]
+): FormDataRecord => {
   return _.reduce(
     fields,
     (acc, field) => {

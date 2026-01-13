@@ -1,11 +1,12 @@
 import _ from "lodash";
 import { useState } from "react";
 import { useAsyncFn } from "react-use";
-import {
-  validateFormData,
-  type ValidationError,
-} from "../services/formService";
-import type { FormDataInput, Language } from "../types/formTypes";
+import { validateFormData } from "../services/formService";
+import type {
+  FormDataRecord,
+  Language,
+  ValidationError,
+} from "../types/formTypes";
 
 export const useFormValidation = () => {
   // Store full error objects with both languages
@@ -16,7 +17,7 @@ export const useFormValidation = () => {
   const [validateState, executeValidate] = useAsyncFn(
     async (
       countryId: string | undefined,
-      formData: FormDataInput,
+      beneficiaries: FormDataRecord[],
       language: Language
     ): Promise<boolean> => {
       if (!countryId) {
@@ -24,7 +25,7 @@ export const useFormValidation = () => {
       }
 
       // Validate server-side (for checks like OCR validation)
-      const result = await validateFormData(countryId, formData, language);
+      const result = await validateFormData(countryId, beneficiaries, language);
 
       if (!result.valid) {
         const newErrors = _.keyBy(
@@ -45,11 +46,11 @@ export const useFormValidation = () => {
 
   const validate = async (
     countryId: string | undefined,
-    formData: FormDataInput,
+    beneficiaries: FormDataRecord[],
     language: Language
   ): Promise<boolean> => {
     try {
-      return await executeValidate(countryId, formData, language);
+      return await executeValidate(countryId, beneficiaries, language);
     } catch (err) {
       console.error("Error validating form on server:", err);
       return false;
