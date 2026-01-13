@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLanguage } from "../contexts/useLanguage";
 import { apiGet, apiPost } from "../services/apiService";
 import { initializeFormData } from "../services/formService";
@@ -19,6 +19,21 @@ interface PassportDataModalProps {
   onSave?: () => void;
 }
 
+interface ValidationErrorResponse {
+  field: string;
+  message: { en: string; he: string };
+}
+
+interface ApiError {
+  response?: {
+    data?: {
+      detail?: {
+        errors?: ValidationErrorResponse[];
+      };
+    };
+  };
+}
+
 const PassportDataModal: React.FC<PassportDataModalProps> = ({
   isOpen,
   onClose,
@@ -34,13 +49,7 @@ const PassportDataModal: React.FC<PassportDataModalProps> = ({
   const [formData, setFormData] = useState<FormDataRecord>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    if (isOpen && beneficiaryId) {
-      loadPassportSchema();
-    }
-  }, [isOpen, beneficiaryId, requestId]);
-
-  const loadPassportSchema = async () => {
+  const loadPassportSchema = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -63,7 +72,14 @@ const PassportDataModal: React.FC<PassportDataModalProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [beneficiaryId, requestId, language, t.passport.loadError]);
+
+  useEffect(() => {
+    if (isOpen && beneficiaryId) {
+      loadPassportSchema();
+    }
+  }, [isOpen, beneficiaryId, loadPassportSchema]);
+
 
   const handleFieldChange = (fieldName: string, value: FormFieldValue) => {
     setFormData((prev) => ({ ...prev, [fieldName]: value }));
@@ -113,11 +129,12 @@ const PassportDataModal: React.FC<PassportDataModalProps> = ({
       await apiPost(`/api/passport-data?${saveParams.toString()}`, formData);
       onSave?.();
       onClose();
-    } catch (err: any) {
-      if (err.response?.data?.detail?.errors) {
+    } catch (err) {
+      const apiError = err as ApiError;
+      if (apiError.response?.data?.detail?.errors) {
         // Handle validation errors from backend
         const formErrors: Record<string, string> = {};
-        err.response.data.detail.errors.forEach((error: any) => {
+        apiError.response.data.detail.errors.forEach((error: ValidationErrorResponse) => {
           formErrors[error.field] = error.message[language] || error.message.en;
         });
         setErrors(formErrors);

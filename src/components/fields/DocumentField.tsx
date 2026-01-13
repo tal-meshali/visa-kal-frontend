@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLanguage } from "../../contexts/useLanguage";
 import {
   deleteFileFromS3,
@@ -44,16 +44,6 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
   const uploadId = `${fieldId || name}-${beneficiaryId}`;
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (value) {
-      const filename =
-        value.split("/").pop()?.split("_").slice(1).join("_") || null;
-      setUploadedFilename(filename);
-      setUploadError(null);
-    }
-  }, [value]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -83,12 +73,10 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
 
     try {
       const result = await uploadFileToS3(file, name, beneficiaryId);
-      // Update value - the useEffect will sync uploadedFilename from value
-      // Don't clear uploading state here - let the useEffect handle it when value is set
       onChange(result.url);
-      // Update parent upload state after onChange
+      setUploadError(null);
+      setUploading(false);
       onUploadStateChange?.(uploadId, false);
-      // The uploading state will be cleared by the useEffect when value prop updates
     } catch (err) {
       setUploadError(
         err instanceof Error ? err.message : t.fileUpload.uploadFailed
@@ -107,7 +95,6 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
     try {
       await deleteFileFromS3(value);
       onChange(null);
-      setUploadedFilename(null);
       setUploadError(null);
     } catch (err) {
       setUploadError(
@@ -117,9 +104,9 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
   };
 
   // Extract filename from S3 URL if value is a URL
-  const displayFilename =
-    uploadedFilename ||
-    (value ? value.split("/").pop()?.split("_").slice(1).join("_") : null);
+  const displayFilename = value
+    ? value.split("/").pop()?.split("_").slice(1).join("_") || null
+    : null;
 
   const acceptString = acceptedFormats.map((f) => `.${f}`).join(",");
 

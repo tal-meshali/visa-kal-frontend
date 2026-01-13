@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { TypedFormField } from "../../types/formTypes";
 import { apiGet, apiPost } from "../apiService";
 import {
   fetchFormSchema,
@@ -66,11 +67,11 @@ describe("formService", () => {
       vi.mocked(apiPost).mockResolvedValue(mockValidationResult);
 
       const formData = { name: "John Doe", age: 30 };
-      const result = await validateFormData("morocco", formData, "en");
+      const result = await validateFormData("morocco", [formData], "en");
 
       expect(apiPost).toHaveBeenCalledWith(
         "/api/validate/morocco?language=en",
-        formData
+        [formData]
       );
       expect(result).toEqual(mockValidationResult);
     });
@@ -86,18 +87,18 @@ describe("formService", () => {
       const file = new File(["content"], "test.pdf", {
         type: "application/pdf",
       });
-      const formData = { name: "John", document: file };
+      const formData = { name: "John", document: file.name };
 
-      await validateFormData("morocco", formData, "en");
+      await validateFormData("morocco", [formData], "en");
 
       expect(apiPost).toHaveBeenCalledWith(
         "/api/validate/morocco?language=en",
-        { name: "John", document: "test.pdf" }
+        [{ name: "John", document: "test.pdf" }]
       );
     });
 
     it("throws error when countryId is undefined", async () => {
-      await expect(validateFormData(undefined, {}, "en")).rejects.toThrow(
+      await expect(validateFormData(undefined, [{}], "en")).rejects.toThrow(
         "Country ID is required"
       );
     });
@@ -105,7 +106,7 @@ describe("formService", () => {
 
   describe("initializeFormData", () => {
     it("initializes form data with default values", () => {
-      const fields: FormField[] = [
+      const fields: TypedFormField[] = [
         {
           name: "field1",
           label: { en: "Field 1", he: "שדה 1" },
@@ -129,12 +130,12 @@ describe("formService", () => {
     });
 
     it("converts number default values to numbers", () => {
-      const fields: FormField[] = [
+      const fields: TypedFormField[] = [
         {
           name: "age",
           label: { en: "Age", he: "גיל" },
           field_type: "number",
-          default_value: "25",
+          default_value: 25,
         },
       ];
 
@@ -146,7 +147,7 @@ describe("formService", () => {
     });
 
     it("handles fields without default values", () => {
-      const fields: FormField[] = [
+      const fields: TypedFormField[] = [
         {
           name: "field1",
           label: { en: "Field 1", he: "שדה 1" },

@@ -51,8 +51,7 @@ export interface BaseFormField<
   required?: boolean;
   placeholder?: TranslatedText;
   auto_copy?: boolean;
-  default_value?: string;
-  value: _TValue;
+  default_value?: _TValue;
 }
 
 /**
