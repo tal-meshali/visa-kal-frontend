@@ -1,5 +1,6 @@
-import { SignedIn, SignedOut } from "./AuthComponents";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import { useLanguage } from "../contexts/useLanguage";
 import {
   getUserRequestsWithBeneficiaries,
@@ -7,10 +8,12 @@ import {
   type Beneficiary,
 } from "../services/requestService";
 import { ApplicationCard } from "./ApplicationCard";
+import { SignedIn, SignedOut } from "./AuthComponents";
 import "./RequestsMonitor.css";
 
 export const RequestsMonitor = () => {
   const { language, t } = useLanguage();
+  const { user } = useAuth();
 
   const {
     data: requests = [],
@@ -21,6 +24,7 @@ export const RequestsMonitor = () => {
     queryKey: ["requestsWithBeneficiaries"],
     queryFn: getUserRequestsWithBeneficiaries,
     staleTime: 2 * 60 * 1000, // 2 minutes
+    enabled: !!user,
   });
 
   const error =
@@ -49,6 +53,12 @@ export const RequestsMonitor = () => {
     }
     return t.monitor.beneficiary;
   };
+
+  useEffect(() => {
+    if (user) {
+      loadRequests();
+    }
+  }, [user, loadRequests]);
 
   return (
     <section className="requests-monitor" id="monitor">
