@@ -1,0 +1,144 @@
+.passport-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease;
+  padding: 1rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.passport-modal {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.passport-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.passport-modal-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.passport-modal-close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.passport-modal-close:hover {
+  background-color: var(--bg-secondary);
+}
+
+.passport-modal-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.passport-modal-description {
+  margin: 0 0 1.5rem 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.passport-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.passport-modal-loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+.passport-modal-error {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid #ef4444;
+  border-radius: 6px;
+  color: #ef4444;
+  font-size: 0.9rem;
+}
+
+.passport-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 640px) {
+  .passport-modal {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .passport-modal-overlay {
+    padding: 0;
+  }
+
+  .passport-modal-header,
+  .passport-modal-content,
+  .passport-modal-footer {
+    padding: 1rem;
+  }
+}
+
