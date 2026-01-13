@@ -142,16 +142,18 @@ export interface FormSchema {
  * Validation error structure
  */
 export interface ValidationError {
-  field: string;
   message: TranslatedText;
+  code?: string;
 }
 
 /**
  * Validation result structure
+ * errors is a list of dictionaries, one per beneficiary
+ * Each dictionary maps field names to ValidationError objects
  */
 export interface ValidationResult {
   valid: boolean;
-  errors: ValidationError[];
+  errors: Record<string, ValidationError>[];
   data?: { beneficiaries: FormDataRecord[] };
 }
 

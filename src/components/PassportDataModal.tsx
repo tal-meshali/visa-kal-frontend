@@ -20,15 +20,15 @@ interface PassportDataModalProps {
 }
 
 interface ValidationErrorResponse {
-  field: string;
   message: { en: string; he: string };
+  code?: string;
 }
 
 interface ApiError {
   response?: {
     data?: {
       detail?: {
-        errors?: ValidationErrorResponse[];
+        errors?: Record<string, ValidationErrorResponse>[];
       };
     };
   };
@@ -131,12 +131,14 @@ const PassportDataModal: React.FC<PassportDataModalProps> = ({
       onClose();
     } catch (err) {
       const apiError = err as ApiError;
-      if (apiError.response?.data?.detail?.errors) {
+      if (apiError.response?.data?.detail?.errors && apiError.response.data.detail.errors.length > 0) {
         // Handle validation errors from backend
+        // errors is a list of dicts, one per beneficiary. Since we validate a single passport, use errors[0]
         const formErrors: Record<string, string> = {};
-        apiError.response.data.detail.errors.forEach((error: ValidationErrorResponse) => {
-          formErrors[error.field] = error.message[language] || error.message.en;
-        });
+        const beneficiaryErrors = apiError.response.data.detail.errors[0];
+        for (const [fieldName, error] of Object.entries(beneficiaryErrors)) {
+          formErrors[fieldName] = error.message[language] || error.message.en;
+        }
         setErrors(formErrors);
       } else {
         setError(err instanceof Error ? err.message : t.passport.saveError);

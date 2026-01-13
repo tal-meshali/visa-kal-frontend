@@ -5,14 +5,17 @@ import { validateFormData } from "../services/formService";
 import type {
   FormDataRecord,
   Language,
-  ValidationError,
 } from "../types/formTypes";
 
+/**
+ * Errors organized by beneficiary index
+ * Key: beneficiary index (number), Value: Record of field name -> translated message
+ */
+type BeneficiaryErrors = Record<number, Record<string, { en: string; he: string }>>;
+
 export const useFormValidation = () => {
-  // Store full error objects with both languages
-  const [errorObjects, setErrorObjects] = useState<
-    Record<string, { en: string; he: string }>
-  >({});
+  // Store errors organized by beneficiary index
+  const [beneficiaryErrors, setBeneficiaryErrors] = useState<BeneficiaryErrors>({});
 
   const [validateState, executeValidate] = useAsyncFn(
     async (
@@ -28,17 +31,25 @@ export const useFormValidation = () => {
       const result = await validateFormData(countryId, beneficiaries, language);
 
       if (!result.valid) {
-        const newErrors = _.keyBy(
-          result.errors,
-          (error: ValidationError) => error.field
-        );
-        setErrorObjects(
-          _.mapValues(newErrors, (error: ValidationError) => error.message)
-        );
+        // result.errors is already a list of dictionaries, one per beneficiary
+        // Convert to our internal format: Record<beneficiaryIndex, Record<fieldName, message>>
+        const errorsByBeneficiary: BeneficiaryErrors = {};
+        
+        for (let index = 0; index < result.errors.length; index++) {
+          const beneficiaryErrorDict = result.errors[index];
+          if (Object.keys(beneficiaryErrorDict).length > 0) {
+            errorsByBeneficiary[index] = {};
+            for (const [fieldName, error] of Object.entries(beneficiaryErrorDict)) {
+              errorsByBeneficiary[index][fieldName] = error.message;
+            }
+          }
+        }
+        
+        setBeneficiaryErrors(errorsByBeneficiary);
         return false;
       }
 
-      setErrorObjects({});
+      setBeneficiaryErrors({});
       return true;
     },
     []
@@ -57,15 +68,28 @@ export const useFormValidation = () => {
     }
   };
 
-  const clearFieldError = (fieldName: string): void => {
-    if (errorObjects[fieldName]) {
-      setErrorObjects((prev) => _.omit(prev, fieldName));
-    }
+  const clearFieldError = (beneficiaryIndex: number, fieldName: string): void => {
+    setBeneficiaryErrors((prev) => {
+      const updated = { ...prev };
+      if (updated[beneficiaryIndex] && updated[beneficiaryIndex][fieldName]) {
+        updated[beneficiaryIndex] = { ...updated[beneficiaryIndex] };
+        delete updated[beneficiaryIndex][fieldName];
+        
+        // Remove beneficiary entry if no errors left
+        if (Object.keys(updated[beneficiaryIndex]).length === 0) {
+          delete updated[beneficiaryIndex];
+        }
+      }
+      return updated;
+    });
   };
 
-  // Get translated errors for current language
-  const getErrors = (language: Language): Record<string, string> => {
-    return _.mapValues(errorObjects, (message) => message[language]);
+  /**
+   * Get translated errors for a specific beneficiary
+   */
+  const getErrors = (beneficiaryIndex: number, language: Language): Record<string, string> => {
+    const errors = beneficiaryErrors[beneficiaryIndex] || {};
+    return _.mapValues(errors, (message) => message[language]);
   };
 
   return {

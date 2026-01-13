@@ -141,9 +141,6 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
   );
   // Track active uploads to disable submit button
   const [activeUploads, setActiveUploads] = useState<Set<string>>(new Set());
-
-  // Get errors translated to current language
-  const errors = getErrors(language);
   const [alert, setAlert] = useState<{
     type: "success" | "error" | "info";
     message: string;
@@ -182,11 +179,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
     });
 
     // Clear error for this field
-    const errorKey =
-      beneficiariesRef.current.length > 1
-        ? `beneficiaries[${beneficiaryIndex}].${fieldName}`
-        : fieldName;
-    clearFieldError(errorKey);
+    clearFieldError(beneficiaryIndex, fieldName);
   };
 
   const handleCopyFromPrevious = (
@@ -418,7 +411,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
                   beneficiaryIndex={activeBeneficiaryIndex}
                   fields={schema.fields}
                   formData={beneficiaries[activeBeneficiaryIndex] || {}}
-                  errors={errors}
+                  errors={getErrors(activeBeneficiaryIndex, language)}
                   language={language}
                   onFieldChange={(fieldName, value) =>
                     handleFieldChange(activeBeneficiaryIndex, fieldName, value)

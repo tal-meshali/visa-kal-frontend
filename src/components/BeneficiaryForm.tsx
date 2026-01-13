@@ -26,11 +26,8 @@ export const BeneficiaryForm = ({
   const isFirstBeneficiary = beneficiaryIndex === 0;
 
   const renderField = (field: TypedFormField) => {
-    const fieldErrorKey =
-      totalBeneficiaries > 1
-        ? `beneficiaries[${beneficiaryIndex}].${field.name}`
-        : field.name;
-    const error = errors[fieldErrorKey] || errors[field.name] || "";
+    // Errors are already filtered by beneficiary index, so just use field name
+    const error = errors[field.name] || "";
 
     const commonProps = {
       name: field.name,
