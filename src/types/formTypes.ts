@@ -196,4 +196,5 @@ export interface BeneficiaryFormProps {
   autoCopyFields: Set<string>;
   onAutoCopyToggle: (fieldName: string, checked: boolean) => void;
   onUploadStateChange?: (uploadId: string, isUploading: boolean) => void;
+  showAutoCopyCheckbox: boolean
 }
