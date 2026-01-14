@@ -19,11 +19,11 @@ export const BeneficiaryForm = ({
   autoCopyFields,
   onAutoCopyToggle,
   onUploadStateChange,
+  showAutoCopyCheckbox,
 }: BeneficiaryFormProps) => {
   const { t } = useLanguage();
   const canCopyFromPrevious =
     previousBeneficiaryData !== undefined && beneficiaryIndex > 0;
-  const isFirstBeneficiary = beneficiaryIndex === 0;
 
   const renderField = (field: TypedFormField) => {
     // Errors are already filtered by beneficiary index, so just use field name
@@ -42,10 +42,6 @@ export const BeneficiaryForm = ({
 
     const previousValue = previousBeneficiaryData?.[field.name];
     const isAutoCopyEnabled = autoCopyFields.has(field.name);
-    const showAutoCopyCheckbox =
-      isFirstBeneficiary &&
-      field.field_type !== "document" &&
-      field.field_type !== "photo";
     const isFileField =
       field.field_type === "document" || field.field_type === "photo";
     const showCopyButton =
@@ -57,7 +53,7 @@ export const BeneficiaryForm = ({
     return (
       <div key={field.name} className="beneficiary-field-wrapper">
         <div className="field-header-row">
-          {showAutoCopyCheckbox && (
+          {showAutoCopyCheckbox &&  !["document", "photo"].includes(field.field_type) &&(
             <label className="auto-copy-checkbox-label">
               <input
                 type="checkbox"

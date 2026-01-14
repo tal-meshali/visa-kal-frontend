@@ -414,6 +414,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
                 )}
                 <BeneficiaryForm
                   beneficiaryIndex={activeBeneficiaryIndex}
+                  showAutoCopyCheckbox={activeBeneficiaryIndex === 0}
                   fields={schema.fields}
                   formData={beneficiaries[activeBeneficiaryIndex] || {}}
                   errors={getErrors(activeBeneficiaryIndex, language)}

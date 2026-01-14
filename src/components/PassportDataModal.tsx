@@ -182,6 +182,7 @@ const PassportDataModal: React.FC<PassportDataModalProps> = ({
               totalBeneficiaries={1}
               autoCopyFields={new Set()}
               onAutoCopyToggle={() => {}}
+              showAutoCopyCheckbox={false}
             />
           ) : null}
           {error && <div className="passport-modal-error">{error}</div>}

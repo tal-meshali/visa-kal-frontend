@@ -29,6 +29,19 @@
   font-family: inherit;
   outline: none;
   box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* Date input specific styles */
+input[type="date"].form-input {
+  min-width: 0;
+  overflow: visible;
+}
+
+input[type="date"].form-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-left: 0.5rem;
 }
 
 [data-theme="light"] .form-input:not(:focus):not(.error),
@@ -190,3 +203,39 @@
   cursor: not-allowed;
 }
 
+/* Mobile responsive styles */
+@media (max-width: 640px) {
+  .form-field {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .form-input,
+  .form-select {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  /* Date input mobile fixes */
+  input[type="date"].form-input {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    font-size: 0.875rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  input[type="date"].form-input::-webkit-calendar-picker-indicator {
+    padding: 0.125rem;
+    margin-left: 0.25rem;
+  }
+
+  /* Ensure form field container doesn't overflow */
+  .form-field {
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+}
