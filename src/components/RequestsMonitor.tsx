@@ -1,6 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import { useLanguage } from "../contexts/useLanguage";
 import {
   getUserRequestsWithBeneficiaries,
@@ -12,9 +10,27 @@ import { SignedIn, SignedOut } from "./AuthComponents";
 import "./RequestsMonitor.css";
 
 export const RequestsMonitor = () => {
-  const { language, t } = useLanguage();
-  const { user } = useAuth();
+  const { t } = useLanguage();
 
+  return (
+    <section className="requests-monitor" id="monitor">
+      <SignedOut>
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">{t.monitor.title}</h2>
+            <p className="section-subtitle">{t.monitor.signInToView}</p>
+          </div>
+        </div>
+      </SignedOut>
+      <SignedIn>
+        <RequestsMonitorSignedIn />
+      </SignedIn>
+    </section>
+  );
+};
+
+const RequestsMonitorSignedIn = () => {
+  const { t, language } = useLanguage();
   const {
     data: requests = [],
     isLoading: loading,
@@ -24,7 +40,6 @@ export const RequestsMonitor = () => {
     queryKey: ["requestsWithBeneficiaries"],
     queryFn: getUserRequestsWithBeneficiaries,
     staleTime: 2 * 60 * 1000, // 2 minutes
-    enabled: !!user,
   });
 
   const error =
@@ -54,65 +69,47 @@ export const RequestsMonitor = () => {
     return t.monitor.beneficiary;
   };
 
-  useEffect(() => {
-    if (user) {
-      loadRequests();
-    }
-  }, [user, loadRequests]);
-
   return (
-    <section className="requests-monitor" id="monitor">
-      <SignedOut>
-        <div className="container">
-          <div className="section-header">
-            <h2 className="section-title">{t.monitor.title}</h2>
-            <p className="section-subtitle">{t.monitor.signInToView}</p>
+    <div className="container">
+      <div className="section-header">
+        <h2 className="section-title">{t.monitor.title}</h2>
+        <p className="section-subtitle">{t.monitor.subtitle}</p>
+        {loading && (
+          <div className="loading-indicator">
+            <div className="spinner"></div>
+            <span>{t.monitor.loading}</span>
           </div>
+        )}
+      </div>
+
+      {error && (
+        <div className="error-message">
+          {error}
+          <button className="retry-button" onClick={() => loadRequests()}>
+            {t.monitor.retry}
+          </button>
         </div>
-      </SignedOut>
-      <SignedIn>
-        <div className="container">
-          <div className="section-header">
-            <h2 className="section-title">{t.monitor.title}</h2>
-            <p className="section-subtitle">{t.monitor.subtitle}</p>
-            {loading && (
-              <div className="loading-indicator">
-                <div className="spinner"></div>
-                <span>{t.monitor.loading}</span>
-              </div>
-            )}
-          </div>
+      )}
 
-          {error && (
-            <div className="error-message">
-              {error}
-              <button className="retry-button" onClick={() => loadRequests()}>
-                {t.monitor.retry}
-              </button>
-            </div>
-          )}
-
-          {!error && !loading && requests.length === 0 && (
-            <div className="empty-state">
-              <p>{t.monitor.noRequests}</p>
-            </div>
-          )}
-
-          {!error && requests.length > 0 && (
-            <div className="requests-list">
-              {requests.map((request) => (
-                <ApplicationCard
-                  key={request.id}
-                  application={request}
-                  variant="detailed"
-                  getBeneficiaryName={getBeneficiaryName}
-                  getStatusLabel={getStatusLabel}
-                />
-              ))}
-            </div>
-          )}
+      {!error && !loading && requests.length === 0 && (
+        <div className="empty-state">
+          <p>{t.monitor.noRequests}</p>
         </div>
-      </SignedIn>
-    </section>
+      )}
+
+      {!error && requests.length > 0 && (
+        <div className="requests-list">
+          {requests.map((request) => (
+            <ApplicationCard
+              key={request.id}
+              application={request}
+              variant="detailed"
+              getBeneficiaryName={getBeneficiaryName}
+              getStatusLabel={getStatusLabel}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 };

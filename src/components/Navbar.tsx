@@ -8,7 +8,6 @@ import {
   SignedOut,
   SignInButton,
   UserButton,
-  useUser,
 } from "./AuthComponents";
 import "./Navbar.css";
 
@@ -26,34 +25,6 @@ export const Navbar = ({
   onThemeToggle,
 }: NavbarProps) => {
   const { t } = useLanguage();
-  const { user, isLoaded } = useUser();
-  const { data: userData } = useQuery({
-    queryFn: getCurrentUser,
-    queryKey: ["user"],
-    enabled: isLoaded,
-  });
-  const [showAgentUrlModal, setShowAgentUrlModal] = useState(false);
-
-  const handleExportAgentUrl = (): void => {
-    if (!user) return;
-    getCurrentUser()
-      .then((currentUser) => {
-        const agentId = currentUser.id;
-        const baseUrl = window.location.origin;
-        const agentUrl = `${baseUrl}/?agent=${agentId}`;
-
-        // Copy to clipboard
-        navigator.clipboard.writeText(agentUrl).then(() => {
-          setShowAgentUrlModal(true);
-          setTimeout(() => setShowAgentUrlModal(false), 3000);
-        });
-      })
-      .catch(() => {
-        // Failed to get user info
-      });
-  };
-
-  const isAgent = userData?.role === "agent";
 
   return (
     <nav className="navbar">
@@ -77,18 +48,7 @@ export const Navbar = ({
             <Link to="/applications" className="nav-link">
               {t.nav.myApplications}
             </Link>
-            {isAgent && (
-              <button
-                className="nav-link agent-url-btn"
-                onClick={handleExportAgentUrl}
-                title={t.nav.exportAgentUrl}
-              >
-                {t.nav.exportAgentUrl}
-              </button>
-            )}
-            {showAgentUrlModal && (
-              <div className="agent-url-modal">{t.nav.agentUrlCopied}</div>
-            )}
+            <NavbarSignedIn />
           </SignedIn>
           <button
             className="theme-toggle"
@@ -115,5 +75,51 @@ export const Navbar = ({
         </div>
       </div>
     </nav>
+  );
+};
+
+const NavbarSignedIn = () => {
+  const { t } = useLanguage();
+  const { data: userData } = useQuery({
+    queryFn: getCurrentUser,
+    queryKey: ["user"],
+  });
+  const [showAgentUrlModal, setShowAgentUrlModal] = useState(false);
+
+  const handleExportAgentUrl = (): void => {
+    getCurrentUser()
+      .then((currentUser) => {
+        const agentId = currentUser.id;
+        const baseUrl = window.location.origin;
+        const agentUrl = `${baseUrl}/?agent=${agentId}`;
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(agentUrl).then(() => {
+          setShowAgentUrlModal(true);
+          setTimeout(() => setShowAgentUrlModal(false), 3000);
+        });
+      })
+      .catch(() => {
+        // Failed to get user info
+      });
+  };
+
+  const isAgent = userData?.role === "agent";
+
+  return (
+    <>
+      {isAgent && (
+        <button
+          className="nav-link agent-url-btn"
+          onClick={handleExportAgentUrl}
+          title={t.nav.exportAgentUrl}
+        >
+          {t.nav.exportAgentUrl}
+        </button>
+      )}
+      {showAgentUrlModal && (
+        <div className="agent-url-modal">{t.nav.agentUrlCopied}</div>
+      )}
+    </>
   );
 };

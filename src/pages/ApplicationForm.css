@@ -13,7 +13,6 @@
   align-items: center;
 }
 
-
 .form-header-controls {
   display: flex;
   align-items: center;
@@ -115,7 +114,6 @@
   border-top: 1px solid var(--border-color);
 }
 
-
 .loading {
   text-align: center;
   padding: 4rem 2rem;
@@ -157,7 +155,6 @@
   font-size: 1.125rem;
   transition: color 0.3s ease;
 }
-
 
 /* Beneficiaries */
 .beneficiaries-tabs {
@@ -315,6 +312,10 @@
   text-align: center;
 }
 
+.sign-in-back-button {
+  margin-top: 1rem;
+  width: 35%;
+}
 
 /* Responsive */
 @media (max-width: 640px) {
@@ -356,5 +357,31 @@
     width: 100%;
     justify-content: flex-start;
   }
-}
 
+  .sign-in-back-button {
+    width: 100%;
+  }
+
+  /* Ensure form content doesn't overflow on mobile */
+  .form-content {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Ensure beneficiary field wrapper doesn't overflow */
+  .beneficiary-field-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .application-form {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+}

@@ -1,27 +1,17 @@
-import "./CTASection.css";
+import { useLanguage } from "../contexts/useLanguage";
 import { Button } from "./Button";
+import "./CTASection.css";
 
-interface CTASectionProps {
-  translations: {
-    cta: {
-      title: string;
-      description: string;
-      button: string;
-    };
-  };
-}
-
-export const CTASection = ({
-  translations,
-}: CTASectionProps) => {
+export const CTASection = () => {
+  const { t } = useLanguage();
   return (
     <section className="cta">
       <div className="container">
         <div className="cta-content">
-          <h2 className="cta-title">{translations.cta.title}</h2>
-          <p className="cta-description">{translations.cta.description}</p>
+          <h2 className="cta-title">{t.cta.title}</h2>
+          <p className="cta-description">{t.cta.description}</p>
           <Button variant="primary" size="large">
-            {translations.cta.button}
+            {t.cta.button}
           </Button>
         </div>
       </div>

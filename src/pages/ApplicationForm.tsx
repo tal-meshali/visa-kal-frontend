@@ -28,15 +28,7 @@ import type {
 import "./ApplicationForm.css";
 
 const ApplicationForm = () => {
-  const { countryId } = useParams<{ countryId: string }>();
   const { t } = useLanguage();
-  const { schema, loading, error: schemaError } = useFormSchema(countryId);
-
-  // Show loading while checking auth or loading schema
-  if (loading || (!schema && !schemaError)) {
-    return <LoadingScreen message={t.form.loading} />;
-  }
-
   return (
     <>
       <SignedOut>
@@ -49,25 +41,38 @@ const ApplicationForm = () => {
                 {t.form.signIn}
               </Button>
             </SignInButton>
-            <BackButton />
+            <BackButton className="sign-in-back-button" />
           </div>
         </div>
       </SignedOut>
       <SignedIn>
-        {schemaError ? (
-          <div className="form-container">
-            <div className="error-message-form">{t.form.failedToLoad}</div>
-            <BackButton />
-          </div>
-        ) : !schema ? (
-          <div className="form-container">
-            <div className="error-message-form">{t.form.notFound}</div>
-          </div>
-        ) : (
-          <ApplicationFormComponent schema={schema} />
-        )}
+        <ApplicationFormSignedIn />
       </SignedIn>
     </>
+  );
+};
+
+const ApplicationFormSignedIn = () => {
+  const { countryId } = useParams<{ countryId: string }>();
+  const { t } = useLanguage();
+  const { schema, loading, error: schemaError } = useFormSchema(countryId);
+
+  // Show loading while checking auth or loading schema
+  if (loading || (!schema && !schemaError)) {
+    return <LoadingScreen message={t.form.loading} />;
+  }
+
+  return schemaError ? (
+    <div className="form-container">
+      <div className="error-message-form">{t.form.failedToLoad}</div>
+      <BackButton />
+    </div>
+  ) : !schema ? (
+    <div className="form-container">
+      <div className="error-message-form">{t.form.notFound}</div>
+    </div>
+  ) : (
+    <ApplicationFormComponent schema={schema} />
   );
 };
 

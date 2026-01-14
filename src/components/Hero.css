@@ -57,7 +57,6 @@
   margin-top: 1rem;
 }
 
-
 /* Hero Visual */
 .hero-visual {
   position: relative;
@@ -86,13 +85,13 @@
 }
 
 .card-2 {
-  top: 50%;
-  right: 20%;
+  top: 40%;
+  right: 10%;
   animation-delay: 2s;
 }
 
 .card-3 {
-  bottom: 10%;
+  bottom: 0%;
   left: 30%;
   animation-delay: 4s;
 }
@@ -108,7 +107,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -130,6 +130,18 @@
   .hero-buttons {
     justify-content: center;
   }
+
+  .card-1 {
+    left: 20%;
+  }
+
+  .card-2 {
+    right: 20%;
+  }
+
+  .card-3 {
+    left: 40%;
+  }
 }
 
 @media (max-width: 640px) {
@@ -148,5 +160,19 @@
   .btn {
     width: 100%;
   }
-}
 
+  .card-1 {
+    top: 10%;
+    left: 5%;
+  }
+
+  .card-2 {
+    right: 5%;
+    top: 20%;
+  }
+
+  .card-3 {
+    bottom: 10%;
+    left: 20%;
+  }
+}

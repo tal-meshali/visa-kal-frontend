@@ -58,7 +58,7 @@ const App = () => {
         onLanguageToggle={toggleLanguage}
         onThemeToggle={toggleTheme}
       />
-      <Hero language={language} translations={t} />
+      <Hero />
       <CountriesSection
         language={language}
         translations={t}
@@ -67,7 +67,7 @@ const App = () => {
       />
       <FeaturesSection />
       <RequestsMonitor />
-      <CTASection translations={t} />
+      <CTASection />
       <Footer />
     </div>
   );
