@@ -3,6 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App.tsx";
+import { EmailVerificationPrompt } from "./components/EmailVerificationPrompt.tsx";
 import { FirebaseTokenSync } from "./components/FirebaseTokenSync.tsx";
 import { AuthProvider } from "./contexts/AuthContext";
 import { LanguageProvider } from "./contexts/LanguageProvider";
@@ -74,6 +75,7 @@ createRoot(document.getElementById("root")!).render(
         <FirebaseTokenSync />
         <LanguageProvider defaultLanguage={getInitialLanguage()}>
           <BrowserRouter>
+            <EmailVerificationPrompt />
             <Routes>
               <Route path="/" element={<App />} />
               <Route path="/apply/:countryId" element={<ApplicationForm />} />

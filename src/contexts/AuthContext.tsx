@@ -1,11 +1,13 @@
 import {
   GoogleAuthProvider,
   applyActionCode,
+  createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
   getIdToken,
   onAuthStateChanged,
   reload,
   sendEmailVerification,
+  signInWithEmailAndPassword,
   signInWithPopup,
   type ActionCodeSettings,
   type User,
@@ -23,6 +25,8 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   signIn: () => Promise<void>;
+  signInWithEmail: (email: string, password: string) => Promise<void>;
+  signUpWithEmail: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   getIdToken: () => Promise<string | null>;
   sendEmailVerification: () => Promise<void>;
@@ -49,15 +53,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
 
-    // Send email verification if user signed in with email/password and email is not verified
-    // For Google Sign-In, email is already verified, but we check anyway
-    if (
-      result.user &&
-      !result.user.emailVerified &&
-      result.user.providerData[0]?.providerId === "password"
-    ) {
+    // Send email verification if email is not verified (for all auth providers)
+    if (result.user && !result.user.emailVerified) {
       try {
-        await sendEmailVerification(result.user);
+        const actionCodeSettings: ActionCodeSettings = {
+          url: `${
+            window.location.origin
+          }/verify-email?email=${encodeURIComponent(result.user.email || "")}`,
+          handleCodeInApp: true,
+        };
+        await sendEmailVerification(result.user, actionCodeSettings);
+      } catch (error) {
+        console.error("Failed to send verification email:", error);
+      }
+    }
+  };
+
+  const signInWithEmailAuth = async (email: string, password: string): Promise<void> => {
+    await signInWithEmailAndPassword(auth, email, password);
+    // Email verification is sent on sign-up, not sign-in
+  };
+
+  const signUpWithEmailAuth = async (email: string, password: string): Promise<void> => {
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    
+    // Send email verification for new email/password users
+    if (result.user) {
+      try {
+        const actionCodeSettings: ActionCodeSettings = {
+          url: `${window.location.origin}/verify-email?email=${encodeURIComponent(email)}`,
+          handleCodeInApp: true,
+        };
+        await sendEmailVerification(result.user, actionCodeSettings);
       } catch (error) {
         console.error("Failed to send verification email:", error);
       }
@@ -123,6 +150,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         loading,
         signIn,
+        signInWithEmail: signInWithEmailAuth,
+        signUpWithEmail: signUpWithEmailAuth,
         signOut,
         getIdToken: getToken,
         sendEmailVerification: sendVerificationEmail,

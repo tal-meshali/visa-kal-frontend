@@ -1,5 +1,6 @@
 import { type PropsWithChildren, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { SignInModal } from "./SignInModal";
 
 /**
  * Component that renders children only when user is signed in
@@ -23,13 +24,16 @@ export const SignedOut = ({ children }: PropsWithChildren) => {
  * Sign in button component
  */
 export const SignInButton = ({ children }: PropsWithChildren) => {
-  const { signIn, loading } = useAuth();
+  const [showModal, setShowModal] = useState(false);
   const handleClick = () => {
-    if (!loading) {
-      signIn();
-    }
+    setShowModal(true);
   };
-  return <div onClick={handleClick}>{children}</div>;
+  return (
+    <>
+      <div onClick={handleClick}>{children}</div>
+      <SignInModal isOpen={showModal} onClose={() => setShowModal(false)} />
+    </>
+  );
 };
 
 /**
