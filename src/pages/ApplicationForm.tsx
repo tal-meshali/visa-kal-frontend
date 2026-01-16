@@ -261,8 +261,8 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
     if (schema && countryId) {
       try {
         if (requestId) {
-          // Request already exists, just navigate to payment
-          navigate(`/payment/${countryId}`, {
+          // Request already exists, just navigate to pricing selection
+          navigate(`/pricing/${countryId}`, {
             state: {
               requestId,
               formData: validationData,
@@ -275,13 +275,12 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
 
           const request = await createApplication({
             country_id: countryId,
-            country_name: schema.country_name,
             beneficiaries: validationData,
             agent_id: agentId || undefined,
           });
 
-          // Navigate to payment page with request ID
-          navigate(`/payment/${countryId}`, {
+          // Navigate to pricing selection page with request ID
+          navigate(`/pricing/${countryId}`, {
             state: {
               requestId: request.id,
               formData: validationData,

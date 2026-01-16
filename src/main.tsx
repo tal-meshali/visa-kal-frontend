@@ -11,7 +11,10 @@ import "./index.css";
 import ApplicationForm from "./pages/ApplicationForm.tsx";
 import ApplicationsHistory from "./pages/ApplicationsHistory.tsx";
 import Payment from "./pages/Payment.tsx";
+import PricingSelection from "./pages/PricingSelection.tsx";
+import AdminPricing from "./pages/AdminPricing.tsx";
 import { EmailVerification } from "./components/EmailVerification.tsx";
+import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 
 // Create a client for react-query
 const queryClient = new QueryClient({
@@ -79,8 +82,17 @@ createRoot(document.getElementById("root")!).render(
             <Routes>
               <Route path="/" element={<App />} />
               <Route path="/apply/:countryId" element={<ApplicationForm />} />
+              <Route path="/pricing/:countryId" element={<PricingSelection />} />
               <Route path="/payment/:countryId" element={<Payment />} />
               <Route path="/applications" element={<ApplicationsHistory />} />
+              <Route
+                path="/admin/pricing"
+                element={
+                  <ProtectedRoute requireAdmin>
+                    <AdminPricing />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/verify-email" element={<EmailVerification />} />
             </Routes>
           </BrowserRouter>

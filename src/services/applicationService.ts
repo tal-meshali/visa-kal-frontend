@@ -1,10 +1,9 @@
 import { apiGet, apiPost, apiPatch } from "./apiService";
 import type { Application } from "./requestService";
-import type { FormDataRecord, TranslatedText } from "../types/formTypes";
+import type { FormDataRecord } from "../types/formTypes";
 
 export interface CreateApplicationRequest {
   country_id: string;
-  country_name: TranslatedText;
   beneficiaries: FormDataRecord[];
   agent_id?: string;
 }
@@ -46,5 +45,18 @@ export const updateApplicationStatus = async (
 ): Promise<Application> => {
   return apiPatch<Application>(`/api/applications/${applicationId}/status`, {
     status: newStatus,
+  });
+};
+
+/**
+ * Updates the pricing plan for an application
+ * Token is automatically provided by apiService from localStorage
+ */
+export const updateApplicationPricing = async (
+  applicationId: string,
+  pricingId: string
+): Promise<Application> => {
+  return apiPatch<Application>(`/api/applications/${applicationId}/pricing`, {
+    pricing_id: pricingId,
   });
 };
