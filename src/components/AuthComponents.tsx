@@ -44,6 +44,7 @@ export const UserButton = () => {
     useAuth();
   const [showMenu, setShowMenu] = useState(false);
   const [sendingVerification, setSendingVerification] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState<{
     type: "success" | "error";
     message: string;
@@ -91,10 +92,11 @@ export const UserButton = () => {
         style={{ cursor: "pointer" }}
         onClick={() => setShowMenu(!showMenu)}
       >
-        {user.photoURL ? (
+        {user.photoURL && !imageError ? (
           <img
             src={user.photoURL}
             alt={user.displayName || "User"}
+            onError={() => setImageError(true)}
             style={{
               width: "32px",
               height: "32px",

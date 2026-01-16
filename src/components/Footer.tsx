@@ -12,7 +12,7 @@ const FooterSection = ({
     <div className="footer-section">
       <h4 className="footer-title">{title}</h4>
       {Object.entries(linkToText).map(([link, text]) => (
-        <a href={link} className="footer-link">
+        <a href={link} className="footer-link" key={link}>
           {text}
         </a>
       ))}

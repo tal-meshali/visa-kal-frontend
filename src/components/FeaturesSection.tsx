@@ -26,7 +26,7 @@ export const FeaturesSection = () => {
         </div>
         <div className="features-grid">
           {Object.entries(iconToFeature).map(([icon, feature]) => (
-            <div className="feature-card">
+            <div className="feature-card" key={feature}>
               <div className="feature-icon">{icon}</div>
               <h3 className="feature-title">
                 {(t.features[feature] as SectionText).title}
