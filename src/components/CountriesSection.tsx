@@ -4,8 +4,8 @@ import './CountriesSection.css'
 interface Country {
   id: string
   name: { en: string; he: string }
-  flag: string
-  available: boolean
+  flag_svg_link: string
+  enabled: boolean
 }
 
 interface CountriesSectionProps {
@@ -41,7 +41,9 @@ export const CountriesSection = ({ language, translations, availableCountries, u
                 to={`/apply/${country.id}`}
                 className="country-card available"
               >
-                <div className="country-flag">{country.flag}</div>
+                <div className="country-flag">
+                  <img src={country.flag_svg_link} alt={country.name[language]} />
+                </div>
                 <h3 className="country-name">{country.name[language]}</h3>
                 <div className="country-select-btn">
                   {translations.countries.select}
@@ -60,7 +62,9 @@ export const CountriesSection = ({ language, translations, availableCountries, u
                   key={country.id}
                   className="country-card upcoming"
                 >
-                  <div className="country-flag">{country.flag}</div>
+                  <div className="country-flag">
+                    <img src={country.flag_svg_link} alt={country.name[language]} />
+                  </div>
                   <h3 className="country-name">{country.name[language]}</h3>
                   <div className="coming-soon-badge">{translations.countries.upcoming}</div>
                 </div>

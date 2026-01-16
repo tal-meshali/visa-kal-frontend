@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import "./App.css";
+import { Alert } from "./components/Alert";
 import { CountriesSection } from "./components/CountriesSection";
 import { CTASection } from "./components/CTASection";
 import { FeaturesSection } from "./components/FeaturesSection";
@@ -9,7 +11,7 @@ import { Hero } from "./components/Hero";
 import { Navbar } from "./components/Navbar";
 import { RequestsMonitor } from "./components/RequestsMonitor";
 import { useLanguage } from "./contexts/useLanguage";
-import { countries } from "./data/countries";
+import { fetchCountries } from "./services/countryService";
 
 type Theme = "light" | "dark";
 
@@ -18,6 +20,48 @@ const App = () => {
   const [theme, setTheme] = useState<Theme>("light");
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // Fetch countries using React Query
+  const {
+    data: countriesData,
+    error: countriesError,
+  } = useQuery({
+    queryKey: ["countries"],
+    queryFn: fetchCountries,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  const availableCountries = countriesData?.available || [];
+  const upcomingCountries = countriesData?.coming_soon || [];
+
+  // Error message state
+  const [errorAlert, setErrorAlert] = useState<{
+    type: "error" | "success" | "info";
+    message: string;
+    isOpen: boolean;
+  }>({
+    type: "error",
+    message: "",
+    isOpen: false,
+  });
+
+  // Show error alert when countries fetch fails
+  useEffect(() => {
+    if (countriesError) {
+      const errorMessage =
+        countriesError instanceof Error
+          ? countriesError.message
+          : "Failed to load countries. Please try again later.";
+      // Defer state update to avoid cascading renders
+      setTimeout(() => {
+        setErrorAlert({
+          type: "error",
+          message: errorMessage,
+          isOpen: true,
+        });
+      }, 0);
+    }
+  }, [countriesError]);
 
   const toggleTheme = (): void => {
     const newTheme: Theme = theme === "light" ? "dark" : "light";
@@ -47,11 +91,15 @@ const App = () => {
     }
   }, [searchParams, setSearchParams, navigate]);
 
-  const availableCountries = countries.filter((c) => c.available);
-  const upcomingCountries = countries.filter((c) => !c.available);
-
   return (
     <div className={`app ${theme}`}>
+      <Alert
+        type={errorAlert.type}
+        message={errorAlert.message}
+        isOpen={errorAlert.isOpen}
+        onClose={() => setErrorAlert({ ...errorAlert, isOpen: false })}
+        duration={0}
+      />
       <Navbar
         language={language}
         theme={theme}

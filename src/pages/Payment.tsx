@@ -128,7 +128,6 @@ const Payment = () => {
         const agentId = localStorage.getItem("agent_id");
         await createApplication({
           country_id: countryId,
-          country_name: finalCountryName,
           beneficiaries: finalFormData,
           agent_id: agentId || undefined,
         });

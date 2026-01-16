@@ -102,3 +102,32 @@
   }
 }
 
+
+  }
+  
+  .country-name {
+    font-size: 1.5rem;
+  }
+  
+  .country-select-btn {
+    width: 80%;
+    margin-top: 5%;
+  }
+}
+
+@media (max-width: 500px) {
+  .country-flag {
+    margin-bottom: 10%;
+  }
+  .country-flag img {
+    width: 120px;
+  }
+  .country-name{
+    font-size: 1rem;
+  }
+  .country-select-btn {
+    width: 90%;
+    font-size: 0.8rem;
+    margin-top: 0%;
+  }
+}
