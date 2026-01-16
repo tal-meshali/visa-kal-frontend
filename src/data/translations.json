@@ -9,7 +9,8 @@
       "signIn": "Sign In",
       "signOut": "Sign Out",
       "exportAgentUrl": "Export Agent URL",
-      "agentUrlCopied": "Agent URL copied to clipboard!"
+      "agentUrlCopied": "Agent URL copied to clipboard!",
+      "adminPricing": "Manage Pricing"
     },
     "hero": {
       "badge": "✨ Automated Electronic Visa Service",
@@ -152,7 +153,49 @@
       "success": "Payment processed successfully! Your application has been submitted.",
       "error": "Payment processing failed. Please try again."
     },
+    "pricing": {
+      "title": "Select Pricing Plan",
+      "subtitle": "Choose the pricing plan that best fits your needs",
+      "loading": "Loading pricing plans...",
+      "noPlansAvailable": "No pricing plans available for this country",
+      "failedToLoad": "Failed to load pricing plans",
+      "pleaseSelect": "Please select a pricing plan",
+      "selected": "Selected",
+      "continue": "Continue to Payment",
+      "processing": "Processing...",
+      "failedToUpdate": "Failed to update pricing selection",
+      "summary": "Selected Plan Summary",
+      "planName": "Plan Name",
+      "totalPrice": "Total Price"
+    },
+    "admin": {
+      "pricing": {
+        "title": "Pricing Plans Management",
+        "subtitle": "Configure pricing plans for each country",
+        "loading": "Loading...",
+        "addPlan": "Add Plan",
+        "editPlan": "Edit Plan",
+        "plan": "plan",
+        "plans": "plans",
+        "planName": "Plan Name",
+        "description": "Description",
+        "priceUSD": "Price (USD)",
+        "priceILS": "Price (ILS)",
+        "noPlans": "No pricing plans for this country yet",
+        "createdSuccess": "Pricing plan created successfully",
+        "updatedSuccess": "Pricing plan updated successfully",
+        "deletedSuccess": "Pricing plan deleted successfully",
+        "saveError": "Failed to save pricing plan",
+        "deleteError": "Failed to delete pricing plan",
+        "invalidPrices": "Prices must be non-negative numbers",
+        "confirmDelete": "Are you sure you want to delete this pricing plan?"
+      }
+    },
     "common": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "edit": "Edit",
+      "delete": "Delete",
       "loading": "Loading...",
       "hebrew": "עברית",
       "english": "English",
@@ -219,8 +262,12 @@
       "loading": "Loading passport data...",
       "male": "Male",
       "female": "Female"
-    }
-  },
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "The page you're looking for doesn't exist or has been moved.",
+      "backToHome": "Back to Home"
+    }},
   "he": {
     "nav": {
       "home": "בית",
@@ -231,7 +278,8 @@
       "signIn": "התחבר",
       "signOut": "התנתק",
       "exportAgentUrl": "ייצא כתובת סוכן",
-      "agentUrlCopied": "כתובת הסוכן הועתקה ללוח!"
+      "agentUrlCopied": "כתובת הסוכן הועתקה ללוח!",
+      "adminPricing": "ניהול תמחור"
     },
     "hero": {
       "badge": "✨ שירות ויזה אלקטרונית אוטומטי",
@@ -374,13 +422,55 @@
       "success": "התשלום בוצע בהצלחה! הבקשה שלך נשלחה.",
       "error": "עיבוד התשלום נכשל. אנא נסה שוב."
     },
+    "pricing": {
+      "title": "בחר תוכנית תמחור",
+      "subtitle": "בחר את תוכנית התמחור שמתאימה לך ביותר",
+      "loading": "טוען תוכניות תמחור...",
+      "noPlansAvailable": "אין תוכניות תמחור זמינות למדינה זו",
+      "failedToLoad": "נכשל בטעינת תוכניות תמחור",
+      "pleaseSelect": "אנא בחר תוכנית תמחור",
+      "selected": "נבחר",
+      "continue": "המשך לתשלום",
+      "processing": "מעבד...",
+      "failedToUpdate": "נכשל בעדכון בחירת התמחור",
+      "summary": "סיכום תוכנית נבחרת",
+      "planName": "שם תוכנית",
+      "totalPrice": "מחיר כולל"
+    },
+    "admin": {
+      "pricing": {
+        "title": "ניהול תוכניות תמחור",
+        "subtitle": "הגדר תוכניות תמחור לכל מדינה",
+        "loading": "טוען...",
+        "addPlan": "הוסף תוכנית",
+        "editPlan": "ערוך תוכנית",
+        "plan": "תוכנית",
+        "plans": "תוכניות",
+        "planName": "שם תוכנית",
+        "description": "תיאור",
+        "priceUSD": "מחיר (USD)",
+        "priceILS": "מחיר (ILS)",
+        "noPlans": "אין תוכניות תמחור למדינה זו עדיין",
+        "createdSuccess": "תוכנית תמחור נוצרה בהצלחה",
+        "updatedSuccess": "תוכנית תמחור עודכנה בהצלחה",
+        "deletedSuccess": "תוכנית תמחור נמחקה בהצלחה",
+        "saveError": "שמירת תוכנית תמחור נכשלה",
+        "deleteError": "מחיקת תוכנית תמחור נכשלה",
+        "invalidPrices": "המחירים חייבים להיות מספרים לא שליליים",
+        "confirmDelete": "האם אתה בטוח שברצונך למחוק את תוכנית התמחור הזו?"
+      }
+    },
     "common": {
       "loading": "טוען...",
       "hebrew": "עברית",
       "english": "English",
       "application": "בקשה",
       "approved": "אושר",
-      "travelReady": "מוכן לנסיעה"
+      "travelReady": "מוכן לנסיעה",
+      "cancel": "ביטול",
+      "save": "שמור",
+      "edit": "ערוך",
+      "delete": "מחק"
     },
     "auth": {
       "signIn": "התחבר",
@@ -441,6 +531,11 @@
       "loading": "טוען פרטי דרכון...",
       "male": "זכר",
       "female": "נקבה"
+    },
+    "notFound": {
+      "title": "דף לא נמצא",
+      "description": "הדף שאתה מחפש לא קיים או הועבר.",
+      "backToHome": "חזור לדף הבית"
     }
   }
 }
