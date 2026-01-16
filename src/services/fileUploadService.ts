@@ -1,4 +1,4 @@
-import { apiDelete, apiPost, apiPostFormData } from "./apiService";
+import { apiDelete, apiPostFormData } from "./apiService";
 
 export interface UploadFileResponse {
   url: string;

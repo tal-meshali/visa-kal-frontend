@@ -5,35 +5,13 @@ import NumberField from "../components/fields/NumberField";
 import PhotoField from "../components/fields/PhotoField";
 import SelectField from "../components/fields/SelectField";
 import StringField from "../components/fields/StringField";
-
-interface FormField {
-  name: string;
-  label: { en: string; he: string };
-  field_type: "string" | "number" | "date" | "select" | "document" | "photo";
-  required?: boolean;
-  placeholder?: { en: string; he: string };
-  [key: string]: any;
-  default_value?: string;
-}
-
-interface CommonFieldProps {
-  name: string;
-  label: { en: string; he: string };
-  value: any;
-  onChange: (value: any) => void;
-  error?: string;
-  required: boolean;
-  placeholder?: { en: string; he: string };
-  language: "en" | "he";
-  fieldId?: string;
-  beneficiaryId?: string;
-  getToken?: () => Promise<string | null>;
-  onUploadStateChange?: (uploadId: string, isUploading: boolean) => void;
-  activeUploads?: Set<string>;
-}
+import type {
+  CommonFieldProps,
+  TypedFormField,
+} from "../types/formTypes";
 
 type FieldRenderer = (
-  field: FormField,
+  field: TypedFormField,
   props: CommonFieldProps
 ) => React.JSX.Element | null;
 
@@ -87,7 +65,7 @@ const fieldRenderers: Record<string, FieldRenderer> = {
 };
 
 export const renderFormField = (
-  field: FormField,
+  field: TypedFormField,
   commonProps: CommonFieldProps
 ) => {
   const renderer = fieldRenderers[field.field_type];
