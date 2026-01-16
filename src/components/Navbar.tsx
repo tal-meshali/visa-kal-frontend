@@ -105,6 +105,7 @@ const NavbarSignedIn = () => {
   };
 
   const isAgent = userData?.role === "agent";
+  const isAdmin = userData?.role === "admin";
 
   return (
     <>
@@ -116,6 +117,11 @@ const NavbarSignedIn = () => {
         >
           {t.nav.exportAgentUrl}
         </button>
+      )}
+      {isAdmin && (
+        <Link to="/admin/pricing" className="nav-link">
+          {t.nav.adminPricing}
+        </Link>
       )}
       {showAgentUrlModal && (
         <div className="agent-url-modal">{t.nav.agentUrlCopied}</div>
