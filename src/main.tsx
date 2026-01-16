@@ -13,6 +13,7 @@ import ApplicationsHistory from "./pages/ApplicationsHistory.tsx";
 import Payment from "./pages/Payment.tsx";
 import PricingSelection from "./pages/PricingSelection.tsx";
 import AdminPricing from "./pages/AdminPricing.tsx";
+import NotFound from "./pages/NotFound.tsx";
 import { EmailVerification } from "./components/EmailVerification.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 
@@ -94,6 +95,7 @@ createRoot(document.getElementById("root")!).render(
                 }
               />
               <Route path="/verify-email" element={<EmailVerification />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </LanguageProvider>
