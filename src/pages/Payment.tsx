@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { Alert } from "../components/Alert";
 import { SignedIn, SignedOut, useUser } from "../components/AuthComponents";
 import { Button } from "../components/Button";
@@ -10,6 +11,8 @@ import {
   getApplication,
   updateApplicationStatus,
 } from "../services/applicationService";
+import { getCountryPricing } from "../services/pricingService";
+import type { Application } from "../services/requestService";
 import "./Payment.css";
 
 import type { FormDataRecord, TranslatedText } from "../types/formTypes";
@@ -43,49 +46,88 @@ const Payment = () => {
   const requestId = state?.requestId;
   const formData = state?.formData;
   const countryName = state?.countryName;
-  const [loadingRequest, setLoadingRequest] = useState(false);
-  const [loadedFormData, setLoadedFormData] = useState<FormDataRecord[] | null>(
-    null
-  );
-  const [loadedCountryName, setLoadedCountryName] =
-    useState<TranslatedText | null>(null);
 
-  // Load form data from request if requestId exists
-  useEffect(() => {
-    const loadRequestData = async () => {
-      if (requestId && user && !formData) {
-        setLoadingRequest(true);
-        try {
-          const application = await getApplication(requestId);
-          // Extract form data from beneficiaries
-          const beneficiariesFormData = application.beneficiaries.map(
-            (beneficiary) => beneficiary.form_data
-          );
-          setLoadedFormData(beneficiariesFormData);
-          setLoadedCountryName(application.country_name);
-        } catch (error) {
-          setAlert({
-            type: "error",
-            message:
-              error instanceof Error
-                ? error.message
-                : "Failed to load application data",
-            isOpen: true,
-          });
-          // Redirect back if loading fails
-          navigate(`/apply/${countryId}`);
-        } finally {
-          setLoadingRequest(false);
-        }
-      }
-    };
+  // Query to load application data when formData is not provided
+  const {
+    data: applicationData,
+    isLoading: loadingRequest,
+    error: applicationError,
+  } = useQuery<Application>({
+    queryKey: ["application", requestId],
+    queryFn: () => getApplication(requestId!),
+    enabled: !!requestId && !!user && !formData,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
 
-    loadRequestData();
-  }, [requestId, user, formData, countryId, navigate]);
+  // Extract form data and country name from application
+  const loadedFormData = useMemo<FormDataRecord[] | null>(() => {
+    if (applicationData?.beneficiaries) {
+      return applicationData.beneficiaries.map(
+        (beneficiary) => beneficiary.form_data
+      );
+    }
+    return null;
+  }, [applicationData]);
+
+  const loadedCountryName = applicationData?.country_name || null;
+
+  // Query to load pricing plans for the country
+  const {
+    data: pricingPlans,
+    isLoading: loadingPricingPlans,
+  } = useQuery({
+    queryKey: ["pricing", countryId],
+    queryFn: () => getCountryPricing(countryId!),
+    enabled: !!countryId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  // Query to load application data when we need pricing_id (when formData exists)
+  const {
+    data: applicationForPricing,
+    isLoading: loadingApplicationForPricing,
+  } = useQuery<Application, Error, string | null | undefined>({
+    queryKey: ["application", requestId, "pricing"],
+    queryFn: () => getApplication(requestId!),
+    enabled: !!requestId && !!user && !!formData && !!countryId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    select: (data: Application) => data.pricing_id,
+  });
+
+  // Find selected pricing based on pricing_id from application
+  const selectedPricing = useMemo(() => {
+    const pricingId =
+      applicationData?.pricing_id || applicationForPricing || null;
+    if (pricingId && pricingPlans) {
+      return pricingPlans.find((p) => p.id === pricingId) || null;
+    }
+    return null;
+  }, [applicationData?.pricing_id, applicationForPricing, pricingPlans]);
+
+  const loadingPricing =
+    loadingPricingPlans || loadingApplicationForPricing;
 
   // Use loaded data if available, otherwise use state data
   const finalFormData = loadedFormData || formData;
   const finalCountryName = loadedCountryName || countryName;
+
+  // Handle application loading error
+  useEffect(() => {
+    if (applicationError) {
+      setAlert({
+        type: "error",
+        message:
+          applicationError instanceof Error
+            ? applicationError.message
+            : "Failed to load application data",
+        isOpen: true,
+      });
+      // Redirect back if loading fails
+      if (countryId) {
+        navigate(`/apply/${countryId}`);
+      }
+    }
+  }, [applicationError, countryId, navigate]);
 
   // Redirect if no form data or not authenticated
   useEffect(() => {
@@ -173,7 +215,7 @@ const Payment = () => {
     setAlert((prev) => ({ ...prev, isOpen: false }));
   };
 
-  if (authLoading || loadingRequest) {
+  if (authLoading || loadingRequest || loadingPricing) {
     return <LoadingScreen message={t.common.loading} />;
   }
 
@@ -209,11 +251,11 @@ const Payment = () => {
             <div className="payment-header">
               <Button
                 variant="back"
-                onClick={() =>
+                onClick={() => {
                   navigate(`/apply/${countryId}`, {
                     state: requestId ? { requestId } : undefined,
-                  })
-                }
+                  });
+                }}
               >
                 ← {t.form.back}
               </Button>
@@ -234,7 +276,11 @@ const Payment = () => {
               <div className="summary-item">
                 <span className="summary-label">{t.payment.totalAmount}</span>
                 <span className="summary-value summary-amount">
-                  {language === "en"
+                  {selectedPricing
+                    ? language === "en"
+                      ? `$${(selectedPricing.price_usd * finalFormData.length).toFixed(2)}`
+                      : `₪${(selectedPricing.price_ils * finalFormData.length).toFixed(2)}`
+                    : language === "en"
                     ? `$${finalFormData.length * 50}.00`
                     : `₪${finalFormData.length * 180}.00`}
                 </span>

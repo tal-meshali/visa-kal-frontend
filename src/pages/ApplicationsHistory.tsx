@@ -7,12 +7,35 @@ import { Button } from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
 import { useLanguage } from "../contexts/useLanguage";
 import { getUserApplications } from "../services/applicationService";
-import type { Application } from "../services/requestService";
+import type { Application, Beneficiary } from "../services/requestService";
 import "./ApplicationsHistory.css";
 
 const ApplicationsHistory = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+
+  const getBeneficiaryName = (formData: Beneficiary["form_data"]): string => {
+    // Try to find name fields in common formats
+    if (formData.passport_data) {
+      const firstName = formData.passport_data.first_name || "";
+      const lastName = formData.passport_data.last_name || "";
+      if (firstName || lastName) {
+        return `${firstName} ${lastName}`.trim();
+      }
+    }
+    // Try other common name fields
+    if (formData.first_name || formData.last_name) {
+      const firstName = formData.first_name || "";
+      const lastName = formData.last_name || "";
+      if (firstName || lastName) {
+        return `${firstName} ${lastName}`.trim();
+      }
+    }
+    if (formData.name) {
+      return String(formData.name);
+    }
+    return t.applications.beneficiary;
+  };
 
   const {
     data: applications = [],
@@ -67,6 +90,7 @@ const ApplicationsHistory = () => {
                     key={app.id}
                     application={app}
                     variant="compact"
+                    getBeneficiaryName={getBeneficiaryName}
                   />
                 ))}
               </div>

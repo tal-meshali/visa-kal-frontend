@@ -1,10 +1,20 @@
-import { apiDelete, apiPostFormData } from "./apiService";
+import { apiDelete, apiPost, apiPostFormData } from "./apiService";
 
 export interface UploadFileResponse {
   url: string;
   field_name: string;
   beneficiary_id: string;
   filename: string;
+}
+
+export interface MoveInfoJsonResponse {
+  message: string;
+  moved_count: number;
+}
+
+export interface DeleteInfoJsonResponse {
+  message: string;
+  deleted_count: number;
 }
 
 export const uploadFileToBucket = async (

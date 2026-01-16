@@ -102,11 +102,21 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
     },
   ] = useList<FormDataRecord>([initializeFormData(schema.fields)]);
 
+  // Track the last loaded requestId to prevent duplicate fetches
+  const lastLoadedRequestIdRef = useRef<string | null>(null);
+
   // Load form data from request if requestId is provided
   useEffect(() => {
     const loadRequestData = async () => {
       if (requestId && user && isUserLoaded) {
+        // Prevent fetching the same requestId multiple times
+        if (lastLoadedRequestIdRef.current === requestId) {
+          setLoadingRequest(false);
+          return;
+        }
+
         try {
+          lastLoadedRequestIdRef.current = requestId;
           const application = await getApplication(requestId);
           // Extract form data from beneficiaries
           const beneficiariesFormData = application.beneficiaries.map(
@@ -118,16 +128,18 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
         } catch (error) {
           console.error("Failed to load request data:", error);
           // Continue with empty form if loading fails
+          lastLoadedRequestIdRef.current = null;
         } finally {
           setLoadingRequest(false);
         }
       } else if (!requestId) {
+        lastLoadedRequestIdRef.current = null;
         setLoadingRequest(false);
       }
     };
 
     loadRequestData();
-  }, [requestId, user, isUserLoaded, setBeneficiaries]);
+  }, [requestId, user, isUserLoaded]);
 
   // Use ref to track latest beneficiaries state to prevent race conditions
   const beneficiariesRef = useRef(beneficiaries);

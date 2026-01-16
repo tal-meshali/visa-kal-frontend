@@ -83,14 +83,19 @@ export const ApplicationCard = ({
                 <div className="beneficiaries-preview">
                   {application.beneficiaries
                     .slice(0, 2)
-                    .map((beneficiary, idx) => (
-                      <div
-                        key={beneficiary.id || idx}
-                        className="beneficiary-preview"
-                      >
-                        {`${translations.beneficiary} ${idx + 1}`}
-                      </div>
-                    ))}
+                    .map((beneficiary, idx) => {
+                      const beneficiaryName = getBeneficiaryName
+                        ? getBeneficiaryName(beneficiary.form_data)
+                        : `${translations.beneficiary} ${idx + 1}`;
+                      return (
+                        <div
+                          key={beneficiary.id || idx}
+                          className="beneficiary-preview"
+                        >
+                          {beneficiaryName}
+                        </div>
+                      );
+                    })}
                   {application.beneficiaries.length > 2 && (
                     <div className="beneficiary-preview">
                       +{application.beneficiaries.length - 2}{" "}
@@ -115,14 +120,6 @@ export const ApplicationCard = ({
                     <div className="beneficiary-info">
                       <span className="beneficiary-name">
                         {beneficiaryName}
-                      </span>
-                      <span
-                        className="beneficiary-status"
-                        style={{
-                          backgroundColor: getStatusColor(beneficiary.status),
-                        }}
-                      >
-                        {getStatusTableFunc(beneficiary.status)}
                       </span>
                     </div>
                   </div>

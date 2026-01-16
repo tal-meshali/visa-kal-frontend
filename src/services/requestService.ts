@@ -21,6 +21,7 @@ export interface Application {
   created_at: string;
   updated_at: string;
   notes?: string | null;
+  pricing_id?: string | null;
   beneficiaries: Beneficiary[];
 }
 

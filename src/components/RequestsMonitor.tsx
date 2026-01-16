@@ -53,6 +53,8 @@ const RequestsMonitorSignedIn = () => {
     const statusLabels: Record<string, { en: string; he: string }> = {
       pending_payment: { en: "Pending Payment", he: "ממתין לתשלום" },
       pending_approval: { en: "Pending Approval", he: "ממתין לאישור" },
+      payment_received: { en: "Payment Received", he: "תשלום התקבל" },
+      submitted: { en: "Submitted", he: "הוגש" },
       approved: { en: "Approved", he: "אושר" },
       rejected: { en: "Rejected", he: "נדחה" },
       pending: { en: "Pending", he: "ממתין" },
