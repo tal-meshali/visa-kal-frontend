@@ -10,9 +10,6 @@ export const CTASection = () => {
         <div className="cta-content">
           <h2 className="cta-title">{t.cta.title}</h2>
           <p className="cta-description">{t.cta.description}</p>
-          <Button variant="primary" size="large">
-            {t.cta.button}
-          </Button>
         </div>
       </div>
     </section>

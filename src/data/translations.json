@@ -28,7 +28,28 @@
       "select": "Select Country",
       "morocco": "Morocco",
       "tanzania": "Tanzania / Zanzibar",
-      "sriLanka": "Sri Lanka"
+      "sriLanka": "Sri Lanka",
+      "startApplication": "Start Application",
+      "visaProcess": {
+        "title": "Visa Process"
+      },
+      "pricing": {
+        "title": "Available Pricing Programs"
+      },
+      "descriptions": {
+        "550e8400-e29b-41d4-a716-446655440000": {
+          "en": "Morocco offers a streamlined electronic visa process for Israeli tourists. The visa application is processed automatically through our platform, eliminating the need for manual paperwork. Once submitted, your visa will be generated electronically and sent directly to your email. The process typically takes 24-48 hours, and you'll receive your visa as a PDF document that you can print and present upon arrival in Morocco.",
+          "he": "מרוקו מציעה תהליך ויזה אלקטרונית מפושט לתיירים ישראלים. בקשת הויזה מעובדת אוטומטית דרך הפלטפורמה שלנו, מה שמבטל את הצורך בניירת ידנית. לאחר הגשת הבקשה, הויזה שלך תיווצר אלקטרונית ותישלח ישירות לאימייל שלך. התהליך בדרך כלל אורך 24-48 שעות, ותקבל את הויזה שלך כמסמך PDF שתוכל להדפיס ולהציג עם ההגעה למרוקו."
+        },
+        "550e8400-e29b-41d4-a716-446655440001": {
+          "en": "Tanzania and Zanzibar offer an electronic visa system that simplifies travel for Israeli tourists. Our automated platform handles the entire visa application process, from submission to approval. The electronic visa is processed within 2-3 business days and delivered directly to your email inbox. You'll receive a printable PDF visa that is valid for entry into both Tanzania mainland and the beautiful island of Zanzibar.",
+          "he": "טנזניה וזנזיבר מציעות מערכת ויזה אלקטרונית שמפשטת את הנסיעה לתיירים ישראלים. הפלטפורמה האוטומטית שלנו מטפלת בכל תהליך הגשת בקשת הויזה, מהגשה לאישור. הויזה האלקטרונית מעובדת תוך 2-3 ימי עסקים ונשלחת ישירות לתיבת הדואר האלקטרוני שלך. תקבל ויזה אלקטרונית להדפסה תקפה לכניסה גם לטנזניה היבשתית וגם לאי היפה זנזיבר."
+        },
+        "550e8400-e29b-41d4-a716-446655440002": {
+          "en": "Sri Lanka offers an electronic visa system for Israeli tourists. The visa application process is fully automated through our platform, making it easy and convenient to obtain your travel authorization. Once your application is submitted, it will be processed and you'll receive your electronic visa via email within 3-5 business days.",
+          "he": "סרי לנקה מציעה מערכת ויזה אלקטרונית לתיירים ישראלים. תהליך הגשת בקשת הויזה מאומת לחלוטין דרך הפלטפורמה שלנו, מה שהופך את קבלת אישור הנסיעה לקל ונוח. לאחר הגשת הבקשה שלך, היא תועבר לעיבוד ותקבל את הויזה האלקטרונית שלך דרך אימייל תוך 3-5 ימי עסקים."
+        }
+      }
     },
     "features": {
       "title": "Why Choose Visa-Kal?",
@@ -297,7 +318,28 @@
       "select": "בחר מדינה",
       "morocco": "מרוקו",
       "tanzania": "טנזניה / זנזיבר",
-      "sriLanka": "סרי לנקה"
+      "sriLanka": "סרי לנקה",
+      "startApplication": "התחל בקשה",
+      "visaProcess": {
+        "title": "תהליך הויזה"
+      },
+      "pricing": {
+        "title": "תוכניות תמחור זמינות"
+      },
+      "descriptions": {
+        "550e8400-e29b-41d4-a716-446655440000": {
+          "en": "Morocco offers a streamlined electronic visa process for Israeli tourists. The visa application is processed automatically through our platform, eliminating the need for manual paperwork. Once submitted, your visa will be generated electronically and sent directly to your email. The process typically takes 24-48 hours, and you'll receive your visa as a PDF document that you can print and present upon arrival in Morocco.",
+          "he": "מרוקו מציעה תהליך ויזה אלקטרונית מפושט לתיירים ישראלים. בקשת הויזה מעובדת אוטומטית דרך הפלטפורמה שלנו, מה שמבטל את הצורך בניירת ידנית. לאחר הגשת הבקשה, הויזה שלך תיווצר אלקטרונית ותישלח ישירות לאימייל שלך. התהליך בדרך כלל אורך 24-48 שעות, ותקבל את הויזה שלך כמסמך PDF שתוכל להדפיס ולהציג עם ההגעה למרוקו."
+        },
+        "550e8400-e29b-41d4-a716-446655440001": {
+          "en": "Tanzania and Zanzibar offer an electronic visa system that simplifies travel for Israeli tourists. Our automated platform handles the entire visa application process, from submission to approval. The electronic visa is processed within 2-3 business days and delivered directly to your email inbox. You'll receive a printable PDF visa that is valid for entry into both Tanzania mainland and the beautiful island of Zanzibar.",
+          "he": "טנזניה וזנזיבר מציעות מערכת ויזה אלקטרונית שמפשטת את הנסיעה לתיירים ישראלים. הפלטפורמה האוטומטית שלנו מטפלת בכל תהליך הגשת בקשת הויזה, מהגשה לאישור. הויזה האלקטרונית מעובדת תוך 2-3 ימי עסקים ונשלחת ישירות לתיבת הדואר האלקטרוני שלך. תקבל ויזה אלקטרונית להדפסה תקפה לכניסה גם לטנזניה היבשתית וגם לאי היפה זנזיבר."
+        },
+        "550e8400-e29b-41d4-a716-446655440002": {
+          "en": "Sri Lanka offers an electronic visa system for Israeli tourists. The visa application process is fully automated through our platform, making it easy and convenient to obtain your travel authorization. Once your application is submitted, it will be processed and you'll receive your electronic visa via email within 3-5 business days.",
+          "he": "סרי לנקה מציעה מערכת ויזה אלקטרונית לתיירים ישראלים. תהליך הגשת בקשת הויזה מאומת לחלוטין דרך הפלטפורמה שלנו, מה שהופך את קבלת אישור הנסיעה לקל ונוח. לאחר הגשת הבקשה שלך, היא תועבר לעיבוד ותקבל את הויזה האלקטרונית שלך דרך אימייל תוך 3-5 ימי עסקים."
+        }
+      }
     },
     "features": {
       "title": "למה לבחור ב-Visa-Kal?",

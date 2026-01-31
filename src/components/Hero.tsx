@@ -22,7 +22,6 @@ export const Hero = () => {
           >
             {t.hero.startApplication}
           </Button>
-          <Button variant="secondary">{t.hero.learnMore}</Button>
         </div>
       </div>
       <div className="hero-visual">

@@ -14,6 +14,7 @@ import Payment from "./pages/Payment.tsx";
 import PricingSelection from "./pages/PricingSelection.tsx";
 import AdminPricing from "./pages/AdminPricing.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import CountryPage from "./pages/CountryPage.tsx";
 import { EmailVerification } from "./components/EmailVerification.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 
@@ -82,6 +83,7 @@ createRoot(document.getElementById("root")!).render(
             <EmailVerificationPrompt />
             <Routes>
               <Route path="/" element={<App />} />
+              <Route path="/country/:countryId" element={<CountryPage />} />
               <Route path="/apply/:countryId" element={<ApplicationForm />} />
               <Route path="/pricing/:countryId" element={<PricingSelection />} />
               <Route path="/payment/:countryId" element={<Payment />} />

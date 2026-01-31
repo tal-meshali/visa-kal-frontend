@@ -38,7 +38,7 @@ export const CountriesSection = ({ language, translations, availableCountries, u
             {availableCountries.map((country) => (
               <Link
                 key={country.id}
-                to={`/apply/${country.id}`}
+                to={`/country/${country.id}`}
                 className="country-card available"
               >
                 <div className="country-flag">
@@ -58,8 +58,9 @@ export const CountriesSection = ({ language, translations, availableCountries, u
             <h3 className="countries-group-title">{translations.countries.upcoming}</h3>
             <div className="countries-grid">
               {upcomingCountries.map((country) => (
-                <div
+                <Link
                   key={country.id}
+                  to={`/country/${country.id}`}
                   className="country-card upcoming"
                 >
                   <div className="country-flag">
@@ -67,7 +68,7 @@ export const CountriesSection = ({ language, translations, availableCountries, u
                   </div>
                   <h3 className="country-name">{country.name[language]}</h3>
                   <div className="coming-soon-badge">{translations.countries.upcoming}</div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

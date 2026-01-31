@@ -1,0 +1,173 @@
+.country-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.country-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.country-page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-top: 2rem;
+}
+
+.country-page-flag {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.country-page-flag img {
+  width: 120px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.country-page-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.country-page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.country-description-section,
+.country-pricing-section {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 2.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.country-section-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.country-description {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  white-space: pre-line;
+}
+
+.country-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.country-pricing-card {
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.country-pricing-card:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.country-pricing-card-header {
+  margin-bottom: 1rem;
+}
+
+.country-pricing-plan-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.country-pricing-plan-description {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.country-pricing-plan-prices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.country-pricing-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.country-pricing-currency {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.country-pricing-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.country-pricing-price-usd {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.country-pricing-empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+}
+
+.country-page-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+[data-theme="dark"] .country-description-section,
+[data-theme="dark"] .country-pricing-section {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+[data-theme="dark"] .country-pricing-card {
+  background: rgba(51, 65, 85, 0.3);
+}
+
+@media (max-width: 768px) {
+  .country-page-container {
+    padding: 1rem;
+  }
+
+  .country-page-title {
+    font-size: 2rem;
+  }
+
+  .country-description-section,
+  .country-pricing-section {
+    padding: 1.5rem;
+  }
+
+  .country-pricing-grid {
+    grid-template-columns: 1fr;
+  }
+}
