@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import "./App.css";
+import { AboutSection } from "./components/AboutSection";
 import { Alert } from "./components/Alert";
 import { CountriesSection } from "./components/CountriesSection";
 import { CTASection } from "./components/CTASection";
@@ -107,6 +108,7 @@ const App = () => {
         onThemeToggle={toggleTheme}
       />
       <Hero />
+      <AboutSection />
       <CountriesSection
         language={language}
         translations={t}

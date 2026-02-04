@@ -33,7 +33,6 @@ export const CountriesSection = ({ language, translations, availableCountries, u
         </div>
 
         <div className="countries-group">
-          <h3 className="countries-group-title">{translations.countries.available}</h3>
           <div className="countries-grid">
             {availableCountries.map((country) => (
               <Link
@@ -55,7 +54,6 @@ export const CountriesSection = ({ language, translations, availableCountries, u
 
         {upcomingCountries.length > 0 && (
           <div className="countries-group">
-            <h3 className="countries-group-title">{translations.countries.upcoming}</h3>
             <div className="countries-grid">
               {upcomingCountries.map((country) => (
                 <Link

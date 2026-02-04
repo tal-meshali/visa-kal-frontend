@@ -12,18 +12,21 @@
       "agentUrlCopied": "Agent URL copied to clipboard!",
       "adminPricing": "Manage Pricing"
     },
+    "home": {
+      "aboutTitle": "About Visa-Kal",
+      "about": "Welcome to Visa-Kal! The new and fastest place to submit electronic visa applications for Israeli tourists in the world.\nWe simplify the process for Israeli tourists traveling to various destinations, and offer fast, secure and fully automated visa creation.\nBy using cutting-edge technologies and AI, we provide you with a more convenient, faster and cheaper user experience than any other competitor!"
+    },
     "hero": {
       "badge": "✨ Automated Electronic Visa Service",
       "title": "Get Your Electronic Visa",
       "titleHighlight": "Automatically",
-      "description": "Streamline your visa application process with our automated platform. Fast, secure, and hassle-free electronic visa creation for Israeli tourists.",
+      "description": "Creating an electronic visa has never been easier! Make your applications quickly, conveniently, securely and at the lowest price among competitors!",
       "startApplication": "Start Application",
       "learnMore": "Learn More"
     },
     "countries": {
       "title": "Available Destinations",
       "subtitle": "Select your destination to begin your visa application",
-      "available": "Available Now",
       "upcoming": "Coming Soon",
       "select": "Select Country",
       "morocco": "Morocco",
@@ -165,6 +168,9 @@
       "country": "Country:",
       "beneficiaries": "Beneficiaries:",
       "totalAmount": "Total Amount:",
+      "currency": "Payment currency",
+      "payInUsd": "Pay in USD",
+      "payInIls": "Pay in ILS",
       "method": "Payment Method",
       "creditCard": "Credit Card",
       "cardNumber": "Card Number",
@@ -172,7 +178,11 @@
       "complete": "Complete Payment",
       "processingButton": "Processing...",
       "success": "Payment processed successfully! Your application has been submitted.",
-      "error": "Payment processing failed. Please try again."
+      "error": "Payment processing failed. Please try again.",
+      "payWithPayMe": "Pay with PayMe",
+      "redirectingToPayment": "Redirecting to secure payment...",
+      "paymentCanceled": "Payment was canceled. You can try again when ready.",
+      "paymentNotConfigured": "Payment is not configured. Please contact support."
     },
     "pricing": {
       "title": "Select Pricing Plan",
@@ -226,9 +236,9 @@
       "loading": "Loading...",
       "hebrew": "עברית",
       "english": "English",
-      "application": "Application",
-      "approved": "Approved",
-      "travelReady": "Travel Ready"
+      "application": "Application within the site",
+      "approved": "Approved by the country",
+      "travelReady": "Ready for your travel"
     },
     "auth": {
       "signIn": "Sign In",
@@ -308,18 +318,21 @@
       "agentUrlCopied": "כתובת הסוכן הועתקה ללוח!",
       "adminPricing": "ניהול תמחור"
     },
+    "home": {
+      "aboutTitle": "אודות Visa-Kal",
+      "about": "ברוכים הבאים אל Visa-Kal! המקום החדש והמהיר ביותר להגשת בקשות לויזות אלקטרוניות עבור תיירים ישראלים בעולם.\nאנו מפשטים את התהליך לתיירים ישראלים הנוסעים ליעדים שונים, ומציעים יצירת ויזה מהירה, מאובטחת ואוטומטית לחלוטין.\nבאמצעות שימוש בטכנולוגיות חדישות ן-AI, אנחנו מאפשרים לכם חווית שימוש נוחה, מהירה וזולה יותר מכל מתחרה אחר!"
+    },
     "hero": {
       "badge": "✨ שירות ויזה אלקטרונית אוטומטי",
       "title": "קבל את הויזה האלקטרונית שלך",
       "titleHighlight": "באופן אוטומטי",
-      "description": "פשט את תהליך הגשת הבקשה לויזה עם הפלטפורמה האוטומטית שלנו. יצירת ויזה אלקטרונית מהירה, מאובטחת וללא טרחה לתיירים ישראלים.",
+      "description": "יצירת ויזה אלקטרונית מעולם לא הייתה פשוטה יותר! בצעו את הבקשות שלכם באופן מהיר, נוח, מאובטח והזול מבין המתחרים!",
       "startApplication": "התחל בקשה",
       "learnMore": "למידע נוסף"
     },
     "countries": {
       "title": "יעדים זמינים",
       "subtitle": "בחר את היעד שלך כדי להתחיל את בקשת הויזה",
-      "available": "זמין כעת",
       "upcoming": "בקרוב",
       "select": "בחר מדינה",
       "morocco": "מרוקו",
@@ -461,6 +474,9 @@
       "country": "מדינה:",
       "beneficiaries": "נהנים:",
       "totalAmount": "סכום כולל:",
+      "currency": "מטבע תשלום",
+      "payInUsd": "שלם בדולרים (USD)",
+      "payInIls": "שלם בשקלים (ILS)",
       "method": "אמצעי תשלום",
       "creditCard": "כרטיס אשראי",
       "cardNumber": "מספר כרטיס",
@@ -468,7 +484,11 @@
       "complete": "השלם תשלום",
       "processingButton": "מעבד...",
       "success": "התשלום בוצע בהצלחה! הבקשה שלך נשלחה.",
-      "error": "עיבוד התשלום נכשל. אנא נסה שוב."
+      "error": "עיבוד התשלום נכשל. אנא נסה שוב.",
+      "payWithPayMe": "שלם עם PayMe",
+      "redirectingToPayment": "מעביר לתשלום מאובטח...",
+      "paymentCanceled": "התשלום בוטל. תוכל לנסות שוב כאשר תהיה מוכן.",
+      "paymentNotConfigured": "התשלום לא מוגדר. אנא פנה לתמיכה."
     },
     "pricing": {
       "title": "בחר תוכנית תמחור",
@@ -518,9 +538,9 @@
       "loading": "טוען...",
       "hebrew": "עברית",
       "english": "English",
-      "application": "בקשה",
-      "approved": "אושר",
-      "travelReady": "מוכן לנסיעה",
+      "application": "ביצוע הבקשה באתר",
+      "approved": "עובר אישור רשמי",
+      "travelReady": "מוכן לקראת הנסיעה",
       "cancel": "ביטול",
       "save": "שמור",
       "edit": "ערוך",
