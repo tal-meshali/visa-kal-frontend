@@ -117,7 +117,7 @@
       "backToHome": "Back to Home",
       "uploadingFiles": "Uploading files...",
       "autoCopy": "Auto-copy to next beneficiaries",
-      "autoCopyTooltip": "Auto-copy this field to new beneficiaries and insert it as default value",
+      "autoCopyTooltip": "Selecting auto-copy will copy a field's value to new beneficiaries as default",
       "copy": "↩ Copied",
       "copyTooltip": "Value has been copied from the first beneficiary"
     },

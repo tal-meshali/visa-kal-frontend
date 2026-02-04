@@ -58,11 +58,18 @@ export const Navbar = ({
             {theme === "light" ? "🌙" : "☀️"}
           </button>
           <button
-            className="lang-toggle"
+            className="lang-toggle lang-toggle-flag"
             onClick={onLanguageToggle}
-            aria-label="Toggle language"
+            aria-label={language === "en" ? t.common.hebrew : t.common.english}
+            title={language === "en" ? t.common.hebrew : t.common.english}
           >
-            {language === "en" ? t.common.hebrew : t.common.english}
+            <img
+              src={language === "en" ? "/flags/il.svg" : "/flags/gb.svg"}
+              alt=""
+              width={24}
+              height={18}
+              className="lang-flag-img"
+            />
           </button>
           <SignedIn>
             <UserButton />

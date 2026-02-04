@@ -73,14 +73,15 @@
 }
 
 .lang-toggle-flag {
-  padding: 0.5rem 0.65rem;
-  line-height: 1;
+  padding: 0.35rem 0.5rem;
+  line-height: 0;
 }
 
-.lang-toggle-flag span {
-  display: inline-block;
-  font-size: 1.35rem;
-  line-height: 1;
+.lang-flag-img {
+  display: block;
+  width: 24px;
+  height: 18px;
+  object-fit: contain;
 }
 
 .lang-toggle:hover {
@@ -244,6 +245,22 @@
   margin: 0 0 1.5rem 0;
   padding-bottom: 1rem;
   border-bottom: 2px solid var(--border-color);
+}
+
+.auto-copy-disclaimer {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0 0 1rem 0;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+}
+
+[dir="rtl"] .auto-copy-disclaimer {
+  border-left: none;
+  border-right: 3px solid #667eea;
 }
 
 .beneficiary-field-wrapper {

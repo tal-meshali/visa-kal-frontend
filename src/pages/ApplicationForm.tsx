@@ -398,9 +398,13 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
               aria-label={language === "en" ? t.common.hebrew : t.common.english}
               title={language === "en" ? t.common.hebrew : t.common.english}
             >
-              <span role="img" aria-hidden>
-                {language === "en" ? "🇮🇱" : "🇬🇧"}
-              </span>
+              <img
+                src={language === "en" ? "/flags/il.svg" : "/flags/gb.svg"}
+                alt=""
+                width={24}
+                height={18}
+                className="lang-flag-img"
+              />
             </button>
           </div>
         </div>

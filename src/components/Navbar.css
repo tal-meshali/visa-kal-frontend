@@ -63,14 +63,15 @@
 }
 
 .lang-toggle-flag {
-  padding: 0.5rem 0.65rem;
-  line-height: 1;
+  padding: 0.35rem 0.5rem;
+  line-height: 0;
 }
 
-.lang-toggle-flag span {
-  display: inline-block;
-  font-size: 1.35rem;
-  line-height: 1;
+.lang-flag-img {
+  display: block;
+  width: 24px;
+  height: 18px;
+  object-fit: contain;
 }
 
 .theme-toggle:hover,
@@ -156,11 +157,12 @@
   }
 
   .lang-toggle-flag {
-    padding: 0.4rem 0.5rem;
+    padding: 0.3rem 0.4rem;
   }
 
-  .lang-toggle-flag span {
-    font-size: 1.15rem;
+  .lang-flag-img {
+    width: 22px;
+    height: 16px;
   }
 }
 
