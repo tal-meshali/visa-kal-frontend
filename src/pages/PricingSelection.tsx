@@ -172,7 +172,9 @@ const PricingSelection = () => {
                     </span>
                   )}
                 </div>
-                <p className="pricing-plan-description">{plan.description}</p>
+                <p className="pricing-plan-description">
+                  {language === "he" ? plan.description_he : plan.description_en}
+                </p>
                 <div className="pricing-plan-prices">
                   <div className="pricing-price">
                     <span className="pricing-currency">₪</span>
@@ -211,9 +213,20 @@ const PricingSelection = () => {
                 <span>{selectedPlan.name}</span>
               </div>
               <div className="pricing-summary-item">
+                <span>{t.pricing.beneficiariesCount}</span>
+                <span>{formData?.length ?? 0}</span>
+              </div>
+              <div className="pricing-summary-item">
+                <span>{t.pricing.pricePerPerson}</span>
+                <span>
+                  ₪{selectedPlan.price_ils} / ${selectedPlan.price_usd}
+                </span>
+              </div>
+              <div className="pricing-summary-item">
                 <span>{t.pricing.totalPrice}</span>
                 <span className="pricing-summary-price">
-                  ₪{selectedPlan.price_ils} / ${selectedPlan.price_usd}
+                  ₪{(selectedPlan.price_ils * (formData?.length ?? 1)).toFixed(2)} / $
+                  {(selectedPlan.price_usd * (formData?.length ?? 1)).toFixed(2)}
                 </span>
               </div>
             </div>

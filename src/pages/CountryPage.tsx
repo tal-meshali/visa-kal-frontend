@@ -137,7 +137,9 @@ const CountryPage = () => {
                       <h3 className="country-pricing-plan-name">{plan.name}</h3>
                     </div>
                     <p className="country-pricing-plan-description">
-                      {plan.description}
+                      {language === "he"
+                        ? plan.description_he
+                        : plan.description_en}
                     </p>
                     <div className="country-pricing-plan-prices">
                       <div className="country-pricing-price">

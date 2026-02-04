@@ -1,7 +1,7 @@
 .pricing-container {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: clamp(1rem, 4vw, 2rem);
   min-height: 100vh;
 }
 
@@ -11,7 +11,7 @@
 }
 
 .pricing-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 700;
   margin-bottom: 0.5rem;
   background: var(--gradient-primary);
@@ -165,4 +165,19 @@
 
 [data-theme="dark"] .pricing-summary {
   background: rgba(30, 41, 59, 0.5);
+}
+
+@media (max-width: 640px) {
+  .pricing-plans {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .pricing-card {
+    padding: 1.5rem;
+  }
+
+  .pricing-actions button {
+    width: 100%;
+  }
 }

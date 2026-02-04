@@ -187,6 +187,8 @@
       "failedToUpdate": "Failed to update pricing selection",
       "summary": "Selected Plan Summary",
       "planName": "Plan Name",
+      "beneficiariesCount": "Beneficiaries",
+      "pricePerPerson": "Price per person",
       "totalPrice": "Total Price"
     },
     "admin": {
@@ -200,6 +202,8 @@
         "plans": "plans",
         "planName": "Plan Name",
         "description": "Description",
+        "descriptionEn": "Description (English)",
+        "descriptionHe": "Description (Hebrew)",
         "priceUSD": "Price (USD)",
         "priceILS": "Price (ILS)",
         "noPlans": "No pricing plans for this country yet",
@@ -477,6 +481,8 @@
       "failedToUpdate": "נכשל בעדכון בחירת התמחור",
       "summary": "סיכום תוכנית נבחרת",
       "planName": "שם תוכנית",
+      "beneficiariesCount": "נהנים",
+      "pricePerPerson": "מחיר לאדם",
       "totalPrice": "מחיר כולל"
     },
     "admin": {
@@ -490,6 +496,8 @@
         "plans": "תוכניות",
         "planName": "שם תוכנית",
         "description": "תיאור",
+        "descriptionEn": "תיאור (אנגלית)",
+        "descriptionHe": "תיאור (עברית)",
         "priceUSD": "מחיר (USD)",
         "priceILS": "מחיר (ILS)",
         "noPlans": "אין תוכניות תמחור למדינה זו עדיין",

@@ -25,7 +25,8 @@ interface PricingFormData {
   price_usd: string;
   price_ils: string;
   name: string;
-  description: string;
+  description_en: string;
+  description_he: string;
 }
 
 const AdminPricing = () => {
@@ -44,7 +45,8 @@ const AdminPricing = () => {
     price_usd: "",
     price_ils: "",
     name: "",
-    description: "",
+    description_en: "",
+    description_he: "",
   });
   const [alert, setAlert] = useState<{
     type: "success" | "error" | "info";
@@ -107,7 +109,8 @@ const AdminPricing = () => {
       price_usd: pricing.price_usd.toString(),
       price_ils: pricing.price_ils.toString(),
       name: pricing.name,
-      description: pricing.description,
+      description_en: pricing.description_en,
+      description_he: pricing.description_he,
     });
     setShowAddForm(null);
   };
@@ -119,7 +122,8 @@ const AdminPricing = () => {
       price_usd: "",
       price_ils: "",
       name: "",
-      description: "",
+      description_en: "",
+      description_he: "",
     });
     setEditingPricingId(null);
   };
@@ -132,7 +136,8 @@ const AdminPricing = () => {
       price_usd: "",
       price_ils: "",
       name: "",
-      description: "",
+      description_en: "",
+      description_he: "",
     });
   };
 
@@ -158,7 +163,8 @@ const AdminPricing = () => {
           price_usd: priceUsd,
           price_ils: priceIls,
           name: formData.name,
-          description: formData.description,
+          description_en: formData.description_en,
+          description_he: formData.description_he,
         };
         await updatePricing(editingPricingId, updateData);
         setAlert({
@@ -172,7 +178,8 @@ const AdminPricing = () => {
           price_usd: priceUsd,
           price_ils: priceIls,
           name: formData.name,
-          description: formData.description,
+          description_en: formData.description_en,
+          description_he: formData.description_he,
         };
         await createPricing(createData);
         setAlert({
@@ -328,13 +335,26 @@ const AdminPricing = () => {
                               />
                             </div>
                             <div className="form-field">
-                              <label>{t.admin.pricing.description}</label>
+                              <label>{t.admin.pricing.descriptionEn}</label>
                               <textarea
-                                value={formData.description}
+                                value={formData.description_en}
                                 onChange={(e) =>
                                   setFormData({
                                     ...formData,
-                                    description: e.target.value,
+                                    description_en: e.target.value,
+                                  })
+                                }
+                                required
+                              />
+                            </div>
+                            <div className="form-field">
+                              <label>{t.admin.pricing.descriptionHe}</label>
+                              <textarea
+                                value={formData.description_he}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    description_he: e.target.value,
                                   })
                                 }
                                 required
@@ -396,7 +416,9 @@ const AdminPricing = () => {
                             <div className="pricing-plan-info">
                               <h4 className="pricing-plan-name">{pricing.name}</h4>
                               <p className="pricing-plan-description">
-                                {pricing.description}
+                                {language === "he"
+                                  ? pricing.description_he
+                                  : pricing.description_en}
                               </p>
                               <div className="pricing-plan-prices">
                                 <span>${pricing.price_usd} USD</span>
