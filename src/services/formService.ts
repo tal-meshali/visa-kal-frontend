@@ -50,8 +50,7 @@ export const validateFormData = async (
 
   return apiPost<ValidationResult>(
     `/api/validate/${countryId}?language=${language}`,
-     beneficiaries.map(beneficiary => {const {passport_data, ...item} = beneficiary; return item}
-     )
+    beneficiaries.map((beneficiary) => _.omit(beneficiary, "passport_data"))
   );
 };
 

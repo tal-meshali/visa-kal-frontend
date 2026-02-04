@@ -1,5 +1,4 @@
 import { useLanguage } from "../contexts/useLanguage";
-import { Button } from "./Button";
 import "./CTASection.css";
 
 export const CTASection = () => {

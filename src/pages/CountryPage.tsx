@@ -90,10 +90,10 @@ const CountryPage = () => {
     return null;
   }
 
-  // Get country description using country.id (UUID) or countryId as fallback
-  const countryDescription = 
-    t.countries.descriptions?.[country.id] || 
-    t.countries.descriptions?.[countryId] || 
+  const descriptions = t.countries.descriptions as Record<string, { en: string; he: string }> | undefined;
+  const countryDescription =
+    (country.id && descriptions?.[country.id]) ||
+    (countryId && descriptions?.[countryId]) ||
     {
       en: "Apply for your electronic visa to this destination.",
       he: "הגש בקשה לויזה אלקטרונית ליעד זה.",

@@ -111,21 +111,9 @@ const Payment = () => {
   const finalFormData = loadedFormData || formData;
   const finalCountryName = loadedCountryName || countryName;
 
-  // Handle application loading error
   useEffect(() => {
-    if (applicationError) {
-      setAlert({
-        type: "error",
-        message:
-          applicationError instanceof Error
-            ? applicationError.message
-            : "Failed to load application data",
-        isOpen: true,
-      });
-      // Redirect back if loading fails
-      if (countryId) {
-        navigate(`/apply/${countryId}`);
-      }
+    if (applicationError && countryId) {
+      navigate(`/apply/${countryId}`);
     }
   }, [applicationError, countryId, navigate]);
 

@@ -1,4 +1,3 @@
-import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { useLanguage } from "../../contexts/useLanguage";
 import {
@@ -27,8 +26,8 @@ interface PhotoFieldProps {
   requestId?: string;
 }
 
-const storage = getStorage();
-storage.maxOperationRetryTime = 2000;
+const isGcsUrl = (url: string): boolean =>
+  url.startsWith("https://storage.googleapis.com/");
 
 const PhotoField: React.FC<PhotoFieldProps> = ({
   name,
@@ -61,6 +60,11 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
       const filename =
         value.split("/").pop()?.split("_").slice(1).join("_") || null;
       setUploadedFilename(filename);
+      if (isGcsUrl(value)) {
+        setPreview(value);
+      }
+    } else {
+      setPreview(null);
     }
   }, [value]);
 
@@ -99,16 +103,8 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
 
     try {
       const result = await uploadFileToBucket(file, name, beneficiaryId);
-      try {
-        const url = await getDownloadURL(
-          ref(
-            storage,
-            result.url.replace("https://storage.googleapis.com/", "")
-          )
-        );
-        setPreview(url);
-      } catch (e) {
-        console.log(e);
+      if (isGcsUrl(result.url)) {
+        setPreview(result.url);
       }
       onChange(result.url);
       setUploadedFilename(result.filename);

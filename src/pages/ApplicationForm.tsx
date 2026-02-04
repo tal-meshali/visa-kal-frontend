@@ -139,7 +139,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
     };
 
     loadRequestData();
-  }, [requestId, user, isUserLoaded]);
+  }, [requestId, user, isUserLoaded, setBeneficiaries]);
 
   // Use ref to track latest beneficiaries state to prevent race conditions
   const beneficiariesRef = useRef(beneficiaries);
