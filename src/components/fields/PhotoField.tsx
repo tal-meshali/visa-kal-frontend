@@ -4,7 +4,6 @@ import {
   deleteFileFromBucket,
   uploadFileToBucket,
 } from "../../services/fileUploadService";
-import PassportDataModal from "../PassportDataModal";
 import "./FieldBase.css";
 
 interface PhotoFieldProps {
@@ -22,12 +21,15 @@ interface PhotoFieldProps {
   fieldId?: string;
   beneficiaryId?: string;
   onUploadStateChange?: (uploadId: string, isUploading: boolean) => void;
+  onPassportUploadComplete?: (beneficiaryIndex: number) => void;
   activeUploads?: Set<string>;
   requestId?: string;
 }
 
-const isGcsUrl = (url: string): boolean =>
-  url.startsWith("https://storage.googleapis.com/");
+const isImageUrl = (url: string): boolean =>
+  url.startsWith("https://") ||
+  url.startsWith("http://") ||
+  url.startsWith("data:");
 
 const PhotoField: React.FC<PhotoFieldProps> = ({
   name,
@@ -44,7 +46,7 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
   fieldId,
   beneficiaryId = "0",
   onUploadStateChange,
-  requestId,
+  onPassportUploadComplete,
 }) => {
   const { t } = useLanguage();
   const inputId = fieldId || name;
@@ -53,14 +55,13 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
-  const [showPassportModal, setShowPassportModal] = useState(false);
 
   useEffect(() => {
     if (value) {
       const filename =
         value.split("/").pop()?.split("_").slice(1).join("_") || null;
       setUploadedFilename(filename);
-      if (isGcsUrl(value)) {
+      if (isImageUrl(value)) {
         setPreview(value);
       }
     } else {
@@ -97,19 +98,20 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
     };
     reader.readAsDataURL(file);
 
+    const beneficiaryIdForUpload = beneficiaryId;
     setUploading(true);
     setUploadError(null);
     onUploadStateChange?.(uploadId, true);
 
     try {
-      const result = await uploadFileToBucket(file, name, beneficiaryId);
-      if (isGcsUrl(result.url)) {
+      const result = await uploadFileToBucket(file, name, beneficiaryIdForUpload);
+      if (isImageUrl(result.url)) {
         setPreview(result.url);
       }
       onChange(result.url);
       setUploadedFilename(result.filename);
       if (name === "passport_copy") {
-        setShowPassportModal(true);
+        onPassportUploadComplete?.(parseInt(beneficiaryIdForUpload, 10));
       }
     } catch (err) {
       setUploadError(
@@ -170,22 +172,25 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
           htmlFor={inputId}
           className={`file-label ${error || uploadError ? "error" : ""} ${
             uploading ? "uploading" : ""
-          }`}
+          } ${preview ? "file-label-has-file" : ""}`}
         >
-          {uploading ? (
-            <span className="file-placeholder">{t.fileUpload.uploading}</span>
-          ) : preview ? (
+          {preview ? (
             <div className="photo-preview">
               <img src={preview} alt="Preview" className="photo-preview-img" />
               {displayFilename && (
                 <span className="file-name">{displayFilename}</span>
               )}
             </div>
+          ) : uploading ? (
+            <span className="file-placeholder">{t.fileUpload.uploading}</span>
           ) : (
             <span className="file-placeholder">
-              {placeholder?.[language] || "Click to upload photo"}
+              {placeholder?.[language] || t.fileUpload.clickToUploadPhoto}
             </span>
           )}
+          <span className="file-dropzone-center">
+            {uploading ? t.fileUpload.uploading : t.fileUpload.choosePhoto}
+          </span>
           <span className="file-button">
             {uploading ? t.fileUpload.uploading : t.fileUpload.choosePhoto}
           </span>
@@ -209,14 +214,6 @@ const PhotoField: React.FC<PhotoFieldProps> = ({
       )}
       {error && <span className="error-message">{error}</span>}
       {uploadError && <span className="error-message">{uploadError}</span>}
-      {showPassportModal && (
-        <PassportDataModal
-          isOpen={showPassportModal}
-          onClose={() => setShowPassportModal(false)}
-          beneficiaryId={beneficiaryId}
-          requestId={requestId}
-        />
-      )}
     </div>
   );
 };

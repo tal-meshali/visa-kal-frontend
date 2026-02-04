@@ -19,6 +19,7 @@ export const BeneficiaryForm = ({
   autoCopyFields,
   onAutoCopyToggle,
   onUploadStateChange,
+  onPassportUploadComplete,
   showAutoCopyCheckbox,
 }: BeneficiaryFormProps) => {
   const { t } = useLanguage();
@@ -84,6 +85,7 @@ export const BeneficiaryForm = ({
               : field.name,
           beneficiaryId: beneficiaryIndex.toString(),
           onUploadStateChange,
+          onPassportUploadComplete,
         })}
       </div>
     );

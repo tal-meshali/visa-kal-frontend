@@ -83,6 +83,7 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
 }
 
 .file-input {
@@ -104,6 +105,7 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
   transition: all 0.3s ease;
   min-height: 3rem;
   flex: 1;
+  min-width: 0;
 }
 
 .file-label:hover {
@@ -131,6 +133,7 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
   color: var(--text-primary);
   font-size: 0.875rem;
   flex: 1;
+  min-width: 0;
   margin-right: 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -147,11 +150,16 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
   white-space: nowrap;
 }
 
+.file-dropzone-center {
+  display: none;
+}
+
 .photo-preview {
   display: flex;
   align-items: center;
   gap: 1rem;
   flex: 1;
+  min-width: 0;
 }
 
 .photo-preview-img {
@@ -237,5 +245,42 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
   .form-field {
     overflow: hidden;
     word-wrap: break-word;
+  }
+
+  /* On small screens: hide button, show text centered in drop zone */
+  .file-button {
+    display: none;
+  }
+
+  .file-dropzone-center {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+  }
+
+  .file-label {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .file-label .file-placeholder {
+    display: none;
+  }
+
+  .file-label .file-dropzone-center {
+    flex: 0;
+  }
+
+  .file-label .photo-preview .file-name,
+  .file-label > .file-name {
+    flex: 0;
+  }
+
+  .file-label-has-file .file-dropzone-center {
+    display: none;
   }
 }

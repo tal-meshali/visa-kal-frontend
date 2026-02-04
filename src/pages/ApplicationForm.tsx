@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useList } from "react-use";
 import { Alert } from "../components/Alert";
@@ -12,6 +12,7 @@ import { BackButton } from "../components/BackButton";
 import { BeneficiaryForm } from "../components/BeneficiaryForm";
 import { Button } from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
+import PassportDataModal from "../components/PassportDataModal";
 import { useLanguage } from "../contexts/useLanguage";
 import { useFormSchema } from "../hooks/useFormSchema";
 import { useFormValidation } from "../hooks/useFormValidation";
@@ -158,6 +159,10 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
   );
   // Track active uploads to disable submit button
   const [activeUploads, setActiveUploads] = useState<Set<string>>(new Set());
+  // Queue of beneficiary indices needing passport data modal (one modal at a time)
+  const [pendingPassportModals, setPendingPassportModals] = useState<
+    number[]
+  >([]);
   const [alert, setAlert] = useState<{
     type: "success" | "error" | "info";
     message: string;
@@ -329,7 +334,17 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
     });
   };
 
-  // Show sign-in prompt if user is not authenticated
+  const handlePassportUploadComplete = useCallback((beneficiaryIndex: number) => {
+    setPendingPassportModals((prev) => [...prev, beneficiaryIndex]);
+  }, []);
+
+  const handlePassportModalClose = useCallback(() => {
+    setPendingPassportModals((prev) => prev.slice(1));
+  }, []);
+
+  const currentPassportModalBeneficiary =
+    pendingPassportModals.length > 0 ? pendingPassportModals[0] : null;
+
   return (
     <>
       <Alert
@@ -339,6 +354,14 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
         onClose={closeAlert}
         duration={4000}
       />
+      {currentPassportModalBeneficiary !== null && (
+        <PassportDataModal
+          isOpen
+          onClose={handlePassportModalClose}
+          beneficiaryId={currentPassportModalBeneficiary.toString()}
+          requestId={requestId}
+        />
+      )}
       <div className="form-container">
         <div className="form-header">
           <BackButton />
@@ -370,17 +393,21 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
               </div>
             )}
             <button
-              className="lang-toggle"
+              className="lang-toggle lang-toggle-flag"
               onClick={() => setLanguage(language === "en" ? "he" : "en")}
+              aria-label={language === "en" ? t.common.hebrew : t.common.english}
+              title={language === "en" ? t.common.hebrew : t.common.english}
             >
-              {language === "en" ? t.common.hebrew : t.common.english}
+              <span role="img" aria-hidden>
+                {language === "en" ? "🇮🇱" : "🇬🇧"}
+              </span>
             </button>
           </div>
         </div>
 
         <div className="form-content">
           <h1 className="form-title">
-            {t.form.title} {schema.country_name[language]}
+            {t.form.title}{schema.country_name[language]}
           </h1>
           <p className="form-description">{t.form.description}</p>
 
@@ -415,43 +442,47 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
               </div>
             )}
 
-            {/* Active Beneficiary Form */}
-            {schema && (
-              <div className="beneficiary-section">
-                {beneficiaries.length > 1 && (
-                  <h3 className="beneficiary-title">
-                    {t.form.beneficiary} {activeBeneficiaryIndex + 1}
-                  </h3>
-                )}
-                <BeneficiaryForm
-                  beneficiaryIndex={activeBeneficiaryIndex}
-                  showAutoCopyCheckbox={activeBeneficiaryIndex === 0}
-                  fields={schema.fields}
-                  formData={beneficiaries[activeBeneficiaryIndex] || {}}
-                  errors={getErrors(activeBeneficiaryIndex, language)}
-                  language={language}
-                  onFieldChange={(fieldName, value) =>
-                    handleFieldChange(activeBeneficiaryIndex, fieldName, value)
-                  }
-                  onCopyFromPrevious={(fieldName, previousValue) =>
-                    handleCopyFromPrevious(
-                      activeBeneficiaryIndex,
-                      fieldName,
-                      previousValue
-                    )
-                  }
-                  previousBeneficiaryData={
-                    activeBeneficiaryIndex > 0
-                      ? beneficiaries[activeBeneficiaryIndex - 1]
-                      : undefined
-                  }
-                  totalBeneficiaries={beneficiaries.length}
-                  autoCopyFields={autoCopyFields}
-                  onAutoCopyToggle={handleAutoCopyToggle}
-                  onUploadStateChange={handleUploadStateChange}
-                />
-              </div>
-            )}
+            {/* Beneficiary Forms - render all to keep PhotoFields mounted during uploads */}
+            {schema &&
+              beneficiaries.map((beneficiaryData, index) => (
+                <div
+                  key={index}
+                  className={`beneficiary-section ${
+                    index !== activeBeneficiaryIndex
+                      ? "beneficiary-section-hidden"
+                      : ""
+                  }`}
+                >
+                  {beneficiaries.length > 1 && (
+                    <h3 className="beneficiary-title">
+                      {t.form.beneficiary} {index + 1}
+                    </h3>
+                  )}
+                  <BeneficiaryForm
+                    beneficiaryIndex={index}
+                    showAutoCopyCheckbox={index === 0}
+                    fields={schema.fields}
+                    formData={beneficiaryData || {}}
+                    errors={getErrors(index, language)}
+                    language={language}
+                    onFieldChange={(fieldName, value) =>
+                      handleFieldChange(index, fieldName, value)
+                    }
+                    onCopyFromPrevious={(fieldName, previousValue) =>
+                      handleCopyFromPrevious(index, fieldName, previousValue)
+                    }
+                    previousBeneficiaryData={
+                      index > 0 ? beneficiaries[index - 1] : undefined
+                    }
+                    totalBeneficiaries={beneficiaries.length}
+                    autoCopyFields={autoCopyFields}
+                    onAutoCopyToggle={handleAutoCopyToggle}
+                    onUploadStateChange={handleUploadStateChange}
+                    onPassportUploadComplete={handlePassportUploadComplete}
+                    requestId={requestId}
+                  />
+                </div>
+              ))}
 
             {/* Add Beneficiary Button */}
             <div className="add-beneficiary-section">

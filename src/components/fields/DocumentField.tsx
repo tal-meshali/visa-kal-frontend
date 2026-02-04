@@ -130,7 +130,7 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
           htmlFor={inputId}
           className={`file-label ${error || uploadError ? "error" : ""} ${
             uploading ? "uploading" : ""
-          }`}
+          } ${value ? "file-label-has-file" : ""}`}
         >
           {uploading ? (
             <span className="file-placeholder">{t.fileUpload.uploading}</span>
@@ -141,6 +141,9 @@ const DocumentField: React.FC<DocumentFieldProps> = ({
               {placeholder?.[language] || "Click to upload document"}
             </span>
           )}
+          <span className="file-dropzone-center">
+            {uploading ? t.fileUpload.uploading : t.fileUpload.chooseFile}
+          </span>
           <span className="file-button">
             {uploading ? t.fileUpload.uploading : t.fileUpload.chooseFile}
           </span>

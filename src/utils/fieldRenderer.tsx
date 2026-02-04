@@ -144,7 +144,7 @@ export const renderFormField = (
         acceptedFormats={field.accepted_formats}
         maxSizeMB={field.max_size_mb}
         onUploadStateChange={commonProps.onUploadStateChange}
-        requestId={commonProps.requestId}
+        onPassportUploadComplete={commonProps.onPassportUploadComplete}
       />
     );
   }
