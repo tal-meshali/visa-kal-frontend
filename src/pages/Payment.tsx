@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Alert } from "../components/Alert";
 import { SignedIn, SignedOut, useUser } from "../components/AuthComponents";
@@ -7,10 +7,14 @@ import { Button } from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
 import { useLanguage } from "../contexts/useLanguage";
 import {
-  createApplication,
   getApplication,
   updateApplicationStatus,
 } from "../services/applicationService";
+import {
+  executePayment,
+  getPaymentConfig,
+  type PaymentCurrency,
+} from "../services/paymentService";
 import { getCountryPricing } from "../services/pricingService";
 import type { Application } from "../services/requestService";
 import "./Payment.css";
@@ -27,11 +31,14 @@ const Payment = () => {
   const { countryId } = useParams<{ countryId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { language, t } = useLanguage();
   const { user, isLoaded: isUserLoaded } = useUser();
   const authLoading = !isUserLoaded;
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [redirectingToPayMe, setRedirectingToPayMe] = useState(false);
+  const [currency, setCurrency] = useState<PaymentCurrency>("ils");
   const [alert, setAlert] = useState<{
     type: "success" | "error" | "info";
     message: string;
@@ -46,6 +53,15 @@ const Payment = () => {
   const requestId = state?.requestId;
   const formData = state?.formData;
   const countryName = state?.countryName;
+
+  const paymentStatus = searchParams.get("status");
+
+  const { data: paymentConfig } = useQuery({
+    queryKey: ["paymentConfig"],
+    queryFn: getPaymentConfig,
+    staleTime: 5 * 60 * 1000,
+  });
+  const paymeAvailable = paymentConfig?.payme_available ?? false;
 
   // Query to load application data when formData is not provided
   const {
@@ -135,60 +151,81 @@ const Payment = () => {
     navigate,
   ]);
 
+  // Handle return from PayMe: status=success
+  useEffect(() => {
+    if (!requestId || !user || paymentStatus !== "success") {
+      return;
+    }
+    const applySuccess = async (): Promise<void> => {
+      try {
+        await updateApplicationStatus(requestId, "payment_received");
+        setAlert({ type: "success", message: t.payment.success, isOpen: true });
+        setSearchParams((prev) => {
+          prev.delete("status");
+          return prev;
+        });
+        setTimeout(() => navigate("/applications"), 2000);
+      } catch {
+        setAlert({ type: "error", message: t.payment.error, isOpen: true });
+      }
+    };
+    applySuccess();
+  }, [paymentStatus, requestId, user, navigate, setSearchParams, t]);
+
+  // Handle return from PayMe: status=cancel
+  useEffect(() => {
+    if (paymentStatus !== "cancel") {
+      return;
+    }
+    setAlert({
+      type: "info",
+      message: t.payment.paymentCanceled,
+      isOpen: true,
+    });
+    setSearchParams((prev) => {
+      prev.delete("status");
+      return prev;
+    });
+  }, [paymentStatus, setSearchParams, t]);
+
   const handlePayment = async (): Promise<void> => {
     if (!user || !finalFormData || !countryId || !finalCountryName) {
       return;
     }
 
     setProcessing(true);
-    setProgress(0);
+    setProgress(20);
 
-    try {
-      // Step 1: Validating application (20%)
-      setProgress(20);
-      await new Promise((resolve) => setTimeout(resolve, 300));
+    const result = await executePayment({
+      requestId,
+      countryId,
+      finalFormData,
+      finalCountryName,
+      selectedPricing,
+      paymeAvailable,
+      language,
+      currency,
+    });
 
-      // Step 2: Update request status or create application (40%)
-      setProgress(40);
-      if (requestId) {
-        // Update existing request status to payment_received
-        await updateApplicationStatus(requestId, "payment_received");
-      } else {
-        // Fallback: Create new application (for backward compatibility)
-        const agentId = localStorage.getItem("agent_id");
-        await createApplication({
-          country_id: countryId,
-          beneficiaries: finalFormData,
-          agent_id: agentId || undefined,
-        });
-
-        // Delete agent_id from localStorage after successful submission
-        if (agentId) {
-          localStorage.removeItem("agent_id");
-        }
-      }
-
-      // Step 3: Processing payment (70%)
+    if (result.outcome === "redirect") {
       setProgress(70);
-      // In a real app, you would integrate with a payment provider here
-      // For now, we'll simulate payment processing
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setRedirectingToPayMe(true);
+      window.location.href = result.paymentUrl;
+      return;
+    }
 
-      // Step 4: Finalizing (100%)
-      setProgress(100);
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
+    if (result.outcome === "not_configured") {
       setAlert({
-        type: "success",
-        message: t.payment.success,
+        type: "error",
+        message: t.payment.paymentNotConfigured,
         isOpen: true,
       });
+      setProcessing(false);
+      setProgress(0);
+      return;
+    }
 
-      // Redirect to applications page after a delay
-      setTimeout(() => {
-        navigate("/applications");
-      }, 2000);
-    } catch {
+    if (result.outcome === "error") {
       setAlert({
         type: "error",
         message: t.payment.error,
@@ -196,7 +233,16 @@ const Payment = () => {
       });
       setProcessing(false);
       setProgress(0);
+      return;
     }
+
+    setProgress(100);
+    setAlert({
+      type: "success",
+      message: t.payment.success,
+      isOpen: true,
+    });
+    setTimeout(() => navigate("/applications"), 2000);
   };
 
   const closeAlert = (): void => {
@@ -224,8 +270,15 @@ const Payment = () => {
         </div>
       </SignedOut>
       <SignedIn>
-        {processing && (
-          <LoadingScreen message={t.payment.processing} progress={progress} />
+        {(processing || redirectingToPayMe) && (
+          <LoadingScreen
+            message={
+              redirectingToPayMe
+                ? t.payment.redirectingToPayment
+                : t.payment.processing
+            }
+            progress={redirectingToPayMe ? 70 : progress}
+          />
         )}
         <Alert
           type={alert.type}
@@ -261,71 +314,100 @@ const Payment = () => {
                 <span className="summary-value">{finalFormData.length}</span>
               </div>
               <div className="summary-divider"></div>
+              <div className="currency-selector">
+                <span className="summary-label">{t.payment.currency}</span>
+                <div className="currency-options">
+                  <label className="currency-option">
+                    <input
+                      type="radio"
+                      name="payment-currency"
+                      value="usd"
+                      checked={currency === "usd"}
+                      onChange={() => setCurrency("usd")}
+                      disabled={processing || redirectingToPayMe}
+                    />
+                    <span>{t.payment.payInUsd}</span>
+                  </label>
+                  <label className="currency-option">
+                    <input
+                      type="radio"
+                      name="payment-currency"
+                      value="ils"
+                      checked={currency === "ils"}
+                      onChange={() => setCurrency("ils")}
+                      disabled={processing || redirectingToPayMe}
+                    />
+                    <span>{t.payment.payInIls}</span>
+                  </label>
+                </div>
+              </div>
               <div className="summary-item">
                 <span className="summary-label">{t.payment.totalAmount}</span>
                 <span className="summary-value summary-amount">
                   {selectedPricing
-                    ? language === "en"
+                    ? currency === "usd"
                       ? `$${(selectedPricing.price_usd * finalFormData.length).toFixed(2)}`
                       : `₪${(selectedPricing.price_ils * finalFormData.length).toFixed(2)}`
-                    : language === "en"
+                    : currency === "usd"
                     ? `$${finalFormData.length * 50}.00`
                     : `₪${finalFormData.length * 180}.00`}
                 </span>
               </div>
             </div>
 
-            <div className="payment-methods">
-              <h2 className="methods-title">{t.payment.method}</h2>
-              <div className="payment-method-card">
-                <div className="method-header">
-                  <input
-                    type="radio"
-                    id="credit-card"
-                    name="payment-method"
-                    defaultChecked
-                    className="method-radio"
-                  />
-                  <label htmlFor="credit-card" className="method-label">
-                    {t.payment.creditCard}
-                  </label>
-                </div>
-                <div className="method-details">
-                  <div className="payment-form">
-                    <div className="form-row">
-                      <input
-                        type="text"
-                        placeholder={t.payment.cardNumber}
-                        className="payment-input"
-                        disabled={processing}
-                      />
-                    </div>
-                    <div className="form-row">
-                      <input
-                        type="text"
-                        placeholder={t.payment.cardholderName}
-                        className="payment-input"
-                        disabled={processing}
-                      />
-                    </div>
-                    <div className="form-row form-row-split">
-                      <input
-                        type="text"
-                        placeholder="MM/YY"
-                        className="payment-input"
-                        disabled={processing}
-                      />
-                      <input
-                        type="text"
-                        placeholder="CVV"
-                        className="payment-input"
-                        disabled={processing}
-                      />
+            {!paymeAvailable && (
+              <div className="payment-methods">
+                <h2 className="methods-title">{t.payment.method}</h2>
+                <div className="payment-method-card">
+                  <div className="method-header">
+                    <input
+                      type="radio"
+                      id="credit-card"
+                      name="payment-method"
+                      defaultChecked
+                      className="method-radio"
+                    />
+                    <label htmlFor="credit-card" className="method-label">
+                      {t.payment.creditCard}
+                    </label>
+                  </div>
+                  <div className="method-details">
+                    <div className="payment-form">
+                      <div className="form-row">
+                        <input
+                          type="text"
+                          placeholder={t.payment.cardNumber}
+                          className="payment-input"
+                          disabled={processing}
+                        />
+                      </div>
+                      <div className="form-row">
+                        <input
+                          type="text"
+                          placeholder={t.payment.cardholderName}
+                          className="payment-input"
+                          disabled={processing}
+                        />
+                      </div>
+                      <div className="form-row form-row-split">
+                        <input
+                          type="text"
+                          placeholder="MM/YY"
+                          className="payment-input"
+                          disabled={processing}
+                        />
+                        <input
+                          type="text"
+                          placeholder="CVV"
+                          className="payment-input"
+                          disabled={processing}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
 
             <div className="payment-actions">
               <Button
@@ -333,10 +415,14 @@ const Payment = () => {
                 size="large"
                 fullWidth
                 onClick={handlePayment}
-                disabled={processing}
+                disabled={processing || redirectingToPayMe}
                 className="payment-button"
               >
-                {processing ? t.payment.processingButton : t.payment.complete}
+                {processing || redirectingToPayMe
+                  ? t.payment.processingButton
+                  : paymeAvailable
+                    ? t.payment.payWithPayMe
+                    : t.payment.complete}
               </Button>
             </div>
           </div>

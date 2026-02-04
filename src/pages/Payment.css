@@ -71,6 +71,40 @@
   margin: 1rem 0;
 }
 
+.currency-selector {
+  margin-bottom: 1rem;
+}
+
+.currency-selector .summary-label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.currency-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.currency-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.currency-option input {
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+.currency-option:has(input:disabled) {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .payment-methods {
   margin-bottom: 2rem;
 }
