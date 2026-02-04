@@ -19,28 +19,27 @@ export const ApplicationCard = ({
 }: ApplicationCardProps) => {
   const { language, t } = useLanguage();
 
-  // Use monitor translations for detailed variant, applications for compact
   const translations = variant === "detailed" ? t.monitor : t.applications;
 
-  const getStatusTableFunc = getStatusLabel ?? ((status: string) => status);
+  const statusLabels = (t as { statusLabels?: Record<string, string> }).statusLabels;
+  const getStatusTableFunc =
+    getStatusLabel ??
+    ((status: string) => (statusLabels && statusLabels[status]) || status);
 
   const countryDisplay =
     variant === "detailed"
       ? `${translations.requestFor} ${application.country_name[language]}`
       : application.country_name[language];
 
-  const submittedDateText =
-    variant === "detailed"
+  const submittedDateText = application.submitted_at 
+    ? variant === "detailed"
       ? `${translations.submittedAt}: ${
-          application.submitted_at
-            ? formatDate(application.submitted_at, language)
-            : translations.notSubmitted
+             formatDate(application.submitted_at, language)
         }`
       : `${translations.submitted}: ${
-          application.submitted_at
-            ? formatDate(application.submitted_at, language)
-            : translations.notSubmitted
-        }`;
+             formatDate(application.submitted_at, language)
+        }`
+    : translations.notSubmitted;
 
   return (
     <div className="application-card" data-variant={variant}>

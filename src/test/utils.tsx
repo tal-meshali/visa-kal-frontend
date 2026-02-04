@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, type RenderOptions, screen } from "@testing-library/react";
 import type { ReactElement } from "react";
 import { BrowserRouter } from "react-router-dom";
+import { LanguageProvider } from "../contexts/LanguageProvider";
 
 /**
  * Custom render function that includes all providers
@@ -22,7 +23,9 @@ const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>{children}</BrowserRouter>
+      <LanguageProvider defaultLanguage="en">
+        <BrowserRouter>{children}</BrowserRouter>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 };

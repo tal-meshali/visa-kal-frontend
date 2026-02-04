@@ -130,7 +130,7 @@
       "beneficiary": "Beneficiary",
       "beneficiariesCount": "Beneficiaries:",
       "status": "Status",
-      "submitted": "Submitted:",
+      "submitted": "Submitted",
       "submittedAt": "Submitted at",
       "notSubmitted": "Not submitted",
       "more": "more",
@@ -146,7 +146,7 @@
       "signInToView": "Please sign in to view your applications.",
       "noApplications": "No applications yet.",
       "startNew": "Start New Application",
-      "submitted": "Submitted:",
+      "submitted": "Submitted",
       "submittedAt": "Submitted at",
       "notSubmitted": "Not submitted",
       "beneficiaries": "Beneficiaries",
@@ -155,7 +155,17 @@
       "more": "more",
       "requestFor": "Request for",
       "clientRequest": "Client Request",
-      "clientEmail": "Client Email"
+      "clientEmail": "Client Email",
+      "viewMyApplications": "View my applications"
+    },
+    "statusLabels": {
+      "pending_payment": "Pending Payment",
+      "pending_approval": "Pending Approval",
+      "payment_received": "Payment Received",
+      "submitted": "Submitted",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "pending": "Pending"
     },
     "payment": {
       "title": "Payment",
@@ -437,7 +447,7 @@
       "beneficiary": "נהנה",
       "beneficiariesCount": "נהנים:",
       "status": "סטטוס",
-      "submitted": "נשלח:",
+      "submitted": "נשלח",
       "submittedAt": "נשלח ב-",
       "notSubmitted": "לא נשלח",
       "more": "נוספים",
@@ -453,7 +463,7 @@
       "signInToView": "אנא התחבר כדי לצפות בבקשות שלך.",
       "noApplications": "אין בקשות עדיין.",
       "startNew": "התחל בקשה חדשה",
-      "submitted": "נשלח:",
+      "submitted": "נשלח",
       "submittedAt": "נשלח ב-",
       "notSubmitted": "לא נשלח",
       "beneficiaries": "נהנים",
@@ -462,7 +472,17 @@
       "more": "נוספים",
       "requestFor": "בקשה ל-",
       "clientRequest": "בקשת לקוח",
-      "clientEmail": "אימייל לקוח"
+      "clientEmail": "אימייל לקוח",
+      "viewMyApplications": "צפה בבקשות שלי"
+    },
+    "statusLabels": {
+      "pending_payment": "ממתין לתשלום",
+      "pending_approval": "ממתין לאישור",
+      "payment_received": "תשלום התקבל",
+      "submitted": "הוגש",
+      "approved": "אושר",
+      "rejected": "נדחה",
+      "pending": "ממתין"
     },
     "payment": {
       "title": "תשלום",
