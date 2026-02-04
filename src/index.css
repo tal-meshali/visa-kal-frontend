@@ -85,3 +85,7 @@ html {
 ::selection {
   background: rgba(102, 126, 234, 0.2);
 }
+
+[dir="rtl"] {
+  font-family: "Heebo", sans-serif;
+}

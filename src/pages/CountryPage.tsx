@@ -136,15 +136,12 @@ const CountryPage = () => {
                     <h3 className="country-pricing-item-title">
                       {language === "he"
                         ? plan.name_he
-                        : plan.name_en}
+                        : plan.name_en} - ₪{plan.price_ils}
                     </h3>
                     <p className="country-pricing-item-description">
                       {language === "he"
                         ? plan.description_he
                         : plan.description_en}
-                    </p>
-                    <p className="country-pricing-item-prices">
-                      ₪{plan.price_ils} / ${plan.price_usd}
                     </p>
                   </div>
                 ))}

@@ -62,6 +62,17 @@
   font-size: 0.875rem;
 }
 
+.lang-toggle-flag {
+  padding: 0.5rem 0.65rem;
+  line-height: 1;
+}
+
+.lang-toggle-flag span {
+  display: inline-block;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
 .theme-toggle:hover,
 .lang-toggle:hover {
   background: var(--bg-secondary);
@@ -142,6 +153,14 @@
   .lang-toggle {
     padding: 0.4rem 0.8rem;
     font-size: 0.75rem;
+  }
+
+  .lang-toggle-flag {
+    padding: 0.4rem 0.5rem;
+  }
+
+  .lang-toggle-flag span {
+    font-size: 1.15rem;
   }
 }
 

@@ -13,6 +13,10 @@
   text-decoration: none;
 }
 
+[dir="rtl"] .btn {
+  font-family: "Heebo", sans-serif;
+}
+
 /* Primary Button */
 .btn-primary {
   background: var(--gradient-primary);

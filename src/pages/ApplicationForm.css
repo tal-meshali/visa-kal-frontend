@@ -72,6 +72,17 @@
   font-size: 0.875rem;
 }
 
+.lang-toggle-flag {
+  padding: 0.5rem 0.65rem;
+  line-height: 1;
+}
+
+.lang-toggle-flag span {
+  display: inline-block;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
 .lang-toggle:hover {
   background: var(--bg-secondary);
   transform: translateY(-2px);
@@ -220,6 +231,10 @@
 
 .beneficiary-section {
   margin-bottom: 2rem;
+}
+
+.beneficiary-section-hidden {
+  display: none;
 }
 
 .beneficiary-title {

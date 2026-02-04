@@ -174,6 +174,7 @@ export interface CommonFieldProps {
   requestId?: string;
   getToken?: () => Promise<string | null>;
   onUploadStateChange?: (uploadId: string, isUploading: boolean) => void;
+  onPassportUploadComplete?: (beneficiaryIndex: number) => void;
   activeUploads?: Set<string>;
 }
 
@@ -196,5 +197,7 @@ export interface BeneficiaryFormProps {
   autoCopyFields: Set<string>;
   onAutoCopyToggle: (fieldName: string, checked: boolean) => void;
   onUploadStateChange?: (uploadId: string, isUploading: boolean) => void;
-  showAutoCopyCheckbox: boolean
+  onPassportUploadComplete?: (beneficiaryIndex: number) => void;
+  showAutoCopyCheckbox: boolean;
+  requestId?: string;
 }

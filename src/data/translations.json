@@ -56,10 +56,10 @@
     },
     "features": {
       "title": "Why Choose Visa-Kal?",
-      "subtitle": "Everything you need for a smooth visa experience",
+      "subtitle": "Everything you need for a quick and smooth visa experience",
       "fast": {
         "title": "Fast Processing",
-        "desc": "Automated visa creation in minutes, not days"
+        "desc": "Automated visa creation using AI text extraction from image and other effective methods"
       },
       "secure": {
         "title": "Secure & Safe",
@@ -101,7 +101,7 @@
       "notFound": "Form not found",
       "failedToLoad": "Failed to load form. Please try again.",
       "back": "Back",
-      "title": "Visa Application for",
+      "title": "Visa Application for ",
       "description": "Please fill out all required fields to complete your visa application.",
       "submitting": "Submitting...",
       "submitSuccess": "Form submitted successfully!",
@@ -116,10 +116,10 @@
       "signIn": "Sign In",
       "backToHome": "Back to Home",
       "uploadingFiles": "Uploading files...",
-      "autoCopy": "Auto-copy",
-      "autoCopyTooltip": "Auto-copy this field to new beneficiaries",
-      "copy": "↩ Copy",
-      "copyTooltip": "Copy from previous beneficiary"
+      "autoCopy": "Auto-copy to next beneficiaries",
+      "autoCopyTooltip": "Auto-copy this field to new beneficiaries and insert it as default value",
+      "copy": "↩ Copied",
+      "copyTooltip": "Value has been copied from the first beneficiary"
     },
     "monitor": {
       "title": "Monitor Your Requests",
@@ -363,10 +363,10 @@
     },
     "features": {
       "title": "למה לבחור ב-Visa-Kal?",
-      "subtitle": "כל מה שאתה צריך לחווית ויזה חלקה",
+      "subtitle": "כל מה שאתה צריך לחווית ויזה חלקה ומהירה",
       "fast": {
         "title": "עיבוד מהיר",
-        "desc": "הכנת ויזה אוטומטית תוך דקות, לא ימים"
+        "desc": "באמצעות חילוץ מידע מצילום הדרכון וקלות בהכנסת המידע לטופס הבקשה"
       },
       "secure": {
         "title": "מאובטח ובטוח",
@@ -408,7 +408,7 @@
       "notFound": "טופס לא נמצא",
       "failedToLoad": "נכשל בטעינת הטופס. נסה שוב.",
       "back": "חזור",
-      "title": "בקשת ויזה ל-",
+      "title": "בקשת ויזה ל",
       "description": "אנא מלא את כל השדות הנדרשים כדי להשלים את בקשת הויזה שלך.",
       "submitting": "שולח...",
       "submitSuccess": "הטופס נשלח בהצלחה!",
@@ -423,10 +423,10 @@
       "signIn": "התחבר",
       "backToHome": "חזור לדף הבית",
       "uploadingFiles": "מעלה קבצים...",
-      "autoCopy": "העתק אוטומטי",
-      "autoCopyTooltip": "העתק אוטומטית שדה זה לנהנים חדשים",
-      "copy": "↩ העתק",
-      "copyTooltip": "העתק מהנהנה הקודם"
+      "autoCopy": "העתק לנהנים הבאים",
+      "autoCopyTooltip": "סימון שדה זה מאפשר העתקה של המידע שהוכנס כאן לנהנים הבאים כברירת מחדל",
+      "copy": "↩ הועתק",
+      "copyTooltip": "הועתק מהנהנה הראשון"
     },
     "monitor": {
       "title": "עקוב אחר הבקשות שלך",

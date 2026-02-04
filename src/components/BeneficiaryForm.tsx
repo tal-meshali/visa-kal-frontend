@@ -93,6 +93,9 @@ export const BeneficiaryForm = ({
 
   return (
     <div className="beneficiary-form">
+      {showAutoCopyCheckbox && (
+        <p className="auto-copy-disclaimer">{t.form.autoCopyTooltip}</p>
+      )}
       {fields.map((field) => renderField(field))}
     </div>
   );
