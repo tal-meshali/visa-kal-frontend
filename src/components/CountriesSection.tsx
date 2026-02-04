@@ -14,7 +14,6 @@ interface CountriesSectionProps {
     countries: {
       title: string
       subtitle: string
-      available: string
       upcoming: string
       select: string
     }
