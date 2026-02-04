@@ -165,7 +165,9 @@ const PricingSelection = () => {
                 onClick={() => handleSelectPricing(plan.id)}
               >
                 <div className="pricing-card-header">
-                  <h3 className="pricing-plan-name">{plan.name}</h3>
+                  <h3 className="pricing-plan-name">
+                    {language === "he" ? plan.name_he : plan.name_en}
+                  </h3>
                   {selectedPricingId === plan.id && (
                     <span className="pricing-selected-badge">
                       {t.pricing.selected}
@@ -210,7 +212,11 @@ const PricingSelection = () => {
               <h3>{t.pricing.summary}</h3>
               <div className="pricing-summary-item">
                 <span>{t.pricing.planName}</span>
-                <span>{selectedPlan.name}</span>
+                <span>
+                {language === "he"
+                  ? selectedPlan.name_he
+                  : selectedPlan.name_en}
+              </span>
               </div>
               <div className="pricing-summary-item">
                 <span>{t.pricing.beneficiariesCount}</span>

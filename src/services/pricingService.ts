@@ -5,7 +5,8 @@ export interface Pricing {
   country_id: string;
   price_usd: number;
   price_ils: number;
-  name: string;
+  name_en: string;
+  name_he: string;
   description_en: string;
   description_he: string;
   created_at?: string;
@@ -16,7 +17,8 @@ export interface CreatePricingRequest {
   country_id: string;
   price_usd: number;
   price_ils: number;
-  name: string;
+  name_en: string;
+  name_he: string;
   description_en: string;
   description_he: string;
 }
@@ -25,7 +27,8 @@ export interface UpdatePricingRequest {
   country_id?: string;
   price_usd?: number;
   price_ils?: number;
-  name?: string;
+  name_en?: string;
+  name_he?: string;
   description_en?: string;
   description_he?: string;
 }

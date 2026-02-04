@@ -24,7 +24,8 @@ interface PricingFormData {
   country_id: string;
   price_usd: string;
   price_ils: string;
-  name: string;
+  name_en: string;
+  name_he: string;
   description_en: string;
   description_he: string;
 }
@@ -44,7 +45,8 @@ const AdminPricing = () => {
     country_id: "",
     price_usd: "",
     price_ils: "",
-    name: "",
+    name_en: "",
+    name_he: "",
     description_en: "",
     description_he: "",
   });
@@ -108,7 +110,8 @@ const AdminPricing = () => {
       country_id: pricing.country_id,
       price_usd: pricing.price_usd.toString(),
       price_ils: pricing.price_ils.toString(),
-      name: pricing.name,
+      name_en: pricing.name_en ?? "",
+      name_he: pricing.name_he ?? "",
       description_en: pricing.description_en,
       description_he: pricing.description_he,
     });
@@ -121,7 +124,8 @@ const AdminPricing = () => {
       country_id: countryId,
       price_usd: "",
       price_ils: "",
-      name: "",
+      name_en: "",
+      name_he: "",
       description_en: "",
       description_he: "",
     });
@@ -135,7 +139,8 @@ const AdminPricing = () => {
       country_id: "",
       price_usd: "",
       price_ils: "",
-      name: "",
+      name_en: "",
+      name_he: "",
       description_en: "",
       description_he: "",
     });
@@ -162,7 +167,8 @@ const AdminPricing = () => {
           country_id: formData.country_id,
           price_usd: priceUsd,
           price_ils: priceIls,
-          name: formData.name,
+          name_en: formData.name_en,
+          name_he: formData.name_he,
           description_en: formData.description_en,
           description_he: formData.description_he,
         };
@@ -177,7 +183,8 @@ const AdminPricing = () => {
           country_id: formData.country_id,
           price_usd: priceUsd,
           price_ils: priceIls,
-          name: formData.name,
+          name_en: formData.name_en,
+          name_he: formData.name_he,
           description_en: formData.description_en,
           description_he: formData.description_he,
         };
@@ -324,12 +331,29 @@ const AdminPricing = () => {
                           </h3>
                           <div className="pricing-form-fields">
                             <div className="form-field">
-                              <label>{t.admin.pricing.planName}</label>
+                              <label>{t.admin.pricing.planNameEn}</label>
                               <input
                                 type="text"
-                                value={formData.name}
+                                value={formData.name_en}
                                 onChange={(e) =>
-                                  setFormData({ ...formData, name: e.target.value })
+                                  setFormData({
+                                    ...formData,
+                                    name_en: e.target.value,
+                                  })
+                                }
+                                required
+                              />
+                            </div>
+                            <div className="form-field">
+                              <label>{t.admin.pricing.planNameHe}</label>
+                              <input
+                                type="text"
+                                value={formData.name_he}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    name_he: e.target.value,
+                                  })
                                 }
                                 required
                               />
@@ -414,7 +438,11 @@ const AdminPricing = () => {
                         {countryPricing.map((pricing) => (
                           <div key={pricing.id} className="pricing-plan-item">
                             <div className="pricing-plan-info">
-                              <h4 className="pricing-plan-name">{pricing.name}</h4>
+                              <h4 className="pricing-plan-name">
+                                {language === "he"
+                                  ? pricing.name_he
+                                  : pricing.name_en}
+                              </h4>
                               <p className="pricing-plan-description">
                                 {language === "he"
                                   ? pricing.description_he

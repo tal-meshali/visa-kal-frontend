@@ -126,32 +126,26 @@ const CountryPage = () => {
               {t.countries.pricing.title}
             </h2>
             {pricingPlans.length === 0 ? (
-              <div className="country-pricing-empty">
-                <p>{t.pricing.noPlansAvailable}</p>
-              </div>
+              <p className="country-pricing-empty">
+                {t.pricing.noPlansAvailable}
+              </p>
             ) : (
-              <div className="country-pricing-grid">
+              <div className="country-pricing-list">
                 {pricingPlans.map((plan) => (
-                  <div key={plan.id} className="country-pricing-card">
-                    <div className="country-pricing-card-header">
-                      <h3 className="country-pricing-plan-name">{plan.name}</h3>
-                    </div>
-                    <p className="country-pricing-plan-description">
+                  <div key={plan.id} className="country-pricing-item">
+                    <h3 className="country-pricing-item-title">
+                      {language === "he"
+                        ? plan.name_he
+                        : plan.name_en}
+                    </h3>
+                    <p className="country-pricing-item-description">
                       {language === "he"
                         ? plan.description_he
                         : plan.description_en}
                     </p>
-                    <div className="country-pricing-plan-prices">
-                      <div className="country-pricing-price">
-                        <span className="country-pricing-currency">₪</span>
-                        <span className="country-pricing-amount">
-                          {plan.price_ils}
-                        </span>
-                      </div>
-                      <div className="country-pricing-price-usd">
-                        ${plan.price_usd} USD
-                      </div>
-                    </div>
+                    <p className="country-pricing-item-prices">
+                      ₪{plan.price_ils} / ${plan.price_usd}
+                    </p>
                   </div>
                 ))}
               </div>
