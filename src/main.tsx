@@ -1,11 +1,12 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { StrictMode } from "react";
+import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App.tsx";
 import { EmailVerificationPrompt } from "./components/EmailVerificationPrompt.tsx";
 import { FirebaseTokenSync } from "./components/FirebaseTokenSync.tsx";
 import { AuthProvider } from "./contexts/AuthContext";
+import { TokenReadyProvider } from "./contexts/TokenReadyContext";
 import { LanguageProvider } from "./contexts/LanguageProvider";
 import "./index.css";
 import ApplicationForm from "./pages/ApplicationForm.tsx";
@@ -76,8 +77,9 @@ initializeTheme();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <FirebaseTokenSync />
+      <TokenReadyProvider>
+        <QueryClientProvider client={queryClient}>
+          <FirebaseTokenSync />
         <LanguageProvider defaultLanguage={getInitialLanguage()}>
           <BrowserRouter>
             <EmailVerificationPrompt />
@@ -102,6 +104,7 @@ createRoot(document.getElementById("root")!).render(
           </BrowserRouter>
         </LanguageProvider>
       </QueryClientProvider>
+      </TokenReadyProvider>
     </AuthProvider>
   </StrictMode>
 );

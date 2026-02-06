@@ -12,6 +12,7 @@ import {
 } from "../services/applicationService";
 import {
   executePayment,
+  getExchangeRate,
   getPaymentConfig,
   type PaymentCurrency,
 } from "../services/paymentService";
@@ -62,6 +63,13 @@ const Payment = () => {
     staleTime: 5 * 60 * 1000,
   });
   const paymeAvailable = paymentConfig?.payme_available ?? false;
+
+  const { data: exchangeRate, isLoading: loadingRate } = useQuery({
+    queryKey: ["exchangeRate"],
+    queryFn: getExchangeRate,
+    enabled: currency === "usd",
+    staleTime: 2 * 60 * 1000,
+  });
 
   // Query to load application data when formData is not provided
   const {
@@ -205,6 +213,9 @@ const Payment = () => {
       paymeAvailable,
       language,
       currency,
+      ...(currency === "usd" && exchangeRate != null && exchangeRate > 0
+        ? { exchangeRateUsdToIls: exchangeRate }
+        : {}),
     });
 
     if (result.outcome === "redirect") {
@@ -346,10 +357,18 @@ const Payment = () => {
                 <span className="summary-value summary-amount">
                   {selectedPricing
                     ? currency === "usd"
-                      ? `$${(selectedPricing.price_usd * finalFormData.length).toFixed(2)}`
+                      ? exchangeRate != null
+                        ? `$${((selectedPricing.price_ils * finalFormData.length) / exchangeRate).toFixed(2)}`
+                        : loadingRate
+                          ? "..."
+                          : "—"
                       : `₪${(selectedPricing.price_ils * finalFormData.length).toFixed(2)}`
                     : currency === "usd"
-                    ? `$${finalFormData.length * 50}.00`
+                    ? exchangeRate != null
+                      ? `$${((finalFormData.length * 180) / exchangeRate).toFixed(2)}`
+                      : loadingRate
+                        ? "..."
+                        : "—"
                     : `₪${finalFormData.length * 180}.00`}
                 </span>
               </div>
@@ -415,7 +434,11 @@ const Payment = () => {
                 size="large"
                 fullWidth
                 onClick={handlePayment}
-                disabled={processing || redirectingToPayMe}
+                disabled={
+                  processing ||
+                  redirectingToPayMe ||
+                  (currency === "usd" && (loadingRate || exchangeRate == null))
+                }
                 className="payment-button"
               >
                 {processing || redirectingToPayMe

@@ -82,6 +82,7 @@ export const SignInModal = ({ isOpen, onClose }: SignInModalProps) => {
       if (err instanceof FirebaseError) {
         const errorCodeMap: Record<string, string> = {
           "auth/invalid-email": t.auth.invalidEmail,
+          "auth/invalid-credential": t.auth.invalidCredentials,
           "auth/user-not-found": t.auth.userNotFound,
           "auth/wrong-password": t.auth.wrongPassword,
           "auth/email-already-in-use": t.auth.emailAlreadyInUse,

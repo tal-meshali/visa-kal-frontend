@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { useSetTokenReady } from "../contexts/TokenReadyContext";
 
 export const FIREBASE_TOKEN_KEY = "firebase_token";
 
@@ -29,11 +30,13 @@ export const getTokenFromStorage = (): string | null => {
  */
 export const useFirebaseTokenSync = (): void => {
   const { user, loading, getIdToken } = useAuth();
+  const setTokenReady = useSetTokenReady();
 
   useEffect(() => {
     if (loading) return;
     if (!user) {
       saveTokenToStorage(null);
+      setTokenReady(false);
       return;
     }
 
@@ -41,19 +44,20 @@ export const useFirebaseTokenSync = (): void => {
       try {
         const token = await getIdToken();
         saveTokenToStorage(token);
+        setTokenReady(!!token);
       } catch (error) {
         console.error("Failed to sync token:", error);
         saveTokenToStorage(null);
+        setTokenReady(false);
       }
     };
 
     syncToken();
 
-    // Sync token every 50 minutes (tokens expire after 1 hour)
     const interval = setInterval(syncToken, 50 * 60 * 1000);
 
     return () => {
       clearInterval(interval);
     };
-  }, [user, loading, getIdToken]);
+  }, [user, loading, getIdToken, setTokenReady]);
 };
