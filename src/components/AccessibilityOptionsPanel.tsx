@@ -3,14 +3,18 @@ import { useLanguage } from "../contexts/useLanguage";
 import type { ContrastMode } from "../types/accessibility";
 import "./AccessibilityOptionsPanel.css";
 
-const FONT_SIZE_OPTIONS = [
+export type FontSizeValue = "100" | "110" | "125" | "150";
+
+type FontSizeOption =
+  | { value: FontSizeValue; labelKey: "textSizeDefault"; label?: never }
+  | { value: FontSizeValue; label: string; labelKey?: never };
+
+const FONT_SIZE_OPTIONS: FontSizeOption[] = [
   { value: "100", labelKey: "textSizeDefault" },
   { value: "110", label: "110%" },
   { value: "125", label: "125%" },
   { value: "150", label: "150%" },
-] as const;
-
-export type FontSizeValue = "100" | "110" | "125" | "150";
+];
 
 interface AccessibilityOptionsPanelProps {
   isOpen: boolean;
@@ -132,7 +136,7 @@ export const AccessibilityOptionsPanel = ({
                   checked={fontSize === opt.value}
                   onChange={() => onFontSizeChange(opt.value as FontSizeValue)}
                 />
-                <span>{opt.label ?? (t.a11y as Record<string, string>)[opt.labelKey]}</span>
+                <span>{opt.label ?? (opt.labelKey ? (t.a11y as Record<string, string>)[opt.labelKey] : "")}</span>
               </label>
             ))}
           </div>

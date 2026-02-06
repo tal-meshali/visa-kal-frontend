@@ -64,8 +64,8 @@ describe("Navbar", () => {
     expect(onAccessibleClick).toHaveBeenCalledTimes(1);
   });
 
-  it("applies accessible-toggle-on class when accessible is true", () => {
-    const { container } = render(<Navbar {...defaultProps} accessible={true} />);
+  it("applies accessible-toggle-on class when contrastMode is high", () => {
+    const { container } = render(<Navbar {...defaultProps} contrastMode="high" />);
     const btn = container.querySelector(".accessible-toggle.accessible-toggle-on");
     expect(btn).toBeInTheDocument();
   });

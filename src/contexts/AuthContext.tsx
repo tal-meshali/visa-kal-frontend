@@ -22,7 +22,7 @@ import {
 } from "react";
 import { auth } from "../config/firebase";
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   loading: boolean;
   signIn: () => Promise<void>;

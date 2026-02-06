@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useKeyDownActivate } from "../hooks/useKeyDownActivate";
 import "./Alert.css";
 

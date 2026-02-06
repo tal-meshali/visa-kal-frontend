@@ -145,7 +145,6 @@ if (import.meta.env.DEV) {
   // Dev-time accessibility audits (WCAG/IS-5568) using axe-core
   import("@axe-core/react").then(({ default: axe }) => {
     import("react-dom").then((ReactDOM) => {
-      // @ts-expect-error axe expects ReactDOM default export shape
       axe(React, ReactDOM, 1000);
     });
   });

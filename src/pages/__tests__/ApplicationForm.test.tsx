@@ -9,7 +9,7 @@ import { TokenReadyProvider } from "../../contexts/TokenReadyContext";
 import { FirebaseTokenSync } from "../../components/FirebaseTokenSync";
 import ApplicationForm from "../ApplicationForm";
 import { apiService } from "../../services/apiService";
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext, type AuthContextType } from "../../contexts/AuthContext";
 import { hasCookieRefused } from "../../constants/cookieConsent";
 import type { FormSchema } from "../../types/formTypes";
 
@@ -101,7 +101,7 @@ describe("ApplicationForm", () => {
   it("shows login prompt when not signed in, then backend requests receive token after simulated login", async () => {
     let capturedConfig: { headers?: { Authorization?: string } } = {};
     apiService.defaults.adapter = (config) => {
-      capturedConfig = config;
+      capturedConfig = { headers: config.headers } as { headers?: { Authorization?: string } };
       return Promise.resolve({
         data: config.url?.includes("/api/form-schema/") ? mockFormSchema : {},
         status: 200,
