@@ -9,6 +9,7 @@ import {
   SignInButton,
   UserButton,
 } from "./AuthComponents";
+import { LanguageSwitch } from "./LanguageSwitch";
 import "./Navbar.css";
 
 interface NavbarProps {
@@ -57,20 +58,7 @@ export const Navbar = ({
           >
             {theme === "light" ? "🌙" : "☀️"}
           </button>
-          <button
-            className="lang-toggle lang-toggle-flag"
-            onClick={onLanguageToggle}
-            aria-label={language === "en" ? t.common.hebrew : t.common.english}
-            title={language === "en" ? t.common.hebrew : t.common.english}
-          >
-            <img
-              src={language === "en" ? "/flags/il.svg" : "/flags/gb.svg"}
-              alt=""
-              width={24}
-              height={18}
-              className="lang-flag-img"
-            />
-          </button>
+          <LanguageSwitch />
           <SignedIn>
             <UserButton />
           </SignedIn>

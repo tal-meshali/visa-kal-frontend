@@ -9,6 +9,7 @@ import {
   useUser,
 } from "../components/AuthComponents";
 import { BackButton } from "../components/BackButton";
+import { LanguageSwitch } from "../components/LanguageSwitch";
 import { BeneficiaryForm } from "../components/BeneficiaryForm";
 import { Button } from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
@@ -65,7 +66,9 @@ const ApplicationFormSignedIn = () => {
 
   return schemaError ? (
     <div className="form-container">
-      <div className="error-message-form">{t.form.failedToLoad}</div>
+      <div className="error-message-form">
+        {schemaError || t.form.failedToLoad}
+      </div>
       <BackButton />
     </div>
   ) : !schema ? (
@@ -81,7 +84,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
   const { countryId } = useParams<{ countryId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { language, setLanguage, t } = useLanguage();
+  const { language, t } = useLanguage();
   const { user, isLoaded: isUserLoaded } = useUser();
   const authLoading = !isUserLoaded;
   const { getErrors, submitting, validate, clearFieldError } =
@@ -128,7 +131,13 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
           }
         } catch (error) {
           console.error("Failed to load request data:", error);
-          // Continue with empty form if loading fails
+          const msg =
+            error instanceof Error ? error.message : t.form.loadRequestError;
+          setAlert({
+            type: "error",
+            message: msg.includes("Cannot connect") ? t.form.networkError : msg,
+            isOpen: true,
+          });
           lastLoadedRequestIdRef.current = null;
         } finally {
           setLoadingRequest(false);
@@ -160,9 +169,9 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
   // Track active uploads to disable submit button
   const [activeUploads, setActiveUploads] = useState<Set<string>>(new Set());
   // Queue of beneficiary indices needing passport data modal (one modal at a time)
-  const [pendingPassportModals, setPendingPassportModals] = useState<
-    number[]
-  >([]);
+  const [pendingPassportModals, setPendingPassportModals] = useState<number[]>(
+    []
+  );
   const [alert, setAlert] = useState<{
     type: "success" | "error" | "info";
     message: string;
@@ -184,11 +193,6 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
         }))();
     }
   }, [user, authLoading, language, t.form.signInMessage]);
-
-  // Show loading while loading request data
-  if (loadingRequest) {
-    return <LoadingScreen message={t.form.loading} />;
-  }
 
   const handleFieldChange = (
     beneficiaryIndex: number,
@@ -306,9 +310,13 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
           });
         }
       } catch (error) {
+        const msg =
+          error instanceof Error
+            ? error.message
+            : t.form.createApplicationError;
         setAlert({
           type: "error",
-          message: error instanceof Error ? error.message : t.form.submitError,
+          message: msg.includes("Cannot connect") ? t.form.networkError : msg,
           isOpen: true,
         });
       }
@@ -334,9 +342,12 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
     });
   };
 
-  const handlePassportUploadComplete = useCallback((beneficiaryIndex: number) => {
-    setPendingPassportModals((prev) => [...prev, beneficiaryIndex]);
-  }, []);
+  const handlePassportUploadComplete = useCallback(
+    (beneficiaryIndex: number) => {
+      setPendingPassportModals((prev) => [...prev, beneficiaryIndex]);
+    },
+    []
+  );
 
   const handlePassportModalClose = useCallback(() => {
     setPendingPassportModals((prev) => prev.slice(1));
@@ -344,6 +355,11 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
 
   const currentPassportModalBeneficiary =
     pendingPassportModals.length > 0 ? pendingPassportModals[0] : null;
+
+  // Show loading while loading request data
+  if (loadingRequest) {
+    return <LoadingScreen message={t.form.loading} />;
+  }
 
   return (
     <>
@@ -392,26 +408,14 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
                 </span>
               </div>
             )}
-            <button
-              className="lang-toggle lang-toggle-flag"
-              onClick={() => setLanguage(language === "en" ? "he" : "en")}
-              aria-label={language === "en" ? t.common.hebrew : t.common.english}
-              title={language === "en" ? t.common.hebrew : t.common.english}
-            >
-              <img
-                src={language === "en" ? "/flags/il.svg" : "/flags/gb.svg"}
-                alt=""
-                width={24}
-                height={18}
-                className="lang-flag-img"
-              />
-            </button>
+            <LanguageSwitch />
           </div>
         </div>
 
         <div className="form-content">
           <h1 className="form-title">
-            {t.form.title}{schema.country_name[language]}
+            {t.form.title}
+            {schema.country_name[language]}
           </h1>
           <p className="form-description">{t.form.description}</p>
 
