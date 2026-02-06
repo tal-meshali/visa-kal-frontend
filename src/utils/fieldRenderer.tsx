@@ -1,4 +1,4 @@
-import React from "react";
+import type { ReactElement } from "react";
 import DateFieldComponent from "../components/fields/DateField";
 import DocumentFieldComponent from "../components/fields/DocumentField";
 import NumberFieldComponent from "../components/fields/NumberField";

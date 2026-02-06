@@ -54,7 +54,7 @@ function TestAuthWrapper({ children }: { children: React.ReactNode }) {
     getIdToken: vi.fn().mockResolvedValue(user ? TEST_TOKEN : null),
   };
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={value as AuthContextType}>
       <button
         type="button"
         data-testid="simulate-login"
