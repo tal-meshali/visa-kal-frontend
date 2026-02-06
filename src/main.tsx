@@ -17,6 +17,8 @@ import PricingSelection from "./pages/PricingSelection.tsx";
 import AdminPricing from "./pages/AdminPricing.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import CountryPage from "./pages/CountryPage.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
+import { CookieConsent } from "./components/CookieConsent.tsx";
 import { EmailVerification } from "./components/EmailVerification.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 
@@ -144,6 +146,7 @@ createRoot(document.getElementById("root")!).render(
           <FirebaseTokenSync />
         <LanguageProvider defaultLanguage={getInitialLanguage()}>
           <BrowserRouter>
+            <CookieConsent />
             <EmailVerificationPrompt />
             <Routes>
               <Route path="/" element={<App />} />
@@ -152,6 +155,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/pricing/:countryId" element={<PricingSelection />} />
               <Route path="/payment/:countryId" element={<Payment />} />
               <Route path="/applications" element={<ApplicationsHistory />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route
                 path="/admin/pricing"
                 element={

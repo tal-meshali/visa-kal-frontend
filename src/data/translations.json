@@ -89,8 +89,8 @@
       "button": "Get Started Today"
     },
     "cookieConsent": {
-      "title": "Cookie & Privacy",
-      "message": "We use cookies to improve your experience and ensure the site works correctly. By continuing, you accept our use of cookies and our privacy policy.",
+      "title": "Data & Privacy",
+      "message": "We store information locally (for example, session data so you stay signed in, and form progress) to make the site work correctly. We do not use cookies. By continuing, you accept this data storage and our privacy policy.",
       "accept": "Accept",
       "refuse": "Decline",
       "privacyPolicyLink": "Privacy Policy"
@@ -112,8 +112,8 @@
       "loading": "Loading form...",
       "notFound": "Form not found",
       "failedToLoad": "Failed to load form. Please try again.",
-      "cookieConsentRequired": "To continue with your visa application, you need to accept cookies. This is required for authentication and form submission. Please review our privacy policy and accept cookies to proceed.",
-      "cookieConsentRequiredTitle": "Cookies Required",
+      "cookieConsentRequired": "To continue with your visa application, you need to accept local data storage. This is required for authentication and form submission. Please review our privacy policy and accept to proceed.",
+      "cookieConsentRequiredTitle": "Data Storage Required",
       "back": "Back",
       "title": "Visa Application for ",
       "description": "Please fill out all required fields to complete your visa application.",
@@ -438,8 +438,8 @@
       "button": "התחל היום"
     },
     "cookieConsent": {
-      "title": "עוגיות ופרטיות",
-      "message": "אנו משתמשים בעוגיות כדי לשפר את החוויה שלך ולוודא שהאתר פועל כראוי. בהמשך הגלישה אתה מקבל את שימושינו בעוגיות ובמדיניות הפרטיות.",
+      "title": "נתונים ופרטיות",
+      "message": "אנו שומרים מידע מקומית (למשל נתוני סשן כדי שתישאר מחובר/ת, והתקדמות טופס) כדי שהאתר יעבוד כראוי. איננו משתמשים בעוגיות. בהמשך הגלישה אתה מקבל/ה שמירת נתונים זו ואת מדיניות הפרטיות.",
       "accept": "אני מקבל/ה",
       "refuse": "אני מסרב/ת",
       "privacyPolicyLink": "מדיניות פרטיות"
@@ -461,8 +461,8 @@
       "loading": "טוען טופס...",
       "notFound": "טופס לא נמצא",
       "failedToLoad": "נכשל בטעינת הטופס. נסה שוב.",
-      "cookieConsentRequired": "כדי להמשיך עם בקשת הויזה שלך, עליך לקבל עוגיות. נדרש לאימות והגשת הטופס. אנא עיין במדיניות הפרטיות שלנו וקבל עוגיות להמשך.",
-      "cookieConsentRequiredTitle": "נדרשות עוגיות",
+      "cookieConsentRequired": "כדי להמשיך עם בקשת הויזה שלך, עליך לקבל שמירת נתונים מקומית. נדרש לאימות והגשת הטופס. אנא עיין במדיניות הפרטיות שלנו וקבל/י להמשך.",
+      "cookieConsentRequiredTitle": "נדרשת שמירת נתונים",
       "back": "חזור",
       "title": "בקשת ויזה ל",
       "description": "אנא מלא את כל השדות הנדרשים כדי להשלים את בקשת הויזה שלך.",

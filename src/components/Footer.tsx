@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useLanguage } from "../contexts/useLanguage";
 import "./Footer.css";
 
@@ -11,11 +12,17 @@ const FooterSection = ({
   return (
     <div className="footer-section">
       <h4 className="footer-title">{title}</h4>
-      {Object.entries(linkToText).map(([link, text]) => (
-        <a href={link} className="footer-link" key={link}>
-          {text}
-        </a>
-      ))}
+      {Object.entries(linkToText).map(([link, text]) =>
+        link.startsWith("/") ? (
+          <Link to={link} className="footer-link" key={link}>
+            {text}
+          </Link>
+        ) : (
+          <a href={link} className="footer-link" key={link}>
+            {text}
+          </a>
+        )
+      )}
     </div>
   );
 };
@@ -43,7 +50,7 @@ export const Footer = () => {
             linkToText={{
               "#home": t.footer.helpCenter,
               "#countries": t.footer.contactUs,
-              "#about": t.footer.privacyPolicy,
+              "/privacy-policy": t.footer.privacyPolicy,
             }}
           />
         </div>

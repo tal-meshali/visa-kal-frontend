@@ -1,0 +1,115 @@
+.cookie-consent-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: cookieConsentFadeIn 0.2s ease-out;
+}
+
+@keyframes cookieConsentFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cookie-consent-modal {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 440px;
+  width: 100%;
+  padding: 1.75rem;
+  animation: cookieConsentSlideIn 0.25s ease-out;
+}
+
+@keyframes cookieConsentSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cookie-consent-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.cookie-consent-message {
+  margin: 0 0 1.25rem 0;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+.cookie-consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cookie-consent-link {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-size: 0.9375rem;
+  transition: color 0.2s ease;
+}
+
+.cookie-consent-link:hover {
+  color: #667eea;
+}
+
+.cookie-consent-accept {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: #667eea;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.cookie-consent-accept:hover {
+  background: #5a67d8;
+}
+
+.cookie-consent-accept:active {
+  transform: scale(0.98);
+}
+
+.cookie-consent-refuse {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+
+.cookie-consent-refuse:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.cookie-consent-refuse:active {
+  transform: scale(0.98);
+}

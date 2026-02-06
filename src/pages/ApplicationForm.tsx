@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useList } from "react-use";
 import { Alert } from "../components/Alert";
 import {
@@ -14,6 +14,7 @@ import { BeneficiaryForm } from "../components/BeneficiaryForm";
 import { Button } from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
 import PassportDataModal from "../components/PassportDataModal";
+import { hasCookieRefused } from "../constants/cookieConsent";
 import { useLanguage } from "../contexts/useLanguage";
 import { useFormSchema } from "../hooks/useFormSchema";
 import { useFormValidation } from "../hooks/useFormValidation";
@@ -31,6 +32,22 @@ import "./ApplicationForm.css";
 
 const ApplicationForm = () => {
   const { t } = useLanguage();
+
+  if (hasCookieRefused()) {
+    return (
+      <div className="form-container">
+        <div className="sign-in-prompt cookie-required-prompt">
+          <h2 className="sign-in-title">{t.form.cookieConsentRequiredTitle}</h2>
+          <p className="sign-in-message">{t.form.cookieConsentRequired}</p>
+          <Link to="/privacy-policy" className="cookie-policy-link">
+            {t.cookieConsent.privacyPolicyLink}
+          </Link>
+          <BackButton className="sign-in-back-button" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <SignedOut>

@@ -139,6 +139,19 @@
   transition: color 0.3s ease;
 }
 
+.cookie-required-prompt .cookie-policy-link {
+  display: inline-block;
+  margin: 1rem 0;
+  color: #667eea;
+  font-weight: 600;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.cookie-required-prompt .cookie-policy-link:hover {
+  color: #5a67d8;
+}
+
 /* Beneficiaries */
 .beneficiaries-tabs {
   display: flex;
