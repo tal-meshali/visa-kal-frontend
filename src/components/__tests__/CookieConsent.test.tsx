@@ -14,8 +14,8 @@ describe("CookieConsent", () => {
 
   it("renders dialog when user has not made cookie choice", () => {
     render(<CookieConsent />);
-    expect(screen.getByRole("dialog", { name: /cookie & privacy/i })).toBeInTheDocument();
-    expect(screen.getByText(/we use cookies/i)).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: /data & privacy/i })).toBeInTheDocument();
+    expect(screen.getByText(/we store information locally/i)).toBeInTheDocument();
   });
 
   it("does not render when user has already made cookie choice", () => {
@@ -50,7 +50,7 @@ describe("CookieConsent", () => {
 
   it("has accessible title for the dialog", () => {
     render(<CookieConsent />);
-    expect(screen.getByRole("dialog", { name: /cookie & privacy/i })).toHaveAttribute(
+    expect(screen.getByRole("dialog", { name: /data & privacy/i })).toHaveAttribute(
       "aria-labelledby",
       "cookie-consent-title"
     );
