@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../contexts/useLanguage";
 import {
@@ -8,15 +8,9 @@ import {
 } from "../constants/cookieConsent";
 import "./CookieConsent.css";
 
-export const CookieConsent = (): JSX.Element | null => {
+export const CookieConsent = (): React.JSX.Element | null => {
   const { t } = useLanguage();
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    if (!hasCookieChoiceMade()) {
-      setShow(true);
-    }
-  }, []);
+  const [show, setShow] = useState(() => !hasCookieChoiceMade());
 
   const handleAccept = (): void => {
     setCookieConsent();

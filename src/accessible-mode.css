@@ -204,3 +204,10 @@
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
 }
+
+/* ---------------------------------------------------------------------------
+   Monochrome mode – grayscale display (user preference)
+   --------------------------------------------------------------------------- */
+:root[data-monochrome="true"] {
+  filter: grayscale(100%);
+}

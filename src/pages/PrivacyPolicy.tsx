@@ -12,7 +12,7 @@ const getStoredTheme = (): Theme => {
   return stored === "dark" || stored === "light" ? stored : "light";
 };
 
-const PrivacyPolicy = (): JSX.Element => {
+const PrivacyPolicy = (): React.JSX.Element => {
   const { t } = useLanguage();
   const [theme, setTheme] = useState<Theme>(getStoredTheme);
 

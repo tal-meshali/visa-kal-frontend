@@ -185,15 +185,18 @@ const Payment = () => {
     if (paymentStatus !== "cancel") {
       return;
     }
-    setAlert({
-      type: "info",
-      message: t.payment.paymentCanceled,
-      isOpen: true,
-    });
+    const timer = setTimeout(() => {
+      setAlert({
+        type: "info",
+        message: t.payment.paymentCanceled,
+        isOpen: true,
+      });
+    }, 0);
     setSearchParams((prev) => {
       prev.delete("status");
       return prev;
     });
+    return () => clearTimeout(timer);
   }, [paymentStatus, setSearchParams, t]);
 
   const handlePayment = async (): Promise<void> => {

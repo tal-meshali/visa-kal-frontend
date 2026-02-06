@@ -61,7 +61,7 @@ function isPhotoField(field: TypedFormField): field is PhotoField {
 export const renderFormField = (
   field: TypedFormField,
   commonProps: CommonFieldProps
-): React.JSX.Element | null => {
+): React.React.JSX.Element | null => {
   const key = `${commonProps.beneficiaryId}__${field.name}`;
   if (isStringField(field)) {
     return (

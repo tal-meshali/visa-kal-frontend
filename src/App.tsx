@@ -21,6 +21,7 @@ type Theme = "light" | "dark";
 const CONTRAST_STORAGE_KEY = "visa-vibe-contrast";
 const FONT_SIZE_STORAGE_KEY = "visa-vibe-font-size";
 const REDUCE_MOTION_STORAGE_KEY = "visa-vibe-reduce-motion";
+const MONOCHROME_STORAGE_KEY = "visa-vibe-monochrome";
 
 const getInitialContrast = (): ContrastMode => {
   try {
@@ -53,12 +54,21 @@ const getInitialReduceMotion = (): boolean => {
   }
 };
 
+const getInitialMonochrome = (): boolean => {
+  try {
+    return localStorage.getItem(MONOCHROME_STORAGE_KEY) === "true";
+  } catch {
+    return false;
+  }
+};
+
 const App = () => {
   const { language, t } = useLanguage();
   const [theme, setTheme] = useState<Theme>("light");
   const [contrastMode, setContrastMode] = useState<ContrastMode>(getInitialContrast);
   const [fontSize, setFontSize] = useState<FontSizeValue>(getInitialFontSize);
   const [reduceMotion, setReduceMotion] = useState<boolean>(getInitialReduceMotion);
+  const [monochrome, setMonochrome] = useState<boolean>(getInitialMonochrome);
   const [a11yPanelOpen, setA11yPanelOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -137,6 +147,15 @@ const App = () => {
     }
   };
 
+  const handleMonochromeChange = (value: boolean): void => {
+    setMonochrome(value);
+    try {
+      localStorage.setItem(MONOCHROME_STORAGE_KEY, String(value));
+    } catch {
+      // ignore
+    }
+  };
+
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
@@ -162,6 +181,15 @@ const App = () => {
       html.removeAttribute("data-reduce-motion");
     }
   }, [reduceMotion]);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    if (monochrome) {
+      html.setAttribute("data-monochrome", "true");
+    } else {
+      html.removeAttribute("data-monochrome");
+    }
+  }, [monochrome]);
 
   // Handle agent identifier in URL
   useEffect(() => {
@@ -203,6 +231,8 @@ const App = () => {
         onFontSizeChange={handleFontSizeChange}
         reduceMotion={reduceMotion}
         onReduceMotionChange={handleReduceMotionChange}
+        monochrome={monochrome}
+        onMonochromeChange={handleMonochromeChange}
       />
       <Hero />
       <AboutSection />

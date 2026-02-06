@@ -2,7 +2,7 @@ import { useLanguage } from "../contexts/useLanguage";
 import type { Language } from "../types/formTypes";
 import "./LanguageSwitch.css";
 
-export const LanguageSwitch = (): JSX.Element => {
+export const LanguageSwitch = (): React.JSX.Element => {
   const { language, setLanguage, t } = useLanguage();
 
   const handleSelect = (lang: Language): void => {

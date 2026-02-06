@@ -343,6 +343,8 @@
       "textSize": "Text size",
       "textSizeDefault": "Default",
       "reduceMotion": "Reduce motion",
+      "monochrome": "Monochrome",
+      "monochromeDesc": "Display the site in grayscale",
       "close": "Close",
       "reportIssue": "Report accessibility issue",
       "skipToContent": "Skip to main content"
@@ -692,6 +694,8 @@
       "textSize": "גודל טקסט",
       "textSizeDefault": "ברירת מחדל",
       "reduceMotion": "הפחתת תנועה",
+      "monochrome": "מונוכרום",
+      "monochromeDesc": "הצגת האתר בגווני אפור",
       "close": "סגור",
       "reportIssue": "דווח על בעיית נגישות",
       "skipToContent": "דלג לתוכן הראשי"

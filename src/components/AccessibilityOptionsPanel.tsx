@@ -21,6 +21,8 @@ interface AccessibilityOptionsPanelProps {
   onFontSizeChange: (value: FontSizeValue) => void;
   reduceMotion: boolean;
   onReduceMotionChange: (value: boolean) => void;
+  monochrome: boolean;
+  onMonochromeChange: (value: boolean) => void;
   reportIssueUrl?: string;
 }
 
@@ -33,6 +35,8 @@ export const AccessibilityOptionsPanel = ({
   onFontSizeChange,
   reduceMotion,
   onReduceMotionChange,
+  monochrome,
+  onMonochromeChange,
   reportIssueUrl = "mailto:support@visa-kal.com?subject=Accessibility%20issue",
 }: AccessibilityOptionsPanelProps) => {
   const { t } = useLanguage();
@@ -146,6 +150,21 @@ export const AccessibilityOptionsPanel = ({
           </label>
           <p id="a11y-reduce-motion-desc" className="a11y-panel-desc">
             Reduces animations and transitions
+          </p>
+        </div>
+
+        <div className="a11y-panel-option">
+          <label className="a11y-panel-toggle">
+            <input
+              type="checkbox"
+              checked={monochrome}
+              onChange={(e) => onMonochromeChange(e.target.checked)}
+              aria-describedby="a11y-monochrome-desc"
+            />
+            <span>{t.a11y.monochrome}</span>
+          </label>
+          <p id="a11y-monochrome-desc" className="a11y-panel-desc">
+            {t.a11y.monochromeDesc}
           </p>
         </div>
 

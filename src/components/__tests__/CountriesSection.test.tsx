@@ -1,5 +1,4 @@
 import { describe, it, expect } from "vitest";
-import userEvent from "@testing-library/user-event";
 import { render, screen } from "../../test/utils";
 import { CountriesSection } from "../CountriesSection";
 

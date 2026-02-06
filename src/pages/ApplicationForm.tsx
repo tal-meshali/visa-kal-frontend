@@ -18,6 +18,7 @@ import { hasCookieRefused } from "../constants/cookieConsent";
 import { useLanguage } from "../contexts/useLanguage";
 import { useFormSchema } from "../hooks/useFormSchema";
 import { useFormValidation } from "../hooks/useFormValidation";
+import { getKeyDownActivateHandler } from "../hooks/useKeyDownActivate";
 import {
   createApplication,
   getApplication,
@@ -166,7 +167,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
     };
 
     loadRequestData();
-  }, [requestId, user, isUserLoaded, setBeneficiaries]);
+  }, [requestId, user, isUserLoaded, setBeneficiaries, t.form.loadRequestError, t.form.networkError]);
 
   // Use ref to track latest beneficiaries state to prevent race conditions
   const beneficiariesRef = useRef(beneficiaries);
@@ -439,14 +440,20 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
           <form onSubmit={handleSubmit} className="application-form">
             {/* Beneficiaries Tabs */}
             {beneficiaries.length > 1 && (
-              <div className="beneficiaries-tabs">
+              <div className="beneficiaries-tabs" role="tablist" aria-label={t.form.beneficiary}>
                 {beneficiaries.map((_, index) => (
                   <div
                     key={index}
+                    role="tab"
+                    tabIndex={activeBeneficiaryIndex === index ? 0 : -1}
+                    aria-selected={activeBeneficiaryIndex === index}
                     className={`beneficiary-tab ${
                       activeBeneficiaryIndex === index ? "active" : ""
                     }`}
                     onClick={() => setActiveBeneficiaryIndex(index)}
+                    onKeyDown={getKeyDownActivateHandler(() =>
+                      setActiveBeneficiaryIndex(index)
+                    )}
                   >
                     {t.form.beneficiary} {index + 1}
                     {beneficiaries.length > 1 && (

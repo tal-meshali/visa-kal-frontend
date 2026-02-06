@@ -1,5 +1,6 @@
-import { useEffect } from 'react'
-import './Alert.css'
+import React, { useEffect } from "react";
+import { useKeyDownActivate } from "../hooks/useKeyDownActivate";
+import "./Alert.css";
 
 interface AlertProps {
   type: 'success' | 'error' | 'info'
@@ -10,6 +11,7 @@ interface AlertProps {
 }
 
 export const Alert = ({ type, message, isOpen, onClose, duration = 3000 }: AlertProps) => {
+  const handleOverlayKeyDown = useKeyDownActivate(onClose);
   useEffect(() => {
     if (isOpen && duration > 0) {
       const timer = setTimeout(() => {
@@ -24,14 +26,29 @@ export const Alert = ({ type, message, isOpen, onClose, duration = 3000 }: Alert
   }
 
   const icons: Record<string, string> = {
-    success: '✓',
-    error: '✕',
-    info: 'ℹ'
-  }
+    success: "✓",
+    error: "✕",
+    info: "ℹ"
+  };
 
   return (
-    <div className="alert-overlay" onClick={onClose}>
-      <div className={`alert alert-${type}`} onClick={(e) => e.stopPropagation()}>
+    <div
+      className="alert-overlay"
+      role="button"
+      tabIndex={0}
+      aria-label="Dismiss"
+      onClick={onClose}
+      onKeyDown={handleOverlayKeyDown}
+    >
+      {/* Content area: stop propagation so overlay click doesn't close when clicking inside */}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- dialog content must stop propagation */}
+      <div
+        className={`alert alert-${type}`}
+        role="alertdialog"
+        aria-live="polite"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
         <div className="alert-content">
           <span className="alert-icon">{icons[type]}</span>
           <span className="alert-message">{message}</span>

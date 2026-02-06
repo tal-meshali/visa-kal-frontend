@@ -7,6 +7,7 @@ import { BackButton } from "../components/BackButton";
 import { Button } from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
 import { useLanguage } from "../contexts/useLanguage";
+import { getKeyDownActivateHandler } from "../hooks/useKeyDownActivate";
 import { fetchCountries } from "../services/countryService";
 import {
   getAllPricing,
@@ -281,7 +282,13 @@ const AdminPricing = () => {
                 <div key={country.id} className="country-accordion-item">
                   <div
                     className="country-accordion-header"
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={isExpanded}
                     onClick={() => handleToggleCountry(country.id)}
+                    onKeyDown={getKeyDownActivateHandler(() =>
+                      handleToggleCountry(country.id)
+                    )}
                   >
                     <div className="country-accordion-title">
                       <img

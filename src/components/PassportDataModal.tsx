@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useKeyDownActivate } from "../hooks/useKeyDownActivate";
 import { useLanguage } from "../contexts/useLanguage";
 import { apiGet, apiPost } from "../services/apiService";
 import { initializeFormData } from "../services/formService";
@@ -48,6 +49,7 @@ const PassportDataModal: React.FC<PassportDataModalProps> = ({
   const [schema, setSchema] = useState<FormSchema | null>(null);
   const [formData, setFormData] = useState<FormDataRecord>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const handleOverlayKeyDown = useKeyDownActivate(onClose);
 
   const loadPassportSchema = useCallback(async () => {
     setLoading(true);
@@ -153,8 +155,22 @@ const PassportDataModal: React.FC<PassportDataModalProps> = ({
   }
 
   return (
-    <div className="passport-modal-overlay" onClick={onClose}>
-      <div className="passport-modal" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="passport-modal-overlay"
+      role="button"
+      tabIndex={0}
+      aria-label="Close"
+      onClick={onClose}
+      onKeyDown={handleOverlayKeyDown}
+    >
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- modal content must stop propagation */}
+      <div
+        className="passport-modal"
+        role="dialog"
+        aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
         <div className="passport-modal-header">
           <h2 className="passport-modal-title">{t.passport.title}</h2>
           <button

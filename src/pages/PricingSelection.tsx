@@ -6,6 +6,7 @@ import { BackButton } from "../components/BackButton";
 import { Button } from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
 import { useLanguage } from "../contexts/useLanguage";
+import { getKeyDownActivateHandler } from "../hooks/useKeyDownActivate";
 import { updateApplicationPricing } from "../services/applicationService";
 import { getCountryPricing, type Pricing } from "../services/pricingService";
 import type { FormDataRecord, TranslatedText } from "../types/formTypes";
@@ -159,10 +160,16 @@ const PricingSelection = () => {
             {pricingPlans.map((plan) => (
               <div
                 key={plan.id}
+                role="button"
+                tabIndex={0}
+                aria-pressed={selectedPricingId === plan.id}
                 className={`pricing-card ${
                   selectedPricingId === plan.id ? "selected" : ""
                 }`}
                 onClick={() => handleSelectPricing(plan.id)}
+                onKeyDown={getKeyDownActivateHandler(() =>
+                  handleSelectPricing(plan.id)
+                )}
               >
                 <div className="pricing-card-header">
                   <h3 className="pricing-plan-name">

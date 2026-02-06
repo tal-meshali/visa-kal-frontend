@@ -77,6 +77,7 @@ const initializeTheme = (): void => {
 
 const FONT_SIZE_STORAGE_KEY = "visa-vibe-font-size";
 const REDUCE_MOTION_STORAGE_KEY = "visa-vibe-reduce-motion";
+const MONOCHROME_STORAGE_KEY = "visa-vibe-monochrome";
 
 const initializeContrast = (): void => {
   try {
@@ -120,17 +121,29 @@ const initializeReduceMotion = (): void => {
   }
 };
 
+const initializeMonochrome = (): void => {
+  try {
+    const stored = localStorage.getItem(MONOCHROME_STORAGE_KEY);
+    const html = document.documentElement;
+    if (stored === "true") {
+      html.setAttribute("data-monochrome", "true");
+    } else {
+      html.removeAttribute("data-monochrome");
+    }
+  } catch {
+    document.documentElement.removeAttribute("data-monochrome");
+  }
+};
+
 initializeTheme();
 initializeContrast();
 initializeFontSize();
 initializeReduceMotion();
+initializeMonochrome();
 
 if (import.meta.env.DEV) {
   // Dev-time accessibility audits (WCAG/IS-5568) using axe-core
-  // Runs only in development and has no effect on production bundle.
-  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   import("@axe-core/react").then(({ default: axe }) => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     import("react-dom").then((ReactDOM) => {
       // @ts-expect-error axe expects ReactDOM default export shape
       axe(React, ReactDOM, 1000);

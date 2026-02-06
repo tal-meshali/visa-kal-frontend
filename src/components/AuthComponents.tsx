@@ -1,5 +1,6 @@
 import { type PropsWithChildren, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { useKeyDownActivate } from "../hooks/useKeyDownActivate";
 import { SignInModal } from "./SignInModal";
 
 /**
@@ -25,12 +26,18 @@ export const SignedOut = ({ children }: PropsWithChildren) => {
  */
 export const SignInButton = ({ children }: PropsWithChildren) => {
   const [showModal, setShowModal] = useState(false);
-  const handleClick = () => {
-    setShowModal(true);
-  };
+  const handleClick = () => setShowModal(true);
+  const handleKeyDown = useKeyDownActivate(handleClick);
   return (
     <>
-      <div onClick={handleClick}>{children}</div>
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+      >
+        {children}
+      </div>
       <SignInModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </>
   );
@@ -49,6 +56,10 @@ export const UserButton = () => {
     type: "success" | "error";
     message: string;
   } | null>(null);
+  const handleAvatarKeyDown = useKeyDownActivate(() =>
+    setShowMenu((prev) => !prev)
+  );
+  const handleBackdropKeyDown = useKeyDownActivate(() => setShowMenu(false));
 
   if (loading || !user) return null;
 
@@ -89,8 +100,13 @@ export const UserButton = () => {
     <div className="user-button-container" style={{ position: "relative" }}>
       <div
         className="user-avatar"
+        role="button"
+        tabIndex={0}
+        aria-label="User menu"
+        aria-expanded={showMenu}
         style={{ cursor: "pointer" }}
         onClick={() => setShowMenu(!showMenu)}
+        onKeyDown={handleAvatarKeyDown}
       >
         {user.photoURL && !imageError ? (
           <img
@@ -124,6 +140,9 @@ export const UserButton = () => {
       {showMenu && (
         <>
           <div
+            role="button"
+            tabIndex={0}
+            aria-label="Close menu"
             style={{
               position: "fixed",
               top: 0,
@@ -133,6 +152,7 @@ export const UserButton = () => {
               zIndex: 999,
             }}
             onClick={() => setShowMenu(false)}
+            onKeyDown={handleBackdropKeyDown}
           />
           <div
             className="user-menu"

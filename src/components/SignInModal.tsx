@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
+import { useKeyDownActivate } from "../hooks/useKeyDownActivate";
 import { createPortal } from "react-dom";
 import { FirebaseError } from "firebase/app";
 import { useAuth } from "../contexts/AuthContext";
@@ -26,6 +27,16 @@ export const SignInModal = ({ isOpen, onClose }: SignInModalProps) => {
     setMounted(true);
     return () => setMounted(false);
   }, []);
+
+  const handleClose = useCallback(() => {
+    setError(null);
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setIsSignUp(false);
+    onClose();
+  }, [onClose]);
+  const handleOverlayKeyDown = useKeyDownActivate(handleClose);
 
   if (!isOpen || !mounted) {
     return null;
@@ -99,18 +110,23 @@ export const SignInModal = ({ isOpen, onClose }: SignInModalProps) => {
     }
   };
 
-  const handleClose = () => {
-    setError(null);
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-    setIsSignUp(false);
-    onClose();
-  };
-
   const modalContent = (
-    <div className="signin-modal-overlay" onClick={handleClose}>
-      <div className="signin-modal" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="signin-modal-overlay"
+      role="button"
+      tabIndex={0}
+      aria-label="Close"
+      onClick={handleClose}
+      onKeyDown={handleOverlayKeyDown}
+    >
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- modal content must stop propagation */}
+      <div
+        className="signin-modal"
+        role="dialog"
+        aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
         <div className="signin-modal-header">
           <h2 className="signin-modal-title">
             {isSignUp ? t.auth.signUp : t.auth.signIn}
