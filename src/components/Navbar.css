@@ -49,8 +49,39 @@
   color: #667eea;
 }
 
-.theme-toggle,
-.lang-toggle {
+.accessible-toggle {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.accessible-toggle-on {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+}
+
+.accessible-toggle:hover {
+  background: var(--bg-secondary);
+  transform: translateY(-2px);
+}
+
+.accessible-toggle-on:hover {
+  filter: brightness(1.1);
+}
+
+.accessible-toggle-icon {
+  display: inline-block;
+}
+
+.theme-toggle {
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
@@ -62,20 +93,7 @@
   font-size: 0.875rem;
 }
 
-.lang-toggle-flag {
-  padding: 0.35rem 0.5rem;
-  line-height: 0;
-}
-
-.lang-flag-img {
-  display: block;
-  width: 24px;
-  height: 18px;
-  object-fit: contain;
-}
-
-.theme-toggle:hover,
-.lang-toggle:hover {
+.theme-toggle:hover {
   background: var(--bg-secondary);
   transform: translateY(-2px);
 }
@@ -150,19 +168,14 @@
     display: none;
   }
 
-  .theme-toggle,
-  .lang-toggle {
+  .accessible-toggle {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .theme-toggle {
     padding: 0.4rem 0.8rem;
     font-size: 0.75rem;
-  }
-
-  .lang-toggle-flag {
-    padding: 0.3rem 0.4rem;
-  }
-
-  .lang-flag-img {
-    width: 22px;
-    height: 16px;
   }
 }
 

@@ -22,6 +22,10 @@ export interface CreatePaymentResponse {
 
 export type PaymentCurrency = "usd" | "ils";
 
+export interface ExchangeRateResponse {
+  rate: number;
+}
+
 export interface ExecutePaymentParams {
   requestId: string | undefined;
   countryId: string;
@@ -31,6 +35,8 @@ export interface ExecutePaymentParams {
   paymeAvailable: boolean;
   language: "en" | "he";
   currency: PaymentCurrency;
+  /** When currency is USD, ILS-per-1-USD rate for real-time conversion: amount_usd = amount_ils / rate */
+  exchangeRateUsdToIls?: number;
 }
 
 export type ExecutePaymentResult =
@@ -41,6 +47,11 @@ export type ExecutePaymentResult =
 
 export const getPaymentConfig = async (): Promise<PaymentConfig> => {
   return apiGet<PaymentConfig>("/api/payment/config");
+};
+
+export const getExchangeRate = async (): Promise<number> => {
+  const res = await apiGet<ExchangeRateResponse>("/api/payment/exchange-rate");
+  return res.rate;
 };
 
 export const createPayMePayment = async (
@@ -65,15 +76,19 @@ export const executePayment = async (
     paymeAvailable,
     language,
     currency,
+    exchangeRateUsdToIls,
   } = params;
 
   const beneficiaryCount = finalFormData.length;
   const amountIls = selectedPricing
     ? selectedPricing.price_ils * beneficiaryCount
     : 180 * beneficiaryCount;
-  const amountUsd = selectedPricing
-    ? selectedPricing.price_usd * beneficiaryCount
-    : 50 * beneficiaryCount;
+  const amountUsd =
+    currency === "usd" && exchangeRateUsdToIls != null && exchangeRateUsdToIls > 0
+      ? amountIls / exchangeRateUsdToIls
+      : selectedPricing
+        ? selectedPricing.price_usd * beneficiaryCount
+        : 50 * beneficiaryCount;
 
   if (paymeAvailable && requestId) {
     try {

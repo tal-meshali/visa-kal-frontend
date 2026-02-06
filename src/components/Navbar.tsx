@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { hasCookieRefused } from "../constants/cookieConsent";
 import { useLanguage } from "../contexts/useLanguage";
 import { getCurrentUser } from "../services/authService";
 import {
@@ -9,21 +10,22 @@ import {
   SignInButton,
   UserButton,
 } from "./AuthComponents";
+import type { ContrastMode } from "../types/accessibility";
 import { LanguageSwitch } from "./LanguageSwitch";
 import "./Navbar.css";
 
 interface NavbarProps {
-  language: "en" | "he";
   theme: "light" | "dark";
-  onLanguageToggle: () => void;
+  contrastMode?: ContrastMode;
   onThemeToggle: () => void;
+  onAccessibleClick?: () => void;
 }
 
 export const Navbar = ({
-  language,
   theme,
-  onLanguageToggle,
+  contrastMode = "standard",
   onThemeToggle,
+  onAccessibleClick = () => {},
 }: NavbarProps) => {
   const { t } = useLanguage();
 
@@ -52,6 +54,26 @@ export const Navbar = ({
             <NavbarSignedIn />
           </SignedIn>
           <button
+            type="button"
+            className={`accessible-toggle ${
+              contrastMode === "high" ? "accessible-toggle-on" : ""
+            }`}
+            onClick={onAccessibleClick}
+            aria-label={t.nav.accessibleMode}
+            aria-haspopup="dialog"
+            title={t.nav.accessibleMode}
+          >
+            <span className="accessible-toggle-icon" aria-hidden>
+              <img
+                src="/accessible.png"
+                alt={t.nav.accessibleMode}
+                width={24}
+                height={18}
+                className="accessible-toggle-img"
+              />
+            </span>
+          </button>
+          <button
             className="theme-toggle"
             onClick={onThemeToggle}
             aria-label="Toggle theme"
@@ -62,11 +84,13 @@ export const Navbar = ({
           <SignedIn>
             <UserButton />
           </SignedIn>
-          <SignedOut>
-            <SignInButton>
-              <button className="nav-button">{t.nav.signIn}</button>
-            </SignInButton>
-          </SignedOut>
+          {!hasCookieRefused() && (
+            <SignedOut>
+              <SignInButton>
+                <button className="nav-button">{t.nav.signIn}</button>
+              </SignInButton>
+            </SignedOut>
+          )}
         </div>
       </div>
     </nav>

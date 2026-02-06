@@ -182,9 +182,6 @@ const PricingSelection = () => {
                     <span className="pricing-currency">₪</span>
                     <span className="pricing-amount">{plan.price_ils}</span>
                   </div>
-                  <div className="pricing-price-usd">
-                    ${plan.price_usd} USD
-                  </div>
                 </div>
               </div>
             ))}
@@ -224,15 +221,12 @@ const PricingSelection = () => {
               </div>
               <div className="pricing-summary-item">
                 <span>{t.pricing.pricePerPerson}</span>
-                <span>
-                  ₪{selectedPlan.price_ils} / ${selectedPlan.price_usd}
-                </span>
+                <span>₪{selectedPlan.price_ils}</span>
               </div>
               <div className="pricing-summary-item">
                 <span>{t.pricing.totalPrice}</span>
                 <span className="pricing-summary-price">
-                  ₪{(selectedPlan.price_ils * (formData?.length ?? 1)).toFixed(2)} / $
-                  {(selectedPlan.price_usd * (formData?.length ?? 1)).toFixed(2)}
+                  ₪{(selectedPlan.price_ils * (formData?.length ?? 1)).toFixed(2)}
                 </span>
               </div>
             </div>

@@ -9,6 +9,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { TokenReadyProvider } from "./contexts/TokenReadyContext";
 import { LanguageProvider } from "./contexts/LanguageProvider";
 import "./index.css";
+import "./accessible-mode.css";
 import ApplicationForm from "./pages/ApplicationForm.tsx";
 import ApplicationsHistory from "./pages/ApplicationsHistory.tsx";
 import Payment from "./pages/Payment.tsx";
@@ -64,15 +65,76 @@ const getInitialLanguage = (): "en" | "he" => {
   return "en";
 };
 
-// Initialize theme - ensures data-theme is always set, even on routes where App.tsx is not rendered
+const CONTRAST_STORAGE_KEY = "visa-vibe-contrast";
+
 const initializeTheme = (): void => {
   const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
   const theme = savedTheme || "light";
   document.documentElement.setAttribute("data-theme", theme);
 };
 
-// Initialize theme before rendering
+const FONT_SIZE_STORAGE_KEY = "visa-vibe-font-size";
+const REDUCE_MOTION_STORAGE_KEY = "visa-vibe-reduce-motion";
+
+const initializeContrast = (): void => {
+  try {
+    const stored = localStorage.getItem(CONTRAST_STORAGE_KEY);
+    const html = document.documentElement;
+    if (stored === "high" || stored === "low") {
+      html.setAttribute("data-contrast", stored);
+    } else {
+      const legacy = localStorage.getItem("visa-vibe-accessible");
+      if (legacy === "true") html.setAttribute("data-contrast", "high");
+      else html.removeAttribute("data-contrast");
+    }
+  } catch {
+    document.documentElement.removeAttribute("data-contrast");
+  }
+};
+
+const initializeFontSize = (): void => {
+  try {
+    const stored = localStorage.getItem(FONT_SIZE_STORAGE_KEY);
+    const value = ["100", "110", "125", "150"].includes(stored ?? "")
+      ? stored!
+      : "100";
+    document.documentElement.setAttribute("data-font-size", value);
+  } catch {
+    document.documentElement.setAttribute("data-font-size", "100");
+  }
+};
+
+const initializeReduceMotion = (): void => {
+  try {
+    const stored = localStorage.getItem(REDUCE_MOTION_STORAGE_KEY);
+    const html = document.documentElement;
+    if (stored === "true") {
+      html.setAttribute("data-reduce-motion", "true");
+    } else {
+      html.removeAttribute("data-reduce-motion");
+    }
+  } catch {
+    document.documentElement.removeAttribute("data-reduce-motion");
+  }
+};
+
 initializeTheme();
+initializeContrast();
+initializeFontSize();
+initializeReduceMotion();
+
+if (import.meta.env.DEV) {
+  // Dev-time accessibility audits (WCAG/IS-5568) using axe-core
+  // Runs only in development and has no effect on production bundle.
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
+  import("@axe-core/react").then(({ default: axe }) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    import("react-dom").then((ReactDOM) => {
+      // @ts-expect-error axe expects ReactDOM default export shape
+      axe(React, ReactDOM, 1000);
+    });
+  });
+}
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

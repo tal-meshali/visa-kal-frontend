@@ -1,0 +1,206 @@
+/**
+ * Contrast modes – applied when [data-contrast] is set on the document root.
+ * high = WCAG AA high contrast; low = softer colors (user preference).
+ */
+
+/* ---------------------------------------------------------------------------
+   High contrast (WCAG AA: 4.5:1 normal text, 3:1 large/UI)
+   --------------------------------------------------------------------------- */
+:root[data-contrast="high"] {
+  --text-primary: #1a1a1a;
+  --text-secondary: #333333;
+  --text-tertiary: #555555;
+  --border-color: rgba(0, 0, 0, 0.4);
+}
+
+:root[data-contrast="high"][data-theme="dark"] {
+  --text-primary: #f8fafc;
+  --text-secondary: #e2e8f0;
+  --text-tertiary: #cbd5e1;
+  --border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* ---------------------------------------------------------------------------
+   Low contrast – softer colors (user preference)
+   --------------------------------------------------------------------------- */
+:root[data-contrast="low"] {
+  --text-primary: #374151;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --border-color: rgba(0, 0, 0, 0.18);
+}
+
+:root[data-contrast="low"][data-theme="dark"] {
+  --text-primary: #d1d5db;
+  --text-secondary: #9ca3af;
+  --text-tertiary: #6b7280;
+  --border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ---------------------------------------------------------------------------
+   Focus visible – WCAG 2.4.11 (min 3:1 contrast, at least 2px thick)
+   --------------------------------------------------------------------------- */
+[data-contrast="high"] :focus {
+  outline: 2px solid transparent;
+}
+
+[data-contrast="high"] :focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+}
+
+[data-contrast="high"] :focus:not(:focus-visible) {
+  outline: none;
+}
+
+:root[data-contrast="high"] :focus-visible {
+  outline-color: #0047ab;
+}
+
+:root[data-contrast="high"][data-theme="dark"] :focus-visible {
+  outline-color: #60a5fa;
+}
+
+/* ---------------------------------------------------------------------------
+   Links – identifiable without relying on color alone (underline)
+   --------------------------------------------------------------------------- */
+[data-contrast="high"] a {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+[data-contrast="high"] a:hover,
+[data-contrast="high"] a:focus-visible {
+  text-decoration-style: solid;
+}
+
+[data-contrast="high"] a:not([class]) {
+  text-decoration: underline;
+}
+
+/* Nav/footer links often use .nav-link / .footer-link; ensure underline on focus/hover */
+[data-contrast="high"] .nav-link,
+[data-contrast="high"] .footer-link {
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
+}
+
+[data-contrast="high"] .nav-link:hover,
+[data-contrast="high"] .footer-link:hover {
+  text-decoration-color: inherit;
+}
+
+/* ---------------------------------------------------------------------------
+   Touch targets – minimum 44×44px (WCAG 2.5.5 Level AAA, Apple HIG)
+   --------------------------------------------------------------------------- */
+[data-contrast="high"] button,
+[data-contrast="high"] .btn,
+[data-contrast="high"] .theme-toggle,
+[data-contrast="high"] .language-switch-option,
+[data-contrast="high"] .accessible-toggle,
+[data-contrast="high"] .nav-button,
+[data-contrast="high"] .nav-link,
+[data-contrast="high"] a[href].nav-link {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+[data-contrast="high"] .theme-toggle,
+[data-contrast="high"] .language-switch-option,
+[data-contrast="high"] .accessible-toggle {
+  padding: 0.5rem 1rem;
+}
+
+[data-contrast="high"] .nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+}
+
+[data-contrast="high"] input:not([type="hidden"]),
+[data-contrast="high"] select,
+[data-contrast="high"] textarea {
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Typography – readable body text and line height
+   --------------------------------------------------------------------------- */
+[data-contrast="high"] body {
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+[data-contrast="high"] p,
+[data-contrast="high"] .hero-description,
+[data-contrast="high"] .feature-description,
+[data-contrast="high"] .footer-text,
+[data-contrast="high"] .section-subtitle {
+  line-height: 1.7;
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion – respect prefers-reduced-motion in accessible mode
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  [data-contrast="high"] *,
+  [data-contrast="high"] *::before,
+  [data-contrast="high"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* In accessible mode, reduce decorative motion even without user preference */
+[data-contrast="high"] .floating-card,
+[data-contrast="high"] [class*="float"] {
+  animation: none;
+}
+
+[data-contrast="high"] .country-card:hover,
+[data-contrast="high"] .feature-card:hover,
+[data-contrast="high"] .country-select-btn:hover,
+[data-contrast="high"] .nav-button:hover,
+[data-contrast="high"] .theme-toggle:hover,
+[data-contrast="high"] .language-switch-option:hover,
+[data-contrast="high"] .accessible-toggle:hover,
+[data-contrast="high"] button:hover,
+[data-contrast="high"] .btn:hover,
+[data-contrast="high"] .hero-buttons a:hover,
+[data-contrast="high"] .hero-buttons button:hover {
+  transform: none;
+}
+
+[data-contrast="high"] .app {
+  animation: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Text size (IS 5568 – resizable text)
+   --------------------------------------------------------------------------- */
+:root[data-font-size="110"] {
+  font-size: 110%;
+}
+
+:root[data-font-size="125"] {
+  font-size: 125%;
+}
+
+:root[data-font-size="150"] {
+  font-size: 150%;
+}
+
+/* ---------------------------------------------------------------------------
+   Reduce motion (IS 5568 / WCAG 2.1 – user control)
+   --------------------------------------------------------------------------- */
+[data-reduce-motion="true"] *,
+[data-reduce-motion="true"] *::before,
+[data-reduce-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}

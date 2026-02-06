@@ -60,35 +60,6 @@
   }
 }
 
-.lang-toggle {
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.875rem;
-}
-
-.lang-toggle-flag {
-  padding: 0.35rem 0.5rem;
-  line-height: 0;
-}
-
-.lang-flag-img {
-  display: block;
-  width: 24px;
-  height: 18px;
-  object-fit: contain;
-}
-
-.lang-toggle:hover {
-  background: var(--bg-secondary);
-  transform: translateY(-2px);
-}
-
 .form-content {
   max-width: 800px;
   margin: 0 auto;

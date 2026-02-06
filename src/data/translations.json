@@ -10,7 +10,8 @@
       "signOut": "Sign Out",
       "exportAgentUrl": "Export Agent URL",
       "agentUrlCopied": "Agent URL copied to clipboard!",
-      "adminPricing": "Manage Pricing"
+      "adminPricing": "Manage Pricing",
+      "accessibleMode": "Show site as accessible"
     },
     "home": {
       "aboutTitle": "About Visa-Kal",
@@ -86,6 +87,17 @@
       "title": "Ready to Begin Your Journey?",
       "description": "Join thousands of Israeli tourists who have successfully obtained their electronic visas",
       "button": "Get Started Today"
+    },
+    "cookieConsent": {
+      "title": "Cookie & Privacy",
+      "message": "We use cookies to improve your experience and ensure the site works correctly. By continuing, you accept our use of cookies and our privacy policy.",
+      "accept": "Accept",
+      "refuse": "Decline",
+      "privacyPolicyLink": "Privacy Policy"
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "backToHome": "Back to Home"
     },
     "footer": {
       "tagline": "Automating electronic visa creation for Israeli tourists.",
@@ -321,7 +333,21 @@
       "title": "Page Not Found",
       "description": "The page you're looking for doesn't exist or has been moved.",
       "backToHome": "Back to Home"
-    }},
+    },
+    "a11y": {
+      "title": "Accessibility options",
+      "contrast": "Contrast",
+      "contrastStandard": "Standard",
+      "contrastHigh": "High contrast",
+      "contrastLow": "Low contrast",
+      "textSize": "Text size",
+      "textSizeDefault": "Default",
+      "reduceMotion": "Reduce motion",
+      "close": "Close",
+      "reportIssue": "Report accessibility issue",
+      "skipToContent": "Skip to main content"
+    }
+  },
   "he": {
     "nav": {
       "home": "בית",
@@ -333,7 +359,8 @@
       "signOut": "התנתק",
       "exportAgentUrl": "ייצא כתובת סוכן",
       "agentUrlCopied": "כתובת הסוכן הועתקה ללוח!",
-      "adminPricing": "ניהול תמחור"
+      "adminPricing": "ניהול תמחור",
+      "accessibleMode": "הצג את האתר כנגיש"
     },
     "home": {
       "aboutTitle": "אודות Visa-Kal",
@@ -655,6 +682,19 @@
       "title": "דף לא נמצא",
       "description": "הדף שאתה מחפש לא קיים או הועבר.",
       "backToHome": "חזור לדף הבית"
+    },
+    "a11y": {
+      "title": "אפשרויות נגישות",
+      "contrast": "ניגודיות",
+      "contrastStandard": "רגילה",
+      "contrastHigh": "ניגודיות גבוהה",
+      "contrastLow": "ניגודיות נמוכה",
+      "textSize": "גודל טקסט",
+      "textSizeDefault": "ברירת מחדל",
+      "reduceMotion": "הפחתת תנועה",
+      "close": "סגור",
+      "reportIssue": "דווח על בעיית נגישות",
+      "skipToContent": "דלג לתוכן הראשי"
     }
   }
 }

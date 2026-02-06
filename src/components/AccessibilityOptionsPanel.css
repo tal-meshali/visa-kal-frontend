@@ -1,0 +1,117 @@
+.a11y-panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.a11y-panel {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.a11y-panel-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 1.25rem 0;
+  color: var(--text-primary);
+}
+
+.a11y-panel-option {
+  margin-bottom: 1.25rem;
+}
+
+.a11y-panel-option:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.a11y-panel-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.a11y-panel-toggle input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: #667eea;
+}
+
+.a11y-panel-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0.25rem 0 0 1.75rem;
+}
+
+.a11y-panel-label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.a11y-panel-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.a11y-panel-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+}
+
+.a11y-panel-radio input {
+  accent-color: #667eea;
+}
+
+.a11y-panel-link {
+  color: #667eea;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.a11y-panel-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.a11y-panel-close {
+  display: block;
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.a11y-panel-close:hover {
+  background: var(--bg-secondary);
+}
+
+.a11y-panel-close:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}

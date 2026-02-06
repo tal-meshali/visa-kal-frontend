@@ -36,14 +36,6 @@ vi.mock('../contexts/AuthContext', () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => children,
 }))
 
-// Mock react-router-dom
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom')
-  return {
-    ...actual,
-    useNavigate: () => vi.fn(),
-    useParams: () => ({}),
-    useLocation: () => ({ pathname: '/', search: '', hash: '', state: null }),
-  }
-})
+// React Router is not mocked globally so that integration tests can use
+// MemoryRouter/BrowserRouter and get real useParams/useNavigate from context.
 
