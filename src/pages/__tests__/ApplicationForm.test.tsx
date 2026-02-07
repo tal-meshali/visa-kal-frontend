@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event";
 import React, { useState } from "react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { hasCookieRefused } from "../../constants/cookieConsent";
 import { AuthContext, type AuthContextType } from "../../contexts/AuthContext";
 import { LanguageProvider } from "../../contexts/LanguageProvider";
 import { apiService } from "../../services/apiService";
@@ -102,8 +101,6 @@ function renderFormPage() {
 describe("ApplicationForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    localStorage.clear();
-    vi.mocked(hasCookieRefused).mockReturnValue(false);
     authStoreToken = null;
   });
 

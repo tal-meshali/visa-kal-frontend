@@ -22,6 +22,7 @@ import {
 } from "react";
 import { auth } from "../config/firebase";
 import { useAuthStore } from "../stores/authStore";
+import { useCookieConsentStore } from "../stores/cookieConsentStore";
 
 export interface AuthContextType {
   user: User | null;
@@ -43,10 +44,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const { setToken } = useAuthStore();
+  const { reset } = useCookieConsentStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (!firebaseUser) {
+        if (!user) reset();
         setUser(null);
         setLoading(false);
         setToken(null);
@@ -65,7 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
 
     return unsubscribe;
-  }, [setToken]);
+  }, [reset, setToken, user]);
 
   const signIn = async () => {
     const provider = new GoogleAuthProvider();

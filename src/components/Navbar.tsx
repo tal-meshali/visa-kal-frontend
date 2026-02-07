@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { hasCookieAccepted } from "../constants/cookieConsent";
 import { useLanguage } from "../contexts/useLanguage";
 import { getCurrentUser } from "../services/authService";
+import { useCookieConsentStore } from "../stores/cookieConsentStore";
 import type { ContrastMode } from "../types/accessibility";
 import {
   SignedIn,
@@ -29,6 +29,7 @@ export const Navbar = ({
   onAccessibleClick = () => {},
 }: NavbarProps) => {
   const { t } = useLanguage();
+  const { hasConsent } = useCookieConsentStore();
 
   return (
     <nav className="navbar">
@@ -86,7 +87,7 @@ export const Navbar = ({
           <SignedIn>
             <UserButton />
           </SignedIn>
-          {hasCookieAccepted() && (
+          {hasConsent() && (
             <SignedOut>
               <SignInButton>
                 <button

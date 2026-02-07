@@ -5,7 +5,7 @@ import { useLanguage } from "../contexts/useLanguage";
 import { useThemeStore } from "../stores/themeStore";
 import "./PrivacyPolicy.css";
 
-const PrivacyPolicy = (): React.JSX.Element => {
+const PrivacyPolicy = () => {
   const { t } = useLanguage();
   const { theme, toggleTheme } = useThemeStore();
 

@@ -9,15 +9,13 @@ import {
   useUser,
 } from "../components/AuthComponents";
 import { BackButton } from "../components/BackButton";
-import { LanguageSwitch } from "../components/LanguageSwitch";
 import { BeneficiaryForm } from "../components/BeneficiaryForm";
 import { Button } from "../components/Button";
+import { LanguageSwitch } from "../components/LanguageSwitch";
 import LoadingScreen from "../components/LoadingScreen";
 import PassportDataModal from "../components/PassportDataModal";
-import { hasCookieRefused } from "../constants/cookieConsent";
 import { useLanguage } from "../contexts/useLanguage";
 import { useFormSchema } from "../hooks/useFormSchema";
-import { useAgentStore } from "../stores/agentStore";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { getKeyDownActivateHandler } from "../hooks/useKeyDownActivate";
 import {
@@ -25,6 +23,8 @@ import {
   getApplication,
 } from "../services/applicationService";
 import { initializeFormData } from "../services/formService";
+import { useAgentStore } from "../stores/agentStore";
+import { useCookieConsentStore } from "../stores/cookieConsentStore";
 import type {
   FormDataRecord,
   FormFieldValue,
@@ -34,8 +34,9 @@ import "./ApplicationForm.css";
 
 const ApplicationForm = () => {
   const { t } = useLanguage();
+  const { hasRefused } = useCookieConsentStore();
 
-  if (hasCookieRefused()) {
+  if (hasRefused()) {
     return (
       <div className="form-container">
         <div className="sign-in-prompt cookie-required-prompt">
@@ -143,7 +144,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
           const application = await getApplication(requestId);
           // Extract form data from beneficiaries
           const beneficiariesFormData = application.beneficiaries.map(
-            (beneficiary) => beneficiary.form_data
+            (beneficiary) => beneficiary.form_data,
           );
           if (beneficiariesFormData.length > 0) {
             setBeneficiaries(beneficiariesFormData);
@@ -168,7 +169,14 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
     };
 
     loadRequestData();
-  }, [requestId, user, isUserLoaded, setBeneficiaries, t.form.loadRequestError, t.form.networkError]);
+  }, [
+    requestId,
+    user,
+    isUserLoaded,
+    setBeneficiaries,
+    t.form.loadRequestError,
+    t.form.networkError,
+  ]);
 
   // Use ref to track latest beneficiaries state to prevent race conditions
   const beneficiariesRef = useRef(beneficiaries);
@@ -182,14 +190,14 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
     new Set(
       schema.fields
         .filter((field) => field.auto_copy)
-        .map((field) => field.name)
-    )
+        .map((field) => field.name),
+    ),
   );
   // Track active uploads to disable submit button
   const [activeUploads, setActiveUploads] = useState<Set<string>>(new Set());
   // Queue of beneficiary indices needing passport data modal (one modal at a time)
   const [pendingPassportModals, setPendingPassportModals] = useState<number[]>(
-    []
+    [],
   );
   const [alert, setAlert] = useState<{
     type: "success" | "error" | "info";
@@ -216,7 +224,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
   const handleFieldChange = (
     beneficiaryIndex: number,
     fieldName: string,
-    value: FormFieldValue
+    value: FormFieldValue,
   ): void => {
     updateAtBeneficiaries(beneficiaryIndex, {
       ...beneficiariesRef.current[beneficiaryIndex],
@@ -230,7 +238,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
   const handleCopyFromPrevious = (
     beneficiaryIndex: number,
     fieldName: string,
-    previousValue: FormFieldValue
+    previousValue: FormFieldValue,
   ): void => {
     if (beneficiaryIndex > 0) {
       handleFieldChange(beneficiaryIndex, fieldName, previousValue);
@@ -345,7 +353,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
 
   const handleUploadStateChange = (
     uploadId: string,
-    isUploading: boolean
+    isUploading: boolean,
   ): void => {
     setActiveUploads((prev) => {
       const newSet = new Set(prev);
@@ -362,7 +370,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
     (beneficiaryIndex: number) => {
       setPendingPassportModals((prev) => [...prev, beneficiaryIndex]);
     },
-    []
+    [],
   );
 
   const handlePassportModalClose = useCallback(() => {
@@ -406,7 +414,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
                     `https://ui-avatars.com/api/?name=${encodeURIComponent(
                       user.fullName ||
                         user.primaryEmailAddress?.emailAddress ||
-                        "User"
+                        "User",
                     )}`
                   }
                   alt={user.fullName || "User"}
@@ -438,7 +446,11 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
           <form onSubmit={handleSubmit} className="application-form">
             {/* Beneficiaries Tabs */}
             {beneficiaries.length > 1 && (
-              <div className="beneficiaries-tabs" role="tablist" aria-label={t.form.beneficiary}>
+              <div
+                className="beneficiaries-tabs"
+                role="tablist"
+                aria-label={t.form.beneficiary}
+              >
                 {beneficiaries.map((_, index) => (
                   <div
                     key={index}
@@ -450,7 +462,7 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
                     }`}
                     onClick={() => setActiveBeneficiaryIndex(index)}
                     onKeyDown={getKeyDownActivateHandler(() =>
-                      setActiveBeneficiaryIndex(index)
+                      setActiveBeneficiaryIndex(index),
                     )}
                   >
                     {t.form.beneficiary} {index + 1}
@@ -536,8 +548,8 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
                 {submitting
                   ? t.form.submitting
                   : activeUploads.size > 0
-                  ? t.form.uploadingFiles
-                  : schema?.submit_button_text[language]}
+                    ? t.form.uploadingFiles
+                    : schema?.submit_button_text[language]}
               </Button>
             </div>
           </form>

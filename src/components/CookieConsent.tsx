@@ -4,17 +4,17 @@ import { useLanguage } from "../contexts/useLanguage";
 import { useCookieConsentStore } from "../stores/cookieConsentStore";
 import "./CookieConsent.css";
 
-export const CookieConsent = (): React.JSX.Element | null => {
+export const CookieConsent = () => {
   const { t } = useLanguage();
   const { hasChoiceMade, setAccepted, setRefused } = useCookieConsentStore();
-  const [show, setShow] = useState(() => !hasChoiceMade);
+  const [show, setShow] = useState(() => !hasChoiceMade());
 
-  const handleAccept = (): void => {
+  const handleAccept = () => {
     setAccepted();
     setShow(false);
   };
 
-  const handleRefuse = (): void => {
+  const handleRefuse = () => {
     setRefused();
     setShow(false);
   };
@@ -22,14 +22,6 @@ export const CookieConsent = (): React.JSX.Element | null => {
   if (!show) {
     return null;
   }
-
-  const consent = t.cookieConsent as {
-    title: string;
-    message: string;
-    accept: string;
-    refuse: string;
-    privacyPolicyLink: string;
-  };
 
   return (
     <div
@@ -40,26 +32,26 @@ export const CookieConsent = (): React.JSX.Element | null => {
     >
       <div className="cookie-consent-modal">
         <h2 id="cookie-consent-title" className="cookie-consent-title">
-          {consent.title}
+          {t.cookieConsent.title}
         </h2>
-        <p className="cookie-consent-message">{consent.message}</p>
+        <p className="cookie-consent-message">{t.cookieConsent.message}</p>
         <div className="cookie-consent-actions">
           <button
             type="button"
             className="cookie-consent-accept"
             onClick={handleAccept}
           >
-            {consent.accept}
+            {t.cookieConsent.accept}
           </button>
           <button
             type="button"
             className="cookie-consent-refuse"
             onClick={handleRefuse}
           >
-            {consent.refuse}
+            {t.cookieConsent.refuse}
           </button>
           <Link to="/privacy-policy" className="cookie-consent-link">
-            {consent.privacyPolicyLink}
+            {t.cookieConsent.privacyPolicyLink}
           </Link>
         </div>
       </div>
