@@ -19,6 +19,8 @@ import NotFound from "./pages/NotFound.tsx";
 import Payment from "./pages/Payment.tsx";
 import PricingSelection from "./pages/PricingSelection.tsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
+import { syncAccessibilityToDomFromStore } from "./stores/accessibilityStore";
+import { syncThemeToDomFromStore } from "./stores/themeStore";
 
 // Create a client for react-query
 const queryClient = new QueryClient({
@@ -56,7 +58,6 @@ const getInitialLanguage = (): "en" | "he" => {
     return langParam;
   }
 
-  // Check browser language
   const browserLang = navigator.language.split("-")[0];
   if (browserLang === "he") {
     return "he";
@@ -65,79 +66,8 @@ const getInitialLanguage = (): "en" | "he" => {
   return "en";
 };
 
-const CONTRAST_STORAGE_KEY = "visa-vibe-contrast";
-
-const initializeTheme = (): void => {
-  const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-  const theme = savedTheme || "light";
-  document.documentElement.setAttribute("data-theme", theme);
-};
-
-const FONT_SIZE_STORAGE_KEY = "visa-vibe-font-size";
-const REDUCE_MOTION_STORAGE_KEY = "visa-vibe-reduce-motion";
-const MONOCHROME_STORAGE_KEY = "visa-vibe-monochrome";
-
-const initializeContrast = (): void => {
-  try {
-    const stored = localStorage.getItem(CONTRAST_STORAGE_KEY);
-    const html = document.documentElement;
-    if (stored === "high" || stored === "low") {
-      html.setAttribute("data-contrast", stored);
-    } else {
-      const legacy = localStorage.getItem("visa-vibe-accessible");
-      if (legacy === "true") html.setAttribute("data-contrast", "high");
-      else html.removeAttribute("data-contrast");
-    }
-  } catch {
-    document.documentElement.removeAttribute("data-contrast");
-  }
-};
-
-const initializeFontSize = (): void => {
-  try {
-    const stored = localStorage.getItem(FONT_SIZE_STORAGE_KEY);
-    const value = ["100", "110", "125", "150"].includes(stored ?? "")
-      ? stored!
-      : "100";
-    document.documentElement.setAttribute("data-font-size", value);
-  } catch {
-    document.documentElement.setAttribute("data-font-size", "100");
-  }
-};
-
-const initializeReduceMotion = (): void => {
-  try {
-    const stored = localStorage.getItem(REDUCE_MOTION_STORAGE_KEY);
-    const html = document.documentElement;
-    if (stored === "true") {
-      html.setAttribute("data-reduce-motion", "true");
-    } else {
-      html.removeAttribute("data-reduce-motion");
-    }
-  } catch {
-    document.documentElement.removeAttribute("data-reduce-motion");
-  }
-};
-
-const initializeMonochrome = (): void => {
-  try {
-    const stored = localStorage.getItem(MONOCHROME_STORAGE_KEY);
-    const html = document.documentElement;
-    if (stored === "true") {
-      html.setAttribute("data-monochrome", "true");
-    } else {
-      html.removeAttribute("data-monochrome");
-    }
-  } catch {
-    document.documentElement.removeAttribute("data-monochrome");
-  }
-};
-
-initializeTheme();
-initializeContrast();
-initializeFontSize();
-initializeReduceMotion();
-initializeMonochrome();
+syncThemeToDomFromStore();
+syncAccessibilityToDomFromStore();
 
 if (import.meta.env.DEV) {
   // Dev-time accessibility audits (WCAG/IS-5568) using axe-core

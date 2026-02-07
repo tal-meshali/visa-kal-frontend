@@ -11,10 +11,22 @@ import { apiService } from "../../services/apiService";
 import type { FormSchema } from "../../types/formTypes";
 import ApplicationForm from "../ApplicationForm";
 
+const TEST_TOKEN = "test-bearer-token-xyz";
+
+let authStoreToken: string | null = null;
+vi.mock("../../stores/authStore", () => ({
+  useAuthStore: {
+    getState: () => ({
+      token: authStoreToken,
+      setToken: (t: string | null) => {
+        authStoreToken = t;
+      },
+    }),
+  },
+}));
+
 vi.unmock("../../contexts/AuthContext");
 vi.mock("../../constants/cookieConsent");
-
-const TEST_TOKEN = "test-bearer-token-xyz";
 
 const mockFormSchema: FormSchema = {
   country_id: "morocco",
@@ -34,7 +46,6 @@ const mockUser = {
 const authValueNoUser = {
   user: null,
   loading: false,
-  getIdToken: vi.fn().mockResolvedValue(null),
   signIn: vi.fn(),
   signOut: vi.fn(),
   signInWithEmail: vi.fn(),
@@ -49,14 +60,16 @@ function TestAuthWrapper({ children }: { children: React.ReactNode }) {
   const value = {
     ...authValueNoUser,
     user,
-    getIdToken: vi.fn().mockResolvedValue(user ? TEST_TOKEN : null),
   };
   return (
     <AuthContext.Provider value={value as AuthContextType}>
       <button
         type="button"
         data-testid="simulate-login"
-        onClick={() => setUser(mockUser)}
+        onClick={() => {
+          setUser(mockUser);
+          authStoreToken = TEST_TOKEN;
+        }}
       >
         Simulate login
       </button>
@@ -91,6 +104,7 @@ describe("ApplicationForm", () => {
     vi.clearAllMocks();
     localStorage.clear();
     vi.mocked(hasCookieRefused).mockReturnValue(false);
+    authStoreToken = null;
   });
 
   it("shows login prompt when not signed in, then backend requests receive token after simulated login", async () => {

@@ -20,8 +20,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { create } from "zustand";
 import { auth } from "../config/firebase";
+import { useAuthStore } from "../stores/authStore";
 
 export interface AuthContextType {
   user: User | null;
@@ -38,16 +38,6 @@ export interface AuthContextType {
 export const AuthContext = createContext<AuthContextType>(
   {} as AuthContextType,
 );
-
-export const useAuthStore = create<{
-  token: string | null;
-  setToken: (newToken: string | null) => void;
-}>((set) => ({
-  token: null,
-  setToken: (newToken: string | null) => {
-    set({ token: newToken });
-  },
-}));
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);

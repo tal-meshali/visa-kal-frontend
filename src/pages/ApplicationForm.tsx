@@ -17,6 +17,7 @@ import PassportDataModal from "../components/PassportDataModal";
 import { hasCookieRefused } from "../constants/cookieConsent";
 import { useLanguage } from "../contexts/useLanguage";
 import { useFormSchema } from "../hooks/useFormSchema";
+import { useAgentStore } from "../stores/agentStore";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { getKeyDownActivateHandler } from "../hooks/useKeyDownActivate";
 import {
@@ -309,13 +310,10 @@ const ApplicationFormComponent = ({ schema }: { schema: FormSchema }) => {
             },
           });
         } else {
-          // Create new request
-          const agentId = localStorage.getItem("agent_id");
-
           const request = await createApplication({
             country_id: countryId,
             beneficiaries: validationData,
-            agent_id: agentId || undefined,
+            agent_id: useAgentStore.getState().getAgentId() || undefined,
           });
 
           // Navigate to pricing selection page with request ID

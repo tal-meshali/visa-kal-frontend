@@ -16,7 +16,7 @@ export interface User {
 
 /**
  * Gets the current authenticated user
- * Token is automatically provided by apiService from localStorage
+ * Token is automatically provided by apiService from the auth store
  */
 export const getCurrentUser = async (): Promise<User> => {
   return apiGet<User>('/api/auth/me')

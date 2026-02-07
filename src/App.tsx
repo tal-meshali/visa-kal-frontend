@@ -1,9 +1,9 @@
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import "./App.css";
 import { AboutSection } from "./components/AboutSection";
-import { AccessibilityOptionsPanel, type FontSizeValue } from "./components/AccessibilityOptionsPanel";
+import { AccessibilityOptionsPanel } from "./components/AccessibilityOptionsPanel";
 import { Alert } from "./components/Alert";
 import { CountriesSection } from "./components/CountriesSection";
 import { CTASection } from "./components/CTASection";
@@ -14,79 +14,37 @@ import { Navbar } from "./components/Navbar";
 import { RequestsMonitor } from "./components/RequestsMonitor";
 import { useLanguage } from "./contexts/useLanguage";
 import { fetchCountries } from "./services/countryService";
-import type { ContrastMode } from "./types/accessibility";
-
-type Theme = "light" | "dark";
-
-const CONTRAST_STORAGE_KEY = "visa-vibe-contrast";
-const FONT_SIZE_STORAGE_KEY = "visa-vibe-font-size";
-const REDUCE_MOTION_STORAGE_KEY = "visa-vibe-reduce-motion";
-const MONOCHROME_STORAGE_KEY = "visa-vibe-monochrome";
-
-const getInitialContrast = (): ContrastMode => {
-  try {
-    const stored = localStorage.getItem(CONTRAST_STORAGE_KEY);
-    if (stored === "high" || stored === "low") return stored;
-    const legacy = localStorage.getItem("visa-vibe-accessible");
-    if (legacy === "true") return "high";
-    return "standard";
-  } catch {
-    return "standard";
-  }
-};
-
-const getInitialFontSize = (): FontSizeValue => {
-  try {
-    const stored = localStorage.getItem(FONT_SIZE_STORAGE_KEY);
-    return ["100", "110", "125", "150"].includes(stored ?? "")
-      ? (stored as FontSizeValue)
-      : "100";
-  } catch {
-    return "100";
-  }
-};
-
-const getInitialReduceMotion = (): boolean => {
-  try {
-    return localStorage.getItem(REDUCE_MOTION_STORAGE_KEY) === "true";
-  } catch {
-    return false;
-  }
-};
-
-const getInitialMonochrome = (): boolean => {
-  try {
-    return localStorage.getItem(MONOCHROME_STORAGE_KEY) === "true";
-  } catch {
-    return false;
-  }
-};
+import { useAccessibilityStore } from "./stores/accessibilityStore";
+import { useAgentStore } from "./stores/agentStore";
+import { useThemeStore } from "./stores/themeStore";
 
 const App = () => {
   const { language, t } = useLanguage();
-  const [theme, setTheme] = useState<Theme>("light");
-  const [contrastMode, setContrastMode] = useState<ContrastMode>(getInitialContrast);
-  const [fontSize, setFontSize] = useState<FontSizeValue>(getInitialFontSize);
-  const [reduceMotion, setReduceMotion] = useState<boolean>(getInitialReduceMotion);
-  const [monochrome, setMonochrome] = useState<boolean>(getInitialMonochrome);
+  const { theme, toggleTheme } = useThemeStore();
+  const {
+    contrastMode,
+    fontSize,
+    reduceMotion,
+    monochrome,
+    setContrastMode,
+    setFontSize,
+    setReduceMotion,
+    setMonochrome,
+  } = useAccessibilityStore();
+  const { setAgentId } = useAgentStore();
   const [a11yPanelOpen, setA11yPanelOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // Fetch countries using React Query
-  const {
-    data: countriesData,
-    error: countriesError,
-  } = useQuery({
+  const { data: countriesData, error: countriesError } = useQuery({
     queryKey: ["countries"],
     queryFn: fetchCountries,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 
   const availableCountries = countriesData?.available || [];
   const upcomingCountries = countriesData?.coming_soon || [];
 
-  // Error message state
   const [errorAlert, setErrorAlert] = useState<{
     type: "error" | "success" | "info";
     message: string;
@@ -97,14 +55,12 @@ const App = () => {
     isOpen: false,
   });
 
-  // Show error alert when countries fetch fails
   useEffect(() => {
     if (countriesError) {
       const errorMessage =
         countriesError instanceof Error
           ? countriesError.message
           : "Failed to load countries. Please try again later.";
-      // Defer state update to avoid cascading renders
       setTimeout(() => {
         setErrorAlert({
           type: "error",
@@ -115,94 +71,15 @@ const App = () => {
     }
   }, [countriesError]);
 
-  const toggleTheme = (): void => {
-    const newTheme: Theme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-  };
-
-  const handleContrastChange = (value: ContrastMode): void => {
-    setContrastMode(value);
-    try {
-      localStorage.setItem(CONTRAST_STORAGE_KEY, value);
-    } catch {
-      // ignore
-    }
-  };
-
-  const handleFontSizeChange = (value: FontSizeValue): void => {
-    setFontSize(value);
-    try {
-      localStorage.setItem(FONT_SIZE_STORAGE_KEY, value);
-    } catch {
-      // ignore
-    }
-  };
-
-  const handleReduceMotionChange = (value: boolean): void => {
-    setReduceMotion(value);
-    try {
-      localStorage.setItem(REDUCE_MOTION_STORAGE_KEY, String(value));
-    } catch {
-      // ignore
-    }
-  };
-
-  const handleMonochromeChange = (value: boolean): void => {
-    setMonochrome(value);
-    try {
-      localStorage.setItem(MONOCHROME_STORAGE_KEY, String(value));
-    } catch {
-      // ignore
-    }
-  };
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
-  useEffect(() => {
-    const html = document.documentElement;
-    if (contrastMode === "standard") {
-      html.removeAttribute("data-contrast");
-    } else {
-      html.setAttribute("data-contrast", contrastMode);
-    }
-  }, [contrastMode]);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-font-size", fontSize);
-  }, [fontSize]);
-
-  useEffect(() => {
-    const html = document.documentElement;
-    if (reduceMotion) {
-      html.setAttribute("data-reduce-motion", "true");
-    } else {
-      html.removeAttribute("data-reduce-motion");
-    }
-  }, [reduceMotion]);
-
-  useEffect(() => {
-    const html = document.documentElement;
-    if (monochrome) {
-      html.setAttribute("data-monochrome", "true");
-    } else {
-      html.removeAttribute("data-monochrome");
-    }
-  }, [monochrome]);
-
-  // Handle agent identifier in URL
   useEffect(() => {
     const agentId = searchParams.get("agent");
     if (agentId) {
-      // Save agent_id to localStorage
-      localStorage.setItem("agent_id", agentId);
-      // Remove agent parameter from URL and redirect to clean home page
+      setAgentId(agentId);
       searchParams.delete("agent");
       setSearchParams(searchParams, { replace: true });
       navigate("/", { replace: true });
     }
-  }, [searchParams, setSearchParams, navigate]);
+  }, [searchParams, setSearchParams, navigate, setAgentId]);
 
   return (
     <div className={`app ${theme}`}>
@@ -213,7 +90,7 @@ const App = () => {
         type={errorAlert.type}
         message={errorAlert.message}
         isOpen={errorAlert.isOpen}
-        onClose={() => setErrorAlert({ ...errorAlert, isOpen: false })}
+        onClose={() => setErrorAlert((prev) => ({ ...prev, isOpen: false }))}
         duration={0}
       />
       <Navbar
@@ -226,13 +103,13 @@ const App = () => {
         isOpen={a11yPanelOpen}
         onClose={() => setA11yPanelOpen(false)}
         contrastMode={contrastMode}
-        onContrastChange={handleContrastChange}
+        onContrastChange={setContrastMode}
         fontSize={fontSize}
-        onFontSizeChange={handleFontSizeChange}
+        onFontSizeChange={setFontSize}
         reduceMotion={reduceMotion}
-        onReduceMotionChange={handleReduceMotionChange}
+        onReduceMotionChange={setReduceMotion}
         monochrome={monochrome}
-        onMonochromeChange={handleMonochromeChange}
+        onMonochromeChange={setMonochrome}
       />
       <Hero />
       <AboutSection />

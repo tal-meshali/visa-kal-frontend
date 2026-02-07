@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { getTokenFromStorage } from "../../utils/tokenManager";
 import {
   apiDelete,
   apiGet,
@@ -9,7 +8,12 @@ import {
   apiService,
 } from "../apiService";
 
-vi.mock("../../utils/tokenManager");
+vi.mock("../../stores/authStore", () => ({
+  useAuthStore: {
+    getState: () => ({ token: "mock_token_12345" }),
+  },
+}));
+
 vi.mock("axios", () => {
   const mockAxiosInstance = {
     get: vi.fn(),
@@ -37,7 +41,6 @@ vi.mock("axios", () => {
 describe("apiService", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(getTokenFromStorage).mockReturnValue("mock_token_12345");
   });
 
   describe("apiGet", () => {
@@ -52,7 +55,6 @@ describe("apiService", () => {
     });
 
     it("includes authorization header when token exists", async () => {
-      vi.mocked(getTokenFromStorage).mockReturnValue("test_token");
       const mockData = { id: 1 };
       vi.mocked(apiService.get).mockResolvedValue({ data: mockData });
 
@@ -73,7 +75,7 @@ describe("apiService", () => {
       expect(apiService.post).toHaveBeenCalledWith(
         "/api/test",
         postData,
-        undefined
+        undefined,
       );
       expect(result).toEqual(mockData);
     });
@@ -90,7 +92,7 @@ describe("apiService", () => {
       expect(apiService.put).toHaveBeenCalledWith(
         "/api/test",
         putData,
-        undefined
+        undefined,
       );
       expect(result).toEqual(mockData);
     });
@@ -123,9 +125,8 @@ describe("apiService", () => {
         expect.objectContaining({
           headers: expect.objectContaining({
             "Content-Type": "multipart/form-data",
-            Authorization: "Bearer mock_token_12345",
           }),
-        })
+        }),
       );
       expect(result).toEqual(mockData);
     });

@@ -31,9 +31,17 @@ vi.mock('../contexts/AuthContext', () => ({
     loading: false,
     signIn: vi.fn(),
     signOut: vi.fn(),
-    getIdToken: async () => 'mock_token_12345',
   }),
+  useAuthStore: {
+    getState: () => ({ token: 'mock_token_12345', setToken: vi.fn() }),
+  },
   AuthProvider: ({ children }: { children: React.ReactNode }) => children,
+}))
+
+vi.mock('../stores/authStore', () => ({
+  useAuthStore: {
+    getState: () => ({ token: 'mock_token_12345', setToken: vi.fn() }),
+  },
 }))
 
 // React Router is not mocked globally so that integration tests can use

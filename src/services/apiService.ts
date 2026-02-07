@@ -3,7 +3,7 @@ import axios, {
   type AxiosInstance,
   type AxiosRequestConfig,
 } from "axios";
-import { useAuthStore } from "../contexts/AuthContext";
+import { useAuthStore } from "../stores/authStore";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";

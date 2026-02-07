@@ -1,4 +1,5 @@
 import type { FormDataRecord, TranslatedText } from "../types/formTypes";
+import { useAgentStore } from "../stores/agentStore";
 import { createApplication, updateApplicationStatus } from "./applicationService";
 import { apiGet, apiPost } from "./apiService";
 
@@ -123,14 +124,14 @@ export const executePayment = async (
     if (requestId) {
       await updateApplicationStatus(requestId, "payment_received");
     } else {
-      const agentId = localStorage.getItem("agent_id");
+      const agentId = useAgentStore.getState().getAgentId();
       await createApplication({
         country_id: countryId,
         beneficiaries: finalFormData,
         agent_id: agentId || undefined,
       });
       if (agentId) {
-        localStorage.removeItem("agent_id");
+        useAgentStore.getState().clearAgentId();
       }
     }
     await new Promise((resolve) => setTimeout(resolve, 1000));
