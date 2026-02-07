@@ -35,9 +35,9 @@
 input[type="date"] {
   -webkit-appearance: none;
   appearance: none;
-
   box-sizing: border-box;
   width: 100%;
+  min-height: 1.2em;
 }
 
 [data-theme="light"] .form-input:not(:focus):not(.error),
