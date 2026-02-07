@@ -8,7 +8,7 @@ const PAYME_BASE_URL = import.meta.env.VITE_PAYME_BASE_URL || "";
 const PAYME_MERCHANT_ID = import.meta.env.VITE_PAYME_MERCHANT_ID || "";
 const PAYME_SECRET_KEY = import.meta.env.VITE_PAYME_SECRET_KEY || "";
 const PAYME_CHECKOUT_PATH =
-  import.meta.env.VITE_PAYME_CHECKOUT_PATH || "/pay-sale/";
+  import.meta.env.VITE_PAYME_CHECKOUT_PATH || "/generate-sale/";
 
 export interface PayMeCreatePaymentParams {
   amount: number;
@@ -49,10 +49,12 @@ export async function createPayMePayment(
     sale_price: amountSmallest,
     currency: params.currency,
     installments: 1,
-    reference: params.reference,
-    return_url: params.successUrl,
-    cancel_url: params.cancelUrl,
-    description: params.description ?? "Visa application payment",
+    transaction_id: params.reference,
+    sale_send_notification: true,
+    sale_callback_url: "https://www.payme.io",
+    sale_return_url: "https://www.payme.io",
+    product_name: params.description,
+    sale_payment_method: "multi",
   };
   if (params.buyerEmail) {
     body.buyer_email = params.buyerEmail;
@@ -77,15 +79,15 @@ export async function createPayMePayment(
   const data = (await response.json()) as
     | {
         sale_url: string;
-        status_code: 1;
+        status_code: 0;
       }
     | {
-        status_code: 0;
+        status_code: 1;
         status_error_details: string;
         status_error_code: number;
       };
 
-  if (data.status_code === 0) {
+  if (data.status_code === 1) {
     throw new Error(
       `Request failed with status ${data.status_error_code}! ${data.status_error_details}`,
     );
