@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export type CookieConsentStatus = "accepted" | "refused" | null;
 
@@ -12,12 +13,20 @@ interface CookieConsentState {
   hasRefused: () => boolean;
 }
 
-export const useCookieConsentStore = create<CookieConsentState>((set, get) => ({
-  status: null,
-  reset: () => set({ status: null }),
-  setAccepted: () => set({ status: "accepted" }),
-  setRefused: () => set({ status: "refused" }),
-  hasChoiceMade: () => get().status !== null,
-  hasConsent: () => get().status === "accepted",
-  hasRefused: () => get().status === "refused",
-}));
+export const useCookieConsentStore = create<CookieConsentState>()(
+  persist(
+    (set, get) => ({
+      status: null,
+      reset: () => set({ status: null }),
+      setAccepted: () => set({ status: "accepted" }),
+      setRefused: () => set({ status: "refused" }),
+      hasChoiceMade: () => get().status !== null,
+      hasConsent: () => get().status === "accepted",
+      hasRefused: () => get().status === "refused",
+    }),
+    {
+      name: "cookie-consent-store",
+      storage: createJSONStorage(() => localStorage),
+    },
+  ),
+);
