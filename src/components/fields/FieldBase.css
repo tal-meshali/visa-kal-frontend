@@ -32,8 +32,12 @@
   max-width: 100%;
 }
 
-input[type="date"].form-input::-webkit-calendar-picker-indicator {
-  cursor: pointer;
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+
+  box-sizing: border-box;
+  width: 100%;
 }
 
 [data-theme="light"] .form-input:not(:focus):not(.error),
