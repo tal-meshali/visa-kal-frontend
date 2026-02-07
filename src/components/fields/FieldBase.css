@@ -32,16 +32,8 @@
   max-width: 100%;
 }
 
-/* Date input specific styles */
-input[type="date"].form-input {
-  min-width: 0;
-  overflow: visible;
-}
-
 input[type="date"].form-input::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  padding: 0.25rem;
-  margin-left: 0.5rem;
 }
 
 [data-theme="light"] .form-input:not(:focus):not(.error),
