@@ -1,7 +1,7 @@
 import type { FormDataRecord, TranslatedText } from "../types/formTypes";
 import { useAgentStore } from "../stores/agentStore";
 import { createApplication, updateApplicationStatus } from "./applicationService";
-import { apiGet } from "./apiService";
+import { getUsdToIlsRate } from "./exchangeRateService";
 import {
   createPayMePayment as paymeCreatePayment,
   isPayMeAvailable,
@@ -12,10 +12,6 @@ export interface PaymentConfig {
 }
 
 export type PaymentCurrency = "usd" | "ils";
-
-export interface ExchangeRateResponse {
-  rate: number;
-}
 
 export interface ExecutePaymentParams {
   requestId: string | undefined;
@@ -42,10 +38,7 @@ export const getPaymentConfig = async (): Promise<PaymentConfig> => {
   });
 };
 
-export const getExchangeRate = async (): Promise<number> => {
-  const res = await apiGet<ExchangeRateResponse>("/api/payment/exchange-rate");
-  return res.rate;
-};
+export const getExchangeRate = getUsdToIlsRate;
 
 /**
  * Executes payment flow: PayMe redirect when configured, otherwise simulated completion.
