@@ -27,6 +27,7 @@ export const useCookieConsentStore = create<CookieConsentState>()(
     {
       name: "cookie-consent-store",
       storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ status: state.status }),
     },
   ),
 );
