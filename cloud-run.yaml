@@ -34,6 +34,21 @@ spec:
             secretKeyRef:
               name: VITE_FIREBASE_APP_ID
               key: latest
+        - name: VITE_PAYME_BASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: VITE_PAYME_BASE_URL
+              key: latest
+        - name: VITE_PAYME_MERCHANT_ID
+          valueFrom:
+            secretKeyRef:
+              name: VITE_PAYME_MERCHANT_ID
+              key: latest
+        - name: VITE_PAYME_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: VITE_PAYME_SECRET_KEY
+              key: latest
         - name: VITE_FIREBASE_AUTH_DOMAIN
           value: "strong-planet-483808-d1.firebaseapp.com"
         - name: VITE_FIREBASE_PROJECT_ID

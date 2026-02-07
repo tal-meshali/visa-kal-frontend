@@ -1,24 +1,14 @@
 import type { FormDataRecord, TranslatedText } from "../types/formTypes";
 import { useAgentStore } from "../stores/agentStore";
 import { createApplication, updateApplicationStatus } from "./applicationService";
-import { apiGet, apiPost } from "./apiService";
+import { apiGet } from "./apiService";
+import {
+  createPayMePayment as paymeCreatePayment,
+  isPayMeAvailable,
+} from "./paymeService";
 
 export interface PaymentConfig {
   payme_available: boolean;
-}
-
-export interface CreatePaymentRequest {
-  request_id: string;
-  amount_ils?: number;
-  amount_usd?: number;
-  success_url: string;
-  cancel_url: string;
-  description?: string;
-}
-
-export interface CreatePaymentResponse {
-  payment_url: string;
-  reference: string;
 }
 
 export type PaymentCurrency = "usd" | "ils";
@@ -47,18 +37,14 @@ export type ExecutePaymentResult =
   | { outcome: "not_configured" };
 
 export const getPaymentConfig = async (): Promise<PaymentConfig> => {
-  return apiGet<PaymentConfig>("/api/payment/config");
+  return Promise.resolve({
+    payme_available: isPayMeAvailable(),
+  });
 };
 
 export const getExchangeRate = async (): Promise<number> => {
   const res = await apiGet<ExchangeRateResponse>("/api/payment/exchange-rate");
   return res.rate;
-};
-
-export const createPayMePayment = async (
-  payload: CreatePaymentRequest
-): Promise<CreatePaymentResponse> => {
-  return apiPost<CreatePaymentResponse>("/api/payment/create", payload);
 };
 
 /**
@@ -97,19 +83,15 @@ export const executePayment = async (
       const basePath = `/payment/${countryId}`;
       const successUrl = `${origin}${basePath}?status=success&request_id=${requestId}`;
       const cancelUrl = `${origin}${basePath}?status=cancel&request_id=${requestId}`;
-      const payload = {
-        request_id: requestId,
-        success_url: successUrl,
-        cancel_url: cancelUrl,
+      const { paymentUrl } = await paymeCreatePayment({
+        amount: currency === "ils" ? amountIls : amountUsd,
+        currency: currency === "ils" ? "ILS" : "USD",
+        reference: requestId,
+        successUrl,
+        cancelUrl,
         description: `Visa application – ${finalCountryName[language]}`,
-      };
-      const { payment_url } = await createPayMePayment({
-        ...payload,
-        ...(currency === "ils"
-          ? { amount_ils: amountIls }
-          : { amount_usd: amountUsd }),
       });
-      return { outcome: "redirect", paymentUrl: payment_url };
+      return { outcome: "redirect", paymentUrl };
     } catch {
       return { outcome: "error" };
     }

@@ -132,6 +132,9 @@ jobs:
         VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
         VITE_FIREBASE_MEASUREMENT_ID: ${{ env.FIREBASE_MEASUREMENT_ID }}
         VITE_USE_FIREBASE_EMULATOR: "false"
+        VITE_PAYME_BASE_URL: ${{ secrets.VITE_PAYME_BASE_URL || '' }}
+        VITE_PAYME_MERCHANT_ID: ${{ secrets.VITE_PAYME_MERCHANT_ID || '' }}
+        VITE_PAYME_SECRET_KEY: ${{ secrets.VITE_PAYME_SECRET_KEY || '' }}
       run: |
         docker build \
           --build-arg VITE_API_BASE_URL="$VITE_API_BASE_URL" \
@@ -143,6 +146,9 @@ jobs:
           --build-arg VITE_FIREBASE_APP_ID="$VITE_FIREBASE_APP_ID" \
           --build-arg VITE_FIREBASE_MEASUREMENT_ID="$VITE_FIREBASE_MEASUREMENT_ID" \
           --build-arg VITE_USE_FIREBASE_EMULATOR="false" \
+          --build-arg VITE_PAYME_BASE_URL="$VITE_PAYME_BASE_URL" \
+          --build-arg VITE_PAYME_MERCHANT_ID="$VITE_PAYME_MERCHANT_ID" \
+          --build-arg VITE_PAYME_SECRET_KEY="$VITE_PAYME_SECRET_KEY" \
           -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }} .
         docker tag gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }} gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:latest
 
