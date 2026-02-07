@@ -1,12 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "../contexts/useLanguage";
-import { useTokenReady } from "../contexts/TokenReadyContext";
 import { fetchFormSchema } from "../services/formService";
 import type { FormSchema } from "../types/formTypes";
 
 export const useFormSchema = (countryId: string | undefined) => {
   const { language } = useLanguage();
-  const tokenReady = useTokenReady();
 
   const {
     data: schema,
@@ -20,7 +18,7 @@ export const useFormSchema = (countryId: string | undefined) => {
       }
       return fetchFormSchema(countryId, language);
     },
-    enabled: !!countryId && tokenReady,
+    enabled: !!countryId,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 

@@ -2,25 +2,23 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import App from "./App.tsx";
-import { EmailVerificationPrompt } from "./components/EmailVerificationPrompt.tsx";
-import { FirebaseTokenSync } from "./components/FirebaseTokenSync.tsx";
-import { AuthProvider } from "./contexts/AuthContext";
-import { TokenReadyProvider } from "./contexts/TokenReadyContext";
-import { LanguageProvider } from "./contexts/LanguageProvider";
-import "./index.css";
 import "./accessible-mode.css";
-import ApplicationForm from "./pages/ApplicationForm.tsx";
-import ApplicationsHistory from "./pages/ApplicationsHistory.tsx";
-import Payment from "./pages/Payment.tsx";
-import PricingSelection from "./pages/PricingSelection.tsx";
-import AdminPricing from "./pages/AdminPricing.tsx";
-import NotFound from "./pages/NotFound.tsx";
-import CountryPage from "./pages/CountryPage.tsx";
-import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
+import App from "./App.tsx";
 import { CookieConsent } from "./components/CookieConsent.tsx";
 import { EmailVerification } from "./components/EmailVerification.tsx";
+import { EmailVerificationPrompt } from "./components/EmailVerificationPrompt.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
+import { AuthProvider } from "./contexts/AuthContext";
+import { LanguageProvider } from "./contexts/LanguageProvider";
+import "./index.css";
+import AdminPricing from "./pages/AdminPricing.tsx";
+import ApplicationForm from "./pages/ApplicationForm.tsx";
+import ApplicationsHistory from "./pages/ApplicationsHistory.tsx";
+import CountryPage from "./pages/CountryPage.tsx";
+import NotFound from "./pages/NotFound.tsx";
+import Payment from "./pages/Payment.tsx";
+import PricingSelection from "./pages/PricingSelection.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
 
 // Create a client for react-query
 const queryClient = new QueryClient({
@@ -41,12 +39,12 @@ const requiredEnvVars = [
 ];
 
 const missingVars = requiredEnvVars.filter(
-  (varName) => !import.meta.env[varName]
+  (varName) => !import.meta.env[varName],
 );
 
 if (missingVars.length > 0) {
   throw new Error(
-    `Missing required Firebase environment variables: ${missingVars.join(", ")}`
+    `Missing required Firebase environment variables: ${missingVars.join(", ")}`,
   );
 }
 
@@ -153,9 +151,7 @@ if (import.meta.env.DEV) {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider>
-      <TokenReadyProvider>
-        <QueryClientProvider client={queryClient}>
-          <FirebaseTokenSync />
+      <QueryClientProvider client={queryClient}>
         <LanguageProvider defaultLanguage={getInitialLanguage()}>
           <BrowserRouter>
             <CookieConsent />
@@ -164,7 +160,10 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/" element={<App />} />
               <Route path="/country/:countryId" element={<CountryPage />} />
               <Route path="/apply/:countryId" element={<ApplicationForm />} />
-              <Route path="/pricing/:countryId" element={<PricingSelection />} />
+              <Route
+                path="/pricing/:countryId"
+                element={<PricingSelection />}
+              />
               <Route path="/payment/:countryId" element={<Payment />} />
               <Route path="/applications" element={<ApplicationsHistory />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -182,7 +181,6 @@ createRoot(document.getElementById("root")!).render(
           </BrowserRouter>
         </LanguageProvider>
       </QueryClientProvider>
-      </TokenReadyProvider>
     </AuthProvider>
-  </StrictMode>
+  </StrictMode>,
 );

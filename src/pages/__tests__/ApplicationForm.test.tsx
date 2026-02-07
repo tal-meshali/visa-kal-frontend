@@ -1,17 +1,15 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import userEvent from "@testing-library/user-event";
-import { render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import React, { useState } from "react";
-import { LanguageProvider } from "../../contexts/LanguageProvider";
-import { TokenReadyProvider } from "../../contexts/TokenReadyContext";
-import { FirebaseTokenSync } from "../../components/FirebaseTokenSync";
-import ApplicationForm from "../ApplicationForm";
-import { apiService } from "../../services/apiService";
-import { AuthContext, type AuthContextType } from "../../contexts/AuthContext";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { hasCookieRefused } from "../../constants/cookieConsent";
+import { AuthContext, type AuthContextType } from "../../contexts/AuthContext";
+import { LanguageProvider } from "../../contexts/LanguageProvider";
+import { apiService } from "../../services/apiService";
 import type { FormSchema } from "../../types/formTypes";
+import ApplicationForm from "../ApplicationForm";
 
 vi.unmock("../../contexts/AuthContext");
 vi.mock("../../constants/cookieConsent");
@@ -75,19 +73,16 @@ function renderFormPage() {
   });
   return render(
     <TestAuthWrapper>
-      <TokenReadyProvider>
-        <QueryClientProvider client={queryClient}>
-          <FirebaseTokenSync />
-          <LanguageProvider defaultLanguage="en">
-            <MemoryRouter initialEntries={["/apply/morocco"]}>
-              <Routes>
-                <Route path="/apply/:countryId" element={<ApplicationForm />} />
-              </Routes>
-            </MemoryRouter>
-          </LanguageProvider>
-        </QueryClientProvider>
-      </TokenReadyProvider>
-    </TestAuthWrapper>
+      <QueryClientProvider client={queryClient}>
+        <LanguageProvider defaultLanguage="en">
+          <MemoryRouter initialEntries={["/apply/morocco"]}>
+            <Routes>
+              <Route path="/apply/:countryId" element={<ApplicationForm />} />
+            </Routes>
+          </MemoryRouter>
+        </LanguageProvider>
+      </QueryClientProvider>
+    </TestAuthWrapper>,
   );
 }
 
@@ -101,7 +96,9 @@ describe("ApplicationForm", () => {
   it("shows login prompt when not signed in, then backend requests receive token after simulated login", async () => {
     let capturedConfig: { headers?: { Authorization?: string } } = {};
     apiService.defaults.adapter = (config) => {
-      capturedConfig = { headers: config.headers } as { headers?: { Authorization?: string } };
+      capturedConfig = { headers: config.headers } as {
+        headers?: { Authorization?: string };
+      };
       return Promise.resolve({
         data: config.url?.includes("/api/form-schema/") ? mockFormSchema : {},
         status: 200,
@@ -114,10 +111,10 @@ describe("ApplicationForm", () => {
     renderFormPage();
 
     expect(
-      screen.getByRole("heading", { name: /sign in required/i })
+      screen.getByRole("heading", { name: /sign in required/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/please sign in to access the application form/i)
+      screen.getByText(/please sign in to access the application form/i),
     ).toBeInTheDocument();
 
     const simulateLoginBtn = screen.getByTestId("simulate-login");
@@ -126,10 +123,10 @@ describe("ApplicationForm", () => {
     await waitFor(
       () => {
         expect(capturedConfig.headers?.Authorization).toBe(
-          `Bearer ${TEST_TOKEN}`
+          `Bearer ${TEST_TOKEN}`,
         );
       },
-      { timeout: 3000 }
+      { timeout: 3000 },
     );
   });
 });

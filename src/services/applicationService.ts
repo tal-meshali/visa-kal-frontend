@@ -1,60 +1,41 @@
-import { apiGet, apiPost, apiPatch } from "./apiService";
-import type { Application } from "./requestService";
 import type { FormDataRecord } from "../types/formTypes";
+import { apiGet, apiPatch, apiPost } from "./apiService";
+import type { Application } from "./requestService";
 
 export interface CreateApplicationRequest {
   country_id: string;
   beneficiaries: FormDataRecord[];
   agent_id?: string;
 }
-/**
- * Creates a new application
- * Token is automatically provided by apiService from localStorage
- */
+
 export const createApplication = async (
-  application: CreateApplicationRequest
+  application: CreateApplicationRequest,
 ): Promise<Application> => {
   return apiPost<Application>("/api/applications", application);
 };
 
-/**
- * Gets all applications for the current user
- * Token is automatically provided by apiService from localStorage
- */
 export const getUserApplications = async (): Promise<Application[]> => {
   return apiGet<Application[]>("/api/applications");
 };
 
-/**
- * Gets a specific application by ID
- * Token is automatically provided by apiService from localStorage
- */
 export const getApplication = async (
-  applicationId: string
+  applicationId: string,
 ): Promise<Application> => {
   return apiGet<Application>(`/api/applications/${applicationId}`);
 };
 
-/**
- * Updates the status of an application
- * Token is automatically provided by apiService from localStorage
- */
 export const updateApplicationStatus = async (
   applicationId: string,
-  newStatus: string
+  newStatus: string,
 ): Promise<Application> => {
   return apiPatch<Application>(`/api/applications/${applicationId}/status`, {
     status: newStatus,
   });
 };
 
-/**
- * Updates the pricing plan for an application
- * Token is automatically provided by apiService from localStorage
- */
 export const updateApplicationPricing = async (
   applicationId: string,
-  pricingId: string
+  pricingId: string,
 ): Promise<Application> => {
   return apiPatch<Application>(`/api/applications/${applicationId}/pricing`, {
     pricing_id: pricingId,

@@ -20,6 +20,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { create } from "zustand";
 import { auth } from "../config/firebase";
 
 export interface AuthContextType {
@@ -29,29 +30,41 @@ export interface AuthContextType {
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
-  getIdToken: () => Promise<string | null>;
   sendEmailVerification: () => Promise<void>;
   verifyEmail: (actionCode: string) => Promise<void>;
   refreshUser: () => Promise<void>;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
+export const AuthContext = createContext<AuthContextType>(
+  {} as AuthContextType,
 );
+
+export const useAuthStore = create<{
+  token: string | null;
+  setToken: (newToken: string | null) => void;
+}>((set) => ({
+  token: null,
+  setToken: (newToken: string | null) => {
+    set({ token: newToken });
+  },
+}));
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const { setToken } = useAuthStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (!firebaseUser) {
         setUser(null);
         setLoading(false);
+        setToken(null);
         return;
       }
       try {
-        await getIdToken(firebaseUser, false);
+        const newToken = await getIdToken(firebaseUser, false);
+        setToken(newToken);
         setUser(firebaseUser);
       } catch {
         await firebaseSignOut(auth);
@@ -62,7 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
 
     return unsubscribe;
-  }, []);
+  }, [setToken]);
 
   const signIn = async () => {
     const provider = new GoogleAuthProvider();
@@ -84,14 +97,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const signInWithEmailAuth = async (email: string, password: string): Promise<void> => {
+  const signInWithEmailAuth = async (
+    email: string,
+    password: string,
+  ): Promise<void> => {
     await signInWithEmailAndPassword(auth, email, password);
     // Email verification is sent on sign-up, not sign-in
   };
 
-  const signUpWithEmailAuth = async (email: string, password: string): Promise<void> => {
+  const signUpWithEmailAuth = async (
+    email: string,
+    password: string,
+  ): Promise<void> => {
     const result = await createUserWithEmailAndPassword(auth, email, password);
-    
+
     // Send email verification for new email/password users
     if (result.user) {
       try {
@@ -110,16 +129,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await firebaseSignOut(auth);
   };
 
-  const getToken = async (): Promise<string | null> => {
-    if (!user) return null;
-    try {
-      return await getIdToken(user, true);
-    } catch (error) {
-      console.error("Failed to get ID token:", error);
-      return null;
-    }
-  };
-
   const sendVerificationEmail = async (): Promise<void> => {
     if (!user) {
       throw new Error("No user is signed in");
@@ -131,7 +140,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const actionCodeSettings: ActionCodeSettings = {
       url: `${window.location.origin}/verify-email?email=${encodeURIComponent(
-        user.email || ""
+        user.email || "",
       )}`,
       handleCodeInApp: true,
     };
@@ -168,7 +177,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         signInWithEmail: signInWithEmailAuth,
         signUpWithEmail: signUpWithEmailAuth,
         signOut,
-        getIdToken: getToken,
         sendEmailVerification: sendVerificationEmail,
         verifyEmail: verifyEmailWithCode,
         refreshUser: refreshUserData,
@@ -179,10 +187,4 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};
+export const useAuth = () => useContext<AuthContextType>(AuthContext);

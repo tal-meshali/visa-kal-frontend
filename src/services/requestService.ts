@@ -25,10 +25,6 @@ export interface Application {
   beneficiaries: Beneficiary[];
 }
 
-/**
- * Gets user requests with beneficiaries (now uses /api/applications)
- * Token is automatically provided by apiService from localStorage
- */
 export const getUserRequestsWithBeneficiaries = async (): Promise<
   Application[]
 > => {

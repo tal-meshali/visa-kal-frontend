@@ -19,11 +19,10 @@ const getLanguageParam = (language: Language): string => {
 
 /**
  * Fetches form schema for a country
- * Token is automatically provided by apiService from localStorage
  */
 export const fetchFormSchema = async (
   countryId: string | undefined,
-  language: Language = "en"
+  language: Language = "en",
 ): Promise<FormSchema> => {
   if (!countryId) {
     throw new Error("Country ID is required");
@@ -31,18 +30,17 @@ export const fetchFormSchema = async (
 
   const langParam = getLanguageParam(language);
   return apiGet<FormSchema>(
-    `/api/form-schema/${countryId}?language=${langParam}`
+    `/api/form-schema/${countryId}?language=${langParam}`,
   );
 };
 
 /**
  * Validates beneficiaries list
- * Token is automatically provided by apiService from localStorage
  */
 export const validateFormData = async (
   countryId: string | undefined,
   beneficiaries: FormDataRecord[],
-  language: Language
+  language: Language,
 ): Promise<ValidationResult> => {
   if (!countryId) {
     throw new Error("Country ID is required");
@@ -50,7 +48,7 @@ export const validateFormData = async (
 
   return apiPost<ValidationResult>(
     `/api/validate/${countryId}?language=${language}`,
-    beneficiaries.map((beneficiary) => _.omit(beneficiary, "passport_data"))
+    beneficiaries.map((beneficiary) => _.omit(beneficiary, "passport_data")),
   );
 };
 
@@ -59,7 +57,7 @@ export const validateFormData = async (
  * Uses default_value from field if available, otherwise uses empty string
  */
 export const initializeFormData = (
-  fields: TypedFormField[]
+  fields: TypedFormField[],
 ): FormDataRecord => {
   return _.reduce(
     fields,
@@ -76,6 +74,6 @@ export const initializeFormData = (
       }
       return acc;
     },
-    {} as FormDataRecord
+    {} as FormDataRecord,
   );
 };

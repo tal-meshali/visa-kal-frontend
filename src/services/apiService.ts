@@ -3,22 +3,14 @@ import axios, {
   type AxiosInstance,
   type AxiosRequestConfig,
 } from "axios";
-import { getTokenFromStorage } from "../utils/tokenManager";
+import { useAuthStore } from "../contexts/AuthContext";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 /**
- * Gets the Firebase token from localStorage
- * Token is automatically synced by useFirebaseTokenSync hook
- */
-const getStoredToken = (): string | null => {
-  return getTokenFromStorage();
-};
-
-/**
- * Creates an axios instance with automatic token injection from localStorage
- * The token is synced from Firebase via useFirebaseTokenSync hook
+ * Creates an axios instance with automatic token injection.
+ * Token is resolved at request time via getTokenForRequest (supports already-logged-in users).
  */
 const createApiInstance = (): AxiosInstance => {
   const instance = axios.create({
@@ -29,10 +21,9 @@ const createApiInstance = (): AxiosInstance => {
     timeout: 30000,
   });
 
-  // Request interceptor to add auth token from localStorage
   instance.interceptors.request.use(
-    (config) => {
-      const token = getStoredToken();
+    async (config) => {
+      const token = useAuthStore.getState().token;
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -40,7 +31,7 @@ const createApiInstance = (): AxiosInstance => {
     },
     (error) => {
       return Promise.reject(error);
-    }
+    },
   );
 
   // Response interceptor for error handling
@@ -53,11 +44,6 @@ const createApiInstance = (): AxiosInstance => {
           message?: string;
         };
 
-        // Handle 401 Unauthorized - token might be invalid
-        if (error.response.status === 401) {
-          localStorage.removeItem("firebase_token");
-        }
-
         const errorMessage =
           data?.detail || data?.message || error.message || "An error occurred";
         return Promise.reject(new Error(errorMessage));
@@ -66,13 +52,13 @@ const createApiInstance = (): AxiosInstance => {
       if (error.request) {
         return Promise.reject(
           new Error(
-            `Cannot connect to backend at ${API_BASE_URL}. Is the server running?`
-          )
+            `Cannot connect to backend at ${API_BASE_URL}. Is the server running?`,
+          ),
         );
       }
 
       return Promise.reject(error);
-    }
+    },
   );
 
   return instance;
@@ -85,7 +71,7 @@ export const apiService = createApiInstance();
  */
 export const apiGet = async <T = unknown>(
   url: string,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<T> => {
   const response = await apiService.get<T>(url, config);
   return response.data;
@@ -97,7 +83,7 @@ export const apiGet = async <T = unknown>(
 export const apiPost = async <T = unknown>(
   url: string,
   data?: unknown,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<T> => {
   const response = await apiService.post<T>(url, data, config);
   return response.data;
@@ -109,7 +95,7 @@ export const apiPost = async <T = unknown>(
 export const apiPut = async <T = unknown>(
   url: string,
   data?: unknown,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<T> => {
   const response = await apiService.put<T>(url, data, config);
   return response.data;
@@ -121,7 +107,7 @@ export const apiPut = async <T = unknown>(
 export const apiPatch = async <T = unknown>(
   url: string,
   data?: unknown,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<T> => {
   const response = await apiService.patch<T>(url, data, config);
   return response.data;
@@ -132,7 +118,7 @@ export const apiPatch = async <T = unknown>(
  */
 export const apiDelete = async <T = unknown>(
   url: string,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<T> => {
   const response = await apiService.delete<T>(url, config);
   return response.data;
@@ -145,15 +131,13 @@ export const apiDelete = async <T = unknown>(
 export const apiPostFormData = async <T = unknown>(
   url: string,
   formData: FormData,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<T> => {
-  const token = getStoredToken();
   const response = await apiService.post<T>(url, formData, {
     ...config,
     headers: {
       ...config?.headers,
       "Content-Type": "multipart/form-data",
-      ...(token && { Authorization: `Bearer ${token}` }),
     },
   });
   return response.data;
