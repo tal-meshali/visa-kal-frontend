@@ -1,22 +1,32 @@
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useCookieConsentStore } from "../../stores/cookieConsentStore";
 import { render, screen } from "../../test/utils";
 import { CookieConsent } from "../CookieConsent";
 
 const mockSetAccepted = vi.fn();
 const mockSetRefused = vi.fn();
 
-vi.mock("../../hooks/useCookieConsent");
+const mockUseCookieConsentStore = vi.fn();
+
+vi.mock("../../stores/cookieConsentStore", () => ({
+  useCookieConsentStore: (selector?: (state: unknown) => unknown) => {
+    const state = mockUseCookieConsentStore();
+    if (typeof selector === "function") {
+      return selector(state);
+    }
+    return state;
+  },
+  COOKIE_CONSENT_KEY: "visa-kal-cookie-consent",
+}));
 
 describe("CookieConsent", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useCookieConsentStore).mockReturnValue({
+    mockUseCookieConsentStore.mockReturnValue({
       status: null,
-      hasChoiceMade: false,
-      hasConsent: false,
-      hasRefused: false,
+      hasChoiceMade: () => false,
+      hasConsent: () => false,
+      hasRefused: () => false,
       setAccepted: mockSetAccepted,
       setRefused: mockSetRefused,
     });
@@ -33,11 +43,11 @@ describe("CookieConsent", () => {
   });
 
   it("does not render when user has already made cookie choice", () => {
-    vi.mocked(useCookieConsentStore).mockReturnValue({
+    mockUseCookieConsentStore.mockReturnValue({
       status: "accepted",
-      hasChoiceMade: true,
-      hasConsent: true,
-      hasRefused: false,
+      hasChoiceMade: () => true,
+      hasConsent: () => true,
+      hasRefused: () => false,
       setAccepted: mockSetAccepted,
       setRefused: mockSetRefused,
     });
