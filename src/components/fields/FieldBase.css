@@ -37,7 +37,7 @@ input[type="date"] {
   appearance: none;
   box-sizing: border-box;
   width: 100%;
-  min-height: 1.2em;
+  min-height: 3em;
 }
 
 [data-theme="light"] .form-input:not(:focus):not(.error),

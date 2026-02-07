@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export type Theme = "light" | "dark";
 
@@ -12,17 +13,26 @@ interface ThemeState {
   toggleTheme: () => void;
 }
 
-export const useThemeStore = create<ThemeState>((set, get) => ({
-  theme: "light",
-  setTheme: (theme: Theme) => {
-    syncThemeToDom(theme);
-    set({ theme });
-  },
-  toggleTheme: () => {
-    const next: Theme = get().theme === "light" ? "dark" : "light";
-    get().setTheme(next);
-  },
-}));
+export const useThemeStore = create<ThemeState>()(
+  persist(
+    (set, get) => ({
+      theme: "light",
+      setTheme: (theme: Theme) => {
+        syncThemeToDom(theme);
+        set({ theme });
+      },
+      toggleTheme: () => {
+        const next: Theme = get().theme === "light" ? "dark" : "light";
+        get().setTheme(next);
+      },
+    }),
+    {
+      name: "theme-store",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ theme: state.theme }),
+    },
+  ),
+);
 
 export const syncThemeToDomFromStore = (): void => {
   syncThemeToDom(useThemeStore.getState().theme);
