@@ -1,3 +1,4 @@
+# Build using frontend/docker-build.sh (BuildKit + secrets for Firebase keys).
 FROM node:22-alpine AS builder
 
 WORKDIR /app
