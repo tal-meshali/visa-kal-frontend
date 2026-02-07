@@ -7,7 +7,9 @@
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-color);
   padding: 1rem 0;
-  transition: background 0.3s ease, border-color 0.3s ease;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
 
 [data-theme="dark"] .navbar {
@@ -49,17 +51,33 @@
   color: #667eea;
 }
 
+.nav-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 8px;
+  font-size: 1rem;
+  line-height: 1;
+}
+
 .accessible-toggle {
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1rem;
-  line-height: 1;
+}
+
+.accessible-toggle .accessible-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .accessible-toggle-on {
@@ -85,12 +103,9 @@
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.875rem;
 }
 
 .theme-toggle:hover {
@@ -106,12 +121,47 @@
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .nav-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.nav-sign-in-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.nav-sign-in-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.nav-sign-in-icon {
+  display: none;
+  line-height: 0;
 }
 
 .logo-link {
@@ -167,21 +217,22 @@
   .nav-link {
     display: none;
   }
+}
 
-  .accessible-toggle {
-    padding: 0.4rem 0.6rem;
-    font-size: 0.9rem;
-  }
-
-  .theme-toggle {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.75rem;
+@media (min-width: 969px) {
+  .nav-sign-in-btn {
+    min-width: auto;
+    width: auto;
+    padding: 0.6rem 1.5rem;
   }
 }
 
-@media (max-width: 640px) {
-  .nav-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
+@media (max-width: 968px) {
+  .nav-sign-in-text {
+    display: none;
+  }
+
+  .nav-sign-in-icon {
+    display: block;
   }
 }

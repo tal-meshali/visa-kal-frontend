@@ -585,10 +585,6 @@
     justify-content: center;
   }
 
-  .nav-button {
-    display: none;
-  }
-
   .footer-content {
     grid-template-columns: 1fr;
     gap: 2rem;

@@ -153,7 +153,7 @@ export const AccessibilityOptionsPanel = ({
             <span>{t.a11y.reduceMotion}</span>
           </label>
           <p id="a11y-reduce-motion-desc" className="a11y-panel-desc">
-            Reduces animations and transitions
+            {t.a11y.reduceMotionDesc}
           </p>
         </div>
 

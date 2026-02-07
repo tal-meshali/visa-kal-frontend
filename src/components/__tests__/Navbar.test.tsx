@@ -9,7 +9,6 @@ vi.mock("../../services/authService");
 describe("Navbar", () => {
   const defaultProps = {
     theme: "light" as const,
-    accessible: false,
     onThemeToggle: vi.fn(),
     onAccessibleClick: vi.fn(),
   };
@@ -33,9 +32,9 @@ describe("Navbar", () => {
 
   it("renders nav links for home, countries, about", () => {
     render(<Navbar {...defaultProps} />);
-    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("href", "#home");
-    expect(screen.getByRole("link", { name: "Countries" })).toHaveAttribute("href", "#countries");
-    expect(screen.getByRole("link", { name: "About" })).toHaveAttribute("href", "#about");
+    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/#home");
+    expect(screen.getByRole("link", { name: "Countries" })).toHaveAttribute("href", "/#countries");
+    expect(screen.getByRole("link", { name: "About" })).toHaveAttribute("href", "/#about");
   });
 
   it("calls onThemeToggle when theme button is clicked", async () => {
@@ -49,8 +48,10 @@ describe("Navbar", () => {
 
   it("renders language switch with English and Hebrew options", () => {
     render(<Navbar {...defaultProps} />);
-    expect(screen.getByRole("button", { name: /english/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /עברית/i })).toBeInTheDocument();
+    const englishButtons = screen.getAllByRole("button", { name: /english/i });
+    const hebrewButtons = screen.getAllByRole("button", { name: /עברית/i });
+    expect(englishButtons.length).toBeGreaterThanOrEqual(1);
+    expect(hebrewButtons.length).toBeGreaterThanOrEqual(1);
   });
 
   it("calls onAccessibleClick when accessible mode button is clicked", async () => {
@@ -65,7 +66,9 @@ describe("Navbar", () => {
   });
 
   it("applies accessible-toggle-on class when contrastMode is high", () => {
-    const { container } = render(<Navbar {...defaultProps} contrastMode="high" />);
+    const { container } = render(
+      <Navbar {...defaultProps} contrastMode="high" />
+    );
     const btn = container.querySelector(".accessible-toggle.accessible-toggle-on");
     expect(btn).toBeInTheDocument();
   });

@@ -1,18 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { hasCookieRefused } from "../constants/cookieConsent";
+import { hasCookieAccepted } from "../constants/cookieConsent";
 import { useLanguage } from "../contexts/useLanguage";
 import { getCurrentUser } from "../services/authService";
+import type { ContrastMode } from "../types/accessibility";
 import {
   SignedIn,
   SignedOut,
   SignInButton,
   UserButton,
 } from "./AuthComponents";
-import type { ContrastMode } from "../types/accessibility";
 import { LanguageSwitch } from "./LanguageSwitch";
 import "./Navbar.css";
+import { SignInIcon } from "./SignInIcon";
 
 interface NavbarProps {
   theme: "light" | "dark";
@@ -38,13 +39,13 @@ export const Navbar = ({
           </Link>
         </div>
         <div className="nav-links">
-          <a href="#home" className="nav-link">
+          <a href="/#home" className="nav-link">
             {t.nav.home}
           </a>
-          <a href="#countries" className="nav-link">
+          <a href="/#countries" className="nav-link">
             {t.nav.countries}
           </a>
-          <a href="#about" className="nav-link">
+          <a href="/#about" className="nav-link">
             {t.nav.about}
           </a>
           <SignedIn>
@@ -55,7 +56,7 @@ export const Navbar = ({
           </SignedIn>
           <button
             type="button"
-            className={`accessible-toggle ${
+            className={`nav-icon-btn accessible-toggle ${
               contrastMode === "high" ? "accessible-toggle-on" : ""
             }`}
             onClick={onAccessibleClick}
@@ -65,16 +66,17 @@ export const Navbar = ({
           >
             <span className="accessible-toggle-icon" aria-hidden>
               <img
-                src="/accessible.png"
+                src="/accessible.svg"
                 alt={t.nav.accessibleMode}
-                width={24}
+                width={18}
                 height={18}
                 className="accessible-toggle-img"
               />
             </span>
           </button>
           <button
-            className="theme-toggle"
+            type="button"
+            className="nav-icon-btn theme-toggle"
             onClick={onThemeToggle}
             aria-label="Toggle theme"
           >
@@ -84,10 +86,20 @@ export const Navbar = ({
           <SignedIn>
             <UserButton />
           </SignedIn>
-          {!hasCookieRefused() && (
+          {hasCookieAccepted() && (
             <SignedOut>
               <SignInButton>
-                <button className="nav-button">{t.nav.signIn}</button>
+                <button
+                  type="button"
+                  className="nav-icon-btn nav-sign-in-btn"
+                  aria-label={t.nav.signIn}
+                  title={t.nav.signIn}
+                >
+                  <span className="nav-sign-in-text">{t.nav.signIn}</span>
+                  <span className="nav-sign-in-icon">
+                    <SignInIcon />
+                  </span>
+                </button>
               </SignInButton>
             </SignedOut>
           )}
@@ -105,22 +117,16 @@ const NavbarSignedIn = () => {
   });
   const [showAgentUrlModal, setShowAgentUrlModal] = useState(false);
 
-  const handleExportAgentUrl = (): void => {
-    getCurrentUser()
-      .then((currentUser) => {
-        const agentId = currentUser.id;
-        const baseUrl = window.location.origin;
-        const agentUrl = `${baseUrl}/?agent=${agentId}`;
+  const handleExportAgentUrl = async () => {
+    const currentUser = await getCurrentUser();
+    const agentId = currentUser.id;
+    const baseUrl = window.location.origin;
+    const agentUrl = `${baseUrl}/?agent=${agentId}`;
 
-        // Copy to clipboard
-        navigator.clipboard.writeText(agentUrl).then(() => {
-          setShowAgentUrlModal(true);
-          setTimeout(() => setShowAgentUrlModal(false), 3000);
-        });
-      })
-      .catch(() => {
-        // Failed to get user info
-      });
+    // Copy to clipboard
+    await navigator.clipboard.writeText(agentUrl);
+    setShowAgentUrlModal(true);
+    setTimeout(() => setShowAgentUrlModal(false), 3000);
   };
 
   const isAgent = userData?.role === "agent";

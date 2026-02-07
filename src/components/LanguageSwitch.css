@@ -1,11 +1,41 @@
 .language-switch {
   display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 3px;
   gap: 2px;
-  transition: background 0.3s ease, border-color 0.3s ease;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.language-switch-mobile {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  height: 44px;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: var(--bg-tertiary);
+  line-height: 0;
+}
+
+.language-switch-mobile:hover {
+  background: var(--bg-secondary);
+}
+
+.language-switch-mobile img {
+  display: block;
+  width: 24px;
+  height: 18px;
+  object-fit: contain;
 }
 
 .language-switch-option {
@@ -34,4 +64,14 @@
 
 .language-switch-option.active:hover {
   filter: brightness(1.05);
+}
+
+@media (max-width: 968px) {
+  .language-switch-desktop {
+    display: none;
+  }
+
+  .language-switch-mobile {
+    display: flex;
+  }
 }
