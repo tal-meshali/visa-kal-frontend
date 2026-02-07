@@ -34,10 +34,7 @@
 .privacy-policy-content {
   line-height: 1.7;
   color: var(--text-secondary);
-}
-
-.privacy-policy-content p {
-  margin: 0 0 1rem 0;
+  margin: 1rem 0;
 }
 
 .privacy-policy-placeholder {
